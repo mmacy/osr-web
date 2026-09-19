@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Table (dark) — mockup A</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Caveat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#17140d;
+  --paper-2:#211c13;
+  --grid:rgba(112,142,182,.10);
+  --grid-major:rgba(112,142,182,.18);
+  --graphite:#d8d0ba;
+  --graphite-dim:#a49b8180;
+  --graphite-dim2:#a49b81;
+  --ink:#7ba9d6;
+  --ink-soft:#6f9cc8;
+  --red:#e15c43;
+  --red-soft:#e87a63;
+  --tape:rgba(190,165,105,.22);
+  --type: "Courier Prime", "Courier New", monospace;
+  --hand: "Caveat", "Segoe Print", cursive;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  width:1440px;height:900px;overflow:hidden;
+  font-family:var(--type);color:var(--graphite);
+  background-color:var(--paper);
+  background-image:
+    radial-gradient(120% 90% at 50% -20%, rgba(232,178,104,.05), transparent 60%),
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px),
+    linear-gradient(var(--grid-major) 1.2px, transparent 1.2px),
+    linear-gradient(90deg, var(--grid-major) 1.2px, transparent 1.2px);
+  background-size: 100% 100%, 22px 22px, 22px 22px, 110px 110px, 110px 110px;
+  position:relative;
+}
+/* paper edge shadow + faint fiber */
+body::after{content:"";position:fixed;inset:0;pointer-events:none;
+  box-shadow: inset 0 0 180px rgba(0,0,0,.6), inset 0 0 70px rgba(0,0,0,.28);
+  background:
+    radial-gradient(80% 60% at 85% 110%, rgba(140,104,54,.10), transparent 55%);
+}
+.hand{font-family:var(--hand)}
+.stage{position:relative;height:900px;display:grid;
+  grid-template-columns: 1fr 452px;
+  grid-template-rows: 70px 1fr;
+  column-gap:20px;row-gap:14px;padding:20px 26px 24px;}
+
+/* ---------- masthead ---------- */
+header{grid-column:1/3;display:flex;align-items:center;gap:22px;}
+.plate{position:relative;padding:9px 18px 8px;background:var(--paper-2);
+  border:1.4px solid var(--graphite);box-shadow:2px 3px 0 rgba(0,0,0,.5);
+  transform:rotate(-.5deg);}
+.plate::before,.plate::after{content:"";position:absolute;width:64px;height:22px;
+  background:var(--tape);top:-11px;transform:rotate(-3deg);box-shadow:0 1px 2px rgba(0,0,0,.12)}
+.plate::before{left:-18px}
+.plate::after{right:-18px;transform:rotate(2.4deg)}
+.mod{font-size:12px;letter-spacing:.32em;color:var(--red);font-weight:700}
+.title{font-size:19px;letter-spacing:.05em;font-weight:700;text-transform:uppercase;line-height:1.05}
+.title small{display:block;font-family:var(--hand);font-weight:600;font-size:19px;letter-spacing:0;color:var(--ink);text-transform:none;margin-top:-2px}
+.hud{display:flex;gap:10px;margin-left:6px;align-items:center;flex-wrap:wrap}
+.stamp{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--graphite);
+  border:1.3px solid var(--graphite);padding:5px 10px 4px;transform:rotate(-1.2deg);
+  background:rgba(232,200,140,.05)}
+.stamp b{font-weight:700}
+.stamp.turn{color:var(--ink);border-color:var(--ink)}
+.stamp.gold{color:#e0aa4e;border-color:#b98a34;transform:rotate(.8deg)}
+.stamp.light{color:var(--red);border-color:var(--red-soft);transform:rotate(1.4deg)}
+.tally{font-family:var(--hand);font-size:22px;color:var(--red);letter-spacing:.06em;line-height:1}
+.masthead-right{margin-left:auto;display:flex;gap:12px;font-family:var(--hand);font-size:22px}
+.masthead-right a{color:var(--ink);text-decoration:none;border-bottom:1.5px solid var(--ink-soft);cursor:pointer}
+.masthead-right a.red{color:var(--red);border-color:var(--red-soft)}
+
+/* ---------- the map (hero) ---------- */
+.mapwrap{grid-column:1;grid-row:2;position:relative;display:flex;flex-direction:column;min-height:0}
+.map-card{position:relative;flex:1;min-height:0;border:1.5px solid var(--graphite);
+  background:var(--paper-2);box-shadow:3px 4px 0 rgba(0,0,0,.45);
+  background-image:
+    radial-gradient(58% 60% at 46% 55%, rgba(232,172,92,.13), transparent 62%),
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size:100% 100%, 22px 22px, 22px 22px;overflow:hidden}
+.map-corner{position:absolute;top:10px;left:14px;font-family:var(--hand);font-size:26px;color:var(--ink);z-index:3}
+.map-corner b{display:block;font-family:var(--type);font-weight:700;font-size:11px;letter-spacing:.24em;color:var(--graphite-dim2);text-transform:uppercase}
+.map svg{position:absolute;inset:0;width:100%;height:100%}
+.legend{position:absolute;right:14px;bottom:14px;z-index:4;font-family:var(--hand);font-size:17px;color:var(--graphite);
+  background:rgba(24,20,13,.9);border:1.2px dashed var(--graphite-dim2);padding:6px 11px;line-height:1.3;max-width:300px}
+.legend .k{color:var(--red)}
+.legend .b{color:var(--ink)}
+/* action rail beneath map */
+.actions{grid-column:1;display:flex;flex-wrap:wrap;gap:9px;align-items:center;margin-top:2px}
+.pbtn{font-family:var(--type);font-size:12.5px;letter-spacing:.04em;color:var(--graphite);
+  background:var(--paper-2);border:1.5px solid var(--graphite);padding:7px 13px;cursor:pointer;
+  box-shadow:2px 2px 0 rgba(0,0,0,.45);position:relative}
+.pbtn:hover{background:#2b2517}
+.pbtn .k{color:var(--red);font-weight:700}
+.pbtn.compass{font-size:15px;padding:6px 12px}
+.pbtn.warn{color:var(--red);border-color:var(--red-soft);margin-left:auto}
+
+/* ---------- right column ---------- */
+.rail{grid-column:2;grid-row:2;display:flex;flex-direction:column;gap:14px;min-height:0}
+
+/* first-person pencil sketch */
+.sketch{border:1.5px solid var(--graphite);background:var(--paper-2);box-shadow:3px 4px 0 rgba(0,0,0,.45);
+  padding:8px;position:relative}
+.sketch::before{content:"";position:absolute;width:70px;height:20px;background:var(--tape);top:-10px;left:22px;transform:rotate(-4deg)}
+.sketch .cap{position:absolute;bottom:12px;left:0;right:0;text-align:center;font-family:var(--hand);font-size:23px;color:var(--graphite)}
+.sketch svg{display:block;width:100%;height:174px}
+
+/* party clipboard */
+.party{border:1.5px solid var(--graphite);background:var(--paper-2);box-shadow:3px 4px 0 rgba(0,0,0,.45)}
+.party h3,.log h3{font-family:var(--type);font-weight:700;font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--graphite);padding:9px 14px 7px;border-bottom:1.4px solid var(--graphite);display:flex;justify-content:space-between}
+.party h3 span,.log h3 span{font-family:var(--hand);font-size:17px;letter-spacing:0;color:var(--ink);text-transform:none}
+.pc{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:7px 14px 6px;border-bottom:1px solid rgba(216,208,186,.10);align-items:center}
+.pc:last-child{border-bottom:none}
+.pc .nm{font-family:var(--hand);font-size:22px;line-height:1;color:var(--graphite)}
+.pc .cl{font-family:var(--type);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--graphite-dim2);margin-top:2px}
+.pc .hp{font-family:var(--type);font-size:13px;text-align:right;letter-spacing:.02em}
+.pc .pips{display:flex;gap:2px;justify-content:flex-end;margin-top:3px}
+.pip{width:9px;height:9px;border:1.3px solid var(--graphite);background:transparent}
+.pip.f{background:var(--graphite)}
+.pip.f.low{background:var(--red);border-color:var(--red)}
+.pc.frail .hp{color:var(--red)}
+.pc .note{grid-column:1/3;font-family:var(--hand);font-size:16px;color:var(--ink);line-height:1;margin-top:1px}
+
+/* the typed referee log */
+.log{flex:1;min-height:0;border:1.5px solid var(--graphite);background:var(--paper-2);
+  box-shadow:3px 4px 0 rgba(0,0,0,.45);display:flex;flex-direction:column}
+.log-body{padding:10px 15px 12px;overflow:hidden;font-size:12.5px;line-height:1.5}
+.l-place{font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin:10px 0 3px;
+  border-bottom:1.4px solid var(--graphite);display:inline-block;padding-bottom:1px}
+.l-place:first-child{margin-top:0}
+.l-prose{color:var(--graphite);margin:3px 0 4px}
+.l-mech{color:var(--graphite-dim2);font-size:11.5px}
+.l-mech .p{color:var(--red)}
+.l-treas{color:var(--graphite);margin-top:3px}
+.l-treas u{text-decoration-color:var(--red);text-decoration-thickness:2px}
+.l-bard{font-family:var(--hand);font-size:20px;line-height:1.15;color:var(--ink);
+  margin:6px 0 6px 18px;padding-left:12px;border-left:2px solid var(--ink-soft);position:relative}
+.l-bard::before{content:"↳";position:absolute;left:-16px;top:2px;color:var(--ink-soft);font-family:var(--type);font-size:13px}
+</style>
+</head>
+<body>
+<div class="stage">
+
+  <header>
+    <div class="plate">
+      <div class="mod">THE COLD VEIN · LEVEL 1</div>
+      <div class="title">The Cold Vein<small>the referee's table</small></div>
+    </div>
+    <div class="hud">
+      <span class="stamp turn">TURN <b>14</b> <span class="tally">|||| |||| ||||</span></span>
+      <span class="stamp gold">340 GP</span>
+      <span class="stamp light">TORCH · 4 LEFT</span>
+    </div>
+    <div class="masthead-right">
+      <a>save the game</a>
+      <a class="red">new party</a>
+    </div>
+  </header>
+
+  <!-- HERO: the hand-drawn map -->
+  <section class="mapwrap">
+    <div class="map-card">
+      <div class="map-corner">the mine, level one<b>as your party has mapped it</b></div>
+      <div class="map">
+        <svg viewBox="0 0 900 620" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <filter id="rough"><feTurbulence type="fractalNoise" baseFrequency="0.014" numOctaves="2" seed="7" result="n"/>
+              <feDisplacementMap in="SourceGraphic" in2="n" scale="3.4"/></filter>
+          </defs>
+          <g filter="url(#rough)" fill="none" stroke="#d8d0ba" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <!-- entry chamber -->
+            <rect x="120" y="440" width="132" height="110"/>
+            <!-- corridor up -->
+            <path d="M186 440 L186 350 L330 350"/>
+            <!-- vaulted hall (current) -->
+            <rect x="330" y="286" width="200" height="150"/>
+            <!-- side passage east -->
+            <path d="M530 360 L640 360 L640 250"/>
+            <rect x="596" y="150" width="150" height="100"/>
+            <!-- north passage -->
+            <path d="M430 286 L430 190 L360 190"/>
+            <rect x="250" y="150" width="112" height="80"/>
+            <!-- door ticks -->
+            <path d="M186 440 l0 -16 M170 350 l32 0" stroke-width="3"/>
+            <path d="M530 340 l0 26 M430 286 l0 0"/>
+          </g>
+          <!-- doors as gaps + red pencil marks -->
+          <g font-family="Caveat, cursive" font-size="30" fill="#d8d0ba">
+            <text x="150" y="505">1</text>
+            <text x="344" y="314">3</text>
+            <text x="650" y="205">5</text>
+            <text x="290" y="198">2</text>
+          </g>
+          <!-- red-pencil annotations -->
+          <g stroke="#e15c43" stroke-width="2.6" fill="none" filter="url(#rough)">
+            <path d="M258 392 l16 16 M274 392 l-16 16"/> <!-- trap X on corridor -->
+            <path d="M572 352 a13 13 0 1 0 0.1 0"/> <!-- secret circle -->
+          </g>
+          <g font-family="Caveat, cursive" font-size="26" fill="#e15c43">
+            <text x="228" y="386">trap!</text>
+            <text x="540" y="345">secret?</text>
+          </g>
+          <!-- party marker: red arrow, facing north -->
+          <g transform="translate(430 372)">
+            <path d="M0 -20 L13 16 L0 6 L-13 16 Z" fill="#e15c43" stroke="#9a3323" stroke-width="1.5" stroke-linejoin="round"/>
+          </g>
+          <text x="446" y="392" font-family="Caveat, cursive" font-size="24" fill="#e15c43">us — facing N</text>
+          <!-- compass rose -->
+          <g transform="translate(812 90)" stroke="#7ba9d6" stroke-width="2" fill="none">
+            <circle r="26"/><path d="M0 -34 L0 34 M-34 0 L34 0"/>
+            <path d="M0 -34 l6 10 l-6 -4 l-6 4 z" fill="#7ba9d6"/>
+            <text x="-6" y="-38" font-family="Courier Prime, monospace" font-size="15" fill="#7ba9d6">N</text>
+          </g>
+          <!-- little dice, drawn on the paper -->
+          <g transform="translate(120 90) rotate(-8)" stroke="#d8d0ba" stroke-width="2" fill="rgba(225,92,67,.14)">
+            <rect x="0" y="0" width="34" height="34"/>
+            <circle cx="10" cy="10" r="2.4" fill="#d8d0ba" stroke="none"/><circle cx="24" cy="24" r="2.4" fill="#d8d0ba" stroke="none"/><circle cx="17" cy="17" r="2.4" fill="#d8d0ba" stroke="none"/>
+          </g>
+        </svg>
+      </div>
+      <div class="legend hand">
+        pencil = walls we've walked · <span class="k">red</span> = traps &amp; secrets · <span class="b">blue N</span> = which way is up
+      </div>
+    </div>
+    <div class="actions">
+      <button class="pbtn compass">▲ <span class="k">W</span></button>
+      <button class="pbtn compass">◀ <span class="k">A</span></button>
+      <button class="pbtn compass">▶ <span class="k">D</span></button>
+      <button class="pbtn compass">▼ <span class="k">S</span></button>
+      <button class="pbtn">Search <span class="k">·</span></button>
+      <button class="pbtn">Take <span class="k">T</span></button>
+      <button class="pbtn">Light torch <span class="k">L</span></button>
+      <button class="pbtn">Rest <span class="k">R</span></button>
+      <button class="pbtn warn">Back to Cinderhope</button>
+    </div>
+  </section>
+
+  <!-- RIGHT: what you see + party + log -->
+  <aside class="rail">
+    <div class="sketch">
+      <svg viewBox="0 0 420 174" preserveAspectRatio="none">
+        <defs><filter id="rough2"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="3" result="n"/>
+          <feDisplacementMap in="SourceGraphic" in2="n" scale="2.6"/></filter></defs>
+        <g filter="url(#rough2)" fill="none" stroke="#d8d0ba" stroke-width="1.7" stroke-linecap="round">
+          <!-- one-point perspective corridor -->
+          <path d="M14 8 L150 55 L150 120 L14 166"/>
+          <path d="M406 8 L270 55 L270 120 L406 166"/>
+          <path d="M150 55 L270 55 M150 120 L270 120"/>
+          <path d="M14 8 L406 8 M14 166 L406 166"/>
+          <!-- receding column hints -->
+          <path d="M78 30 L78 145" stroke-width="1.2" opacity=".7"/>
+          <path d="M342 30 L342 145" stroke-width="1.2" opacity=".7"/>
+          <!-- doorway ahead -->
+          <path d="M188 70 L188 105 L232 105 L232 70 Z" stroke-width="1.4"/>
+          <!-- hatched shadow -->
+          <path d="M158 62 l0 52 M166 62 l0 52 M174 62 l0 52" stroke-width="0.8" opacity=".5"/>
+        </g>
+      </svg>
+      <div class="cap">a vaulted hall — water drips somewhere ahead</div>
+    </div>
+
+    <div class="party">
+      <h3>The party <span>six souls</span></h3>
+      <div class="pc"><div><span class="nm">Corwin</span><div class="cl">Fighter · lvl 1</div></div><div><div class="hp">5 / 5</div><div class="pips"><i class="pip f"></i><i class="pip f"></i><i class="pip f"></i><i class="pip f"></i><i class="pip f"></i></div></div></div>
+      <div class="pc"><div><span class="nm">Brunhild</span><div class="cl">Dwarf · lvl 1</div></div><div><div class="hp">3 / 3</div><div class="pips"><i class="pip f"></i><i class="pip f"></i><i class="pip f"></i></div></div></div>
+      <div class="pc frail"><div><span class="nm">Meriel</span><div class="cl">Cleric · lvl 1</div><div class="note">so thin a wound — keep her back</div></div><div><div class="hp">1 / 1</div><div class="pips"><i class="pip f low"></i></div></div></div>
+      <div class="pc"><div><span class="nm">Fox</span><div class="cl">Thief · lvl 1</div></div><div><div class="hp">6 / 6</div><div class="pips"><i class="pip f"></i><i class="pip f"></i><i class="pip f"></i><i class="pip f"></i><i class="pip f"></i><i class="pip f"></i></div></div></div>
+      <div class="pc"><div><span class="nm">Aravel</span><div class="cl">Elf · lvl 1</div></div><div><div class="hp">6 / 6</div><div class="pips"><i class="pip f"></i><i class="pip f"></i><i class="pip f"></i><i class="pip f"></i><i class="pip f"></i><i class="pip f"></i></div></div></div>
+      <div class="pc"><div><span class="nm">Zindal</span><div class="cl">Magic-User · sleep readied</div></div><div><div class="hp">2 / 2</div><div class="pips"><i class="pip f"></i><i class="pip f"></i></div></div></div>
+    </div>
+
+    <div class="log">
+      <h3>The referee's log <span>as it was typed</span></h3>
+      <div class="log-body">
+        <div class="l-place">A vaulted hall</div>
+        <div class="l-prose">Cracked marble underfoot, columns rising past the reach of your light. Somewhere ahead, water drips into water.</div>
+        <div class="l-bard">Meriel lifts her holy symbol; the silver catches the flame, and for a breath the dark seems to lean away.</div>
+        <div class="l-mech">&gt; you search the west wall. <span class="p">2 turns pass.</span></div>
+        <div class="l-treas">Behind a loose stone: <u>120 gp</u> and a silver-hilted dagger.</div>
+      </div>
+    </div>
+  </aside>
+
+</div>
+</body>
+</html>

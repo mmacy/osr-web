@@ -1,0 +1,187 @@
+# osrlib — the rules engine this app renders — is wired in pyproject.toml as an editable
+# path dependency on ../osrlib-python, so `uv sync` cannot resolve anything until a sibling
+# checkout exists. actions/checkout refuses any path outside $GITHUB_WORKSPACE, so the
+# sibling pair is built *inside* the workspace rather than beside it:
+#
+#   $GITHUB_WORKSPACE                    /home/runner/work/osr-web/osr-web
+#   this repo        (path: osr-web)     /home/runner/work/osr-web/osr-web/osr-web
+#   the engine (path: osrlib-python)     /home/runner/work/osr-web/osr-web/osrlib-python
+#
+# from which ../osrlib-python resolves exactly as it does in a developer clone. Every run
+# step therefore works out of osr-web/ (the `defaults` block below), while action inputs
+# that take paths — upload-artifact's, notably — stay relative to the workspace root.
+name: CI
+
+on:
+  # Pull requests against any branch, plus direct pushes to main. Push is restricted to
+  # main so a PR branch does not run the whole workflow twice for one commit (once for the
+  # push, once for the pull_request event).
+  push:
+    branches: [main]
+  pull_request:
+
+# Nothing here writes to the repository: the capture step rewrites docs/images/*.png in the
+# runner's throwaway checkout and the result is never committed back. The engine checkout
+# needs no extra grant either — osrlib-python is public, which any valid token can read.
+permissions:
+  contents: read
+
+concurrency:
+  # A newer push to the same branch makes the older run's answer irrelevant, and the
+  # screenshots job installs Chromium and drives a real browser — too expensive to leave
+  # running for a commit nobody is waiting on any more.
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    working-directory: osr-web
+
+jobs:
+  # The two jobs are deliberately independent: no `needs:`. They share only their setup,
+  # and gating screenshots on the unit suite would hide every screenshot failure behind an
+  # unrelated unit failure — the second one would surface a push later, after the first was
+  # fixed. Running them in parallel costs one extra runner for the length of the unit suite
+  # and reports both problems on the first push.
+  tests:
+    name: Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out osr-web
+        uses: actions/checkout@v7
+        with:
+          path: osr-web
+          # Full history, because the cache-bust gate below compares the pull request's base
+          # against its head, and the base ref has to exist locally to be compared against.
+          # The default single-commit fetch leaves no origin/<base> at all, so the gate would
+          # fail for want of a ref rather than on the client. A full fetch is the one form
+          # that cannot; this repository is small, and the screenshots job keeps the default.
+          fetch-depth: 0
+
+      - name: Check out the osrlib engine
+        uses: actions/checkout@v7
+        with:
+          # No ref: the editable path dependency means the app runs against whatever the
+          # engine's default branch has checked out, and CI holds to the same contract.
+          repository: mmacy/osrlib-python
+          path: osrlib-python
+
+      - name: Install uv
+        # Pinned to an exact tag, unlike the actions/* pins above: setup-uv publishes no
+        # moving major-version tag (refs/tags/v8 is a 404, and there is no v8 branch), and
+        # `uses:` resolves a literal git ref rather than a semver range — so `@v8` would
+        # fail the job outright with an unresolvable action. Bumping it is therefore a
+        # manual edit. Staying on 8.3.2 rather than 9.0.0, which is days old at the time of
+        # writing and changes the cache-pruning default.
+        uses: astral-sh/setup-uv@v8.3.2
+        with:
+          enable-cache: true
+
+      - name: Sync dependencies
+        # No setup-python step: pyproject requires >= 3.14 and uv downloads a matching
+        # interpreter itself, the same way `uv sync` does on a developer machine. --locked
+        # fails the job on lockfile drift instead of silently re-resolving it.
+        run: uv sync --locked
+
+      - name: Check formatting
+        # ruff's own opinion of the tree, not ruff check's: a file can be lint-clean and
+        # still not match ruff's canonical layout.
+        run: uv run ruff format --check
+
+      - name: Lint
+        # The rule selection lives in pyproject.toml, matched to osrlib's, with no
+        # per-file ignores beyond tests/** dropping docstring rules.
+        run: uv run ruff check
+
+      - name: Type check
+        # pyright in basic mode, matched to osrlib's, over server/ and scripts/ — the
+        # directories named in pyproject's [tool.pyright], with no suppression list.
+        run: uv run pyright
+
+      - name: Lint the client
+        # static/app.js is the largest file in the repository and the one nothing else reads:
+        # there is no build step, no test loads it, and the server serves it straight from
+        # disk, so a parse error ships and a player finds it by clicking. oxlint is a single
+        # binary run at an exact version through npx, which keeps the promise that the client
+        # has no toolchain — no package.json, no node_modules, no build. --deny-warnings is
+        # what makes the gate mean zero findings rather than a burn-down list. Node is already
+        # on ubuntu-latest, so this step installs nothing of its own.
+        run: npx --yes oxlint@1.83.0 --deny-warnings static/
+
+      - name: Check the app.js version was bumped
+        # index.html loads the client as app.js?v=N and the browser caches it by that URL, so
+        # an edit that forgets the bump ships code no browser loads. Pull requests only: the
+        # check needs a base to compare against, and a push to main has already merged one.
+        if: github.event_name == 'pull_request'
+        run: uv run python scripts/check_app_version.py --base origin/${{ github.base_ref }}
+
+      - name: Run the unit suite
+        # Plain `pytest` does not reach tests/screenshots — pyproject's norecursedirs keeps
+        # it out of collection while pytest recurses. This suite needs no browser and no
+        # server; the screenshots job names that directory on the command line, which is
+        # what gets it collected there.
+        run: uv run pytest
+
+  screenshots:
+    name: Screenshots
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out osr-web
+        uses: actions/checkout@v7
+        with:
+          path: osr-web
+
+      - name: Check out the osrlib engine
+        uses: actions/checkout@v7
+        with:
+          repository: mmacy/osrlib-python
+          path: osrlib-python
+
+      - name: Install uv
+        # Exact tag, and kept in step with the Tests job — see the note there.
+        uses: astral-sh/setup-uv@v8.3.2
+        with:
+          enable-cache: true
+
+      - name: Sync dependencies
+        run: uv sync --locked
+
+      - name: Install Chromium
+        # --with-deps pulls the system libraries Chromium needs on a bare runner; without
+        # it the browser launches into a missing-shared-library error.
+        run: uv run playwright install --with-deps chromium
+
+      - name: Capture the documentation screenshots
+        # Starts its own capture-safe server on an ephemeral port, drives it, rewrites
+        # docs/images/*.png, and appends each slug to .screenshot-manifest as it goes.
+        run: uv run pytest tests/screenshots
+
+      - name: Check the screenshots are in sync
+        # What this proves: the six shots can still be taken against the current UI, and
+        # README.md, docs/images/, and the manifest the capture run just wrote all name the
+        # same set of shots. A UI change that strands a shot fails the build here.
+        #
+        # What it deliberately does NOT prove: that the committed PNGs match what CI just
+        # rendered. The capture step overwrites docs/images/*.png, and fonts and font
+        # rasterisation differ between a runner and a developer's machine, so any pixel
+        # comparison — an image diff, or `git diff --exit-code docs/images` — would fail on
+        # every single run for purely cosmetic reasons and teach everyone to ignore CI.
+        # That is why the gate checks structure only. Do not "fix" this by adding one.
+        run: uv run python scripts/check_screenshots.py
+
+      - name: Upload the images CI rendered
+        # Always, because the failure case is the point: when a capture or the gate fails
+        # there is no other way to see what the runner actually drew. Paths are relative to
+        # the workspace, not to the run steps' working directory, and the manifest is a
+        # dotfile, which upload-artifact skips unless told otherwise.
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: screenshots
+          path: |
+            osr-web/docs/images/*.png
+            osr-web/.screenshot-manifest
+          include-hidden-files: true
+          retention-days: 14

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OSR Web</title>
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%230b0d11'/%3E%3Cpath d='M8 2 L12 8 L8 14 L4 8 Z' fill='none' stroke='%23c7cfdd' stroke-width='1.2'/%3E%3Ccircle cx='8' cy='8' r='1.4' fill='%23e0a94f'/%3E%3C/svg%3E">
+</head>
+<body>
+
+<header id="topbar">
+  <div class="brand">
+    <span class="brand-title">OSR Web</span>
+    <span class="brand-sub" id="brand-sub"></span>
+  </div>
+  <div class="hud" id="hud">
+    <span class="hud-item" id="hud-mode">town</span>
+    <span class="hud-item" id="hud-clock">turn 0</span>
+    <span class="hud-item" id="hud-gold">0 gp</span>
+    <span class="hud-item" id="hud-light">daylight</span>
+  </div>
+  <div class="topbar-actions">
+    <button class="btn ghost" id="btn-journal" type="button">Journal</button>
+    <button class="btn ghost" id="btn-save" type="button">Save</button>
+    <button class="btn ghost" id="btn-menu" type="button">Menu</button>
+  </div>
+</header>
+
+<main id="game">
+  <aside class="rail">
+    <div class="viewport-frame">
+      <canvas id="viewport" width="920" height="518"></canvas>
+      <div id="nameplate" class="nameplate"></div>
+      <div id="viewport-facing" class="viewport-facing"></div>
+      <div id="viewport-note" class="viewport-note hidden"></div>
+    </div>
+    <div id="actions" class="actions"></div>
+    <div id="party" class="party"></div>
+    <div id="context" class="context"></div>
+  </aside>
+
+  <section class="stage">
+    <div id="town" class="town"></div>
+    <div id="log" class="log" aria-live="polite"></div>
+    <div id="roundbar" class="roundbar hidden">
+      <span class="r-label" id="round-label"></span>
+      <span class="r-beat" id="round-beat"></span>
+      <span class="r-ticks" id="round-ticks"></span>
+    </div>
+  </section>
+</main>
+
+<div id="map-overlay" class="scrim hidden">
+  <div class="overlay-panel">
+    <div class="overlay-head">
+      <span class="oh-title" id="map-title">The map</span>
+      <span class="oh-sub">mapped areas only</span>
+      <span class="oh-key">M to close</span>
+    </div>
+    <canvas id="automap" width="1456" height="960"></canvas>
+    <div class="map-foot">
+      <span class="note-pin"></span>
+      <input id="map-note" type="text" maxlength="80" placeholder="Click a mapped cell, then write a note — enter saves, empty deletes">
+      <span class="m-hint" id="map-note-hint"></span>
+    </div>
+  </div>
+</div>
+
+<div id="journal-overlay" class="scrim hidden">
+  <div class="overlay-panel journal-panel">
+    <div class="overlay-head">
+      <span class="oh-title">The journal</span>
+      <span class="oh-sub">the party's own record</span>
+      <span class="oh-key">J to close</span>
+    </div>
+    <div id="journal-body" class="journal-body"></div>
+  </div>
+</div>
+
+<div id="sheet-overlay" class="scrim hidden">
+  <div class="sheet-panel" id="sheet-panel"></div>
+</div>
+
+<div id="overlay" class="overlay">
+  <div class="overlay-card" id="overlay-card"></div>
+</div>
+
+<div id="confirm-overlay" class="scrim hidden">
+  <div class="confirm-panel" role="alertdialog" aria-modal="true" aria-labelledby="confirm-message">
+    <div class="confirm-message" id="confirm-message"></div>
+    <div class="confirm-actions">
+      <button class="btn ghost" id="confirm-cancel" type="button">Cancel</button>
+      <button class="btn danger" id="confirm-accept" type="button"></button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast hidden"></div>
+
+<script src="app.js?v=48"></script>
+</body>
+</html>

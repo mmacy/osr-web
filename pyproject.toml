@@ -1,0 +1,89 @@
+[project]
+name = "osr-web"
+version = "0.1.0"
+# Three kinds of material, three licenses. MIT covers the code; CC BY-NC-4.0 covers the
+# original creative content of the bundled adventure and fixtures; the B/X game content
+# the app displays is Open Game Content under the OGL 1.0a, which has no SPDX identifier
+# and so rides as a LicenseRef. LICENSE-OGL.md carries the section 8 designation saying
+# which portions are which.
+license = "MIT AND CC-BY-NC-4.0 AND LicenseRef-OGL-1.0a"
+license-files = ["LICENSE", "LICENSE-CONTENT.md", "LICENSE-OGL.md"]
+authors = [{ name = "Marsh Macy" }]
+requires-python = ">=3.14"
+dependencies = [
+    "fastapi>=0.139.0",
+    "osrlib>=1.7.0",
+    "python-dotenv>=1.2.2",
+    "uvicorn>=0.51.0",
+]
+
+[tool.uv.sources]
+osrlib = { path = "../osrlib-python", editable = true }
+
+[dependency-groups]
+dev = [
+    "pyright>=1.1.411",
+    "pytest>=9.1.1",
+    "pytest-playwright>=0.8.0",
+    "ruff>=0.11",
+]
+
+[tool.ruff]
+line-length = 120
+src = ["server", "scripts", "tests"]
+# ruff's default discovery includes Markdown so it can format fenced Python examples.
+# The planning documents under specs/ and docs/ are prose, not code under this gate,
+# so Markdown is excluded outright rather than the gated directories enumerated: any
+# Python that lands at the repository root is still checked.
+extend-exclude = ["*.md"]
+
+[tool.ruff.lint]
+select = [
+    "B",   # bugbear
+    "D",   # pydocstyle
+    "E",   # pycodestyle errors
+    "F",   # pyflakes
+    "I",   # isort
+    "UP",  # pyupgrade
+    "W",   # pycodestyle warnings
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["D"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["server", "scripts"]
+
+# Basic mode, matching osrlib's, over the code that ships. Not tests/: those build
+# osrlib models out of SimpleNamespace stand-ins on purpose, so type-checking them
+# would report the fixtures rather than the app. There are no per-rule suppressions
+# here and there is no ignore list — a gate lands only on a clean tree.
+[tool.pyright]
+include = ["server", "scripts"]
+typeCheckingMode = "basic"
+pythonVersion = "3.14"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# The documentation-screenshot harness is opt-in: it needs Chromium and starts a
+# server, so `uv run pytest` must not reach it. pytest only applies norecursedirs
+# while it recurses, so naming the directory on the command line still collects it:
+#   uv run pytest                  -> the fast unit suite, no browser needed
+#   uv run pytest tests/screenshots -> captures the seven documentation shots
+# The first nine patterns are pytest's own defaults, restated because setting this
+# key replaces them.
+norecursedirs = [
+    "*.egg",
+    ".*",
+    "_darcs",
+    "build",
+    "CVS",
+    "dist",
+    "node_modules",
+    "venv",
+    "{arch}",
+    "tests/screenshots",
+]

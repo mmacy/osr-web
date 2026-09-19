@@ -1,0 +1,268 @@
+{
+  "kind": "adventure",
+  "schema_version": 3,
+  "engine_version": "1.6.0",
+  "payload": {
+    "name": "The Barrow of the Ninth",
+    "description": "A shrine, a crypt, and one errand that ends the adventure.",
+    "hooks": [],
+    "town": {
+      "name": "Threshold",
+      "description": "",
+      "services": [],
+      "travel_turns": {
+        "barrow": 1
+      }
+    },
+    "dungeons": [
+      {
+        "id": "barrow",
+        "name": "The Barrow",
+        "levels": [
+          {
+            "number": 1,
+            "width": 4,
+            "height": 1,
+            "edges": {
+              "1,0:west": {
+                "kind": "open",
+                "door": null
+              },
+              "2,0:west": {
+                "kind": "open",
+                "door": null
+              },
+              "3,0:west": {
+                "kind": "open",
+                "door": null
+              }
+            },
+            "areas": [
+              {
+                "id": "shrine",
+                "name": "Shrine of the Nine",
+                "description": "Nine niches, eight of them empty.",
+                "cells": [
+                  [
+                    2,
+                    0
+                  ]
+                ],
+                "encounter": null,
+                "features": [
+                  {
+                    "id": "reliquary",
+                    "kind": "treasure_cache",
+                    "description": "A reliquary of blackened silver.",
+                    "cell": [
+                      2,
+                      0
+                    ],
+                    "item_ids": [
+                      "votive_idol"
+                    ],
+                    "magic_item_ids": [],
+                    "coins": {
+                      "pp": 0,
+                      "gp": 0,
+                      "ep": 0,
+                      "sp": 0,
+                      "cp": 0
+                    },
+                    "valuables": [],
+                    "trap": null
+                  }
+                ],
+                "trap": null,
+                "treasure": null
+              },
+              {
+                "id": "crypt",
+                "name": "Crypt of the Ninth",
+                "description": "A slab, a name worn smooth, and room enough to kneel.",
+                "cells": [
+                  [
+                    3,
+                    0
+                  ]
+                ],
+                "encounter": null,
+                "features": [],
+                "trap": null,
+                "treasure": null
+              }
+            ],
+            "features": [],
+            "transitions": [],
+            "wandering": {
+              "chance_in_six": 0,
+              "interval_turns": 2,
+              "table": null
+            },
+            "entrance": [
+              0,
+              0
+            ],
+            "guidance": ""
+          }
+        ]
+      }
+    ],
+    "monsters": [],
+    "items": [
+      {
+        "item_type": "gear",
+        "id": "votive_idol",
+        "name": "Votive idol of jade",
+        "cost_gp": 0,
+        "lot_size": 1,
+        "capacity_coins": null,
+        "combat": null,
+        "params": {},
+        "overrides_applied": []
+      }
+    ],
+    "triggers": [
+      {
+        "id": "barrow-mouth",
+        "when": {
+          "pattern_type": "dungeon_entered",
+          "dungeon_id": "barrow"
+        },
+        "conditions": [],
+        "repeatable": false,
+        "consequences": [],
+        "narrative": {
+          "refusal": "",
+          "success": "",
+          "fired": "The barrow-mouth exhales cold air over the threshold.",
+          "offer": "",
+          "progress": "",
+          "completion": "",
+          "journal": "The barrow takes you in, and the daylight stops at the lintel.",
+          "guidance": "",
+          "speaker": ""
+        }
+      }
+    ],
+    "quests": [
+      {
+        "id": "the-idol",
+        "name": "The Votive Idol",
+        "activation": {
+          "pattern": {
+            "pattern_type": "dungeon_entered",
+            "dungeon_id": "barrow"
+          },
+          "conditions": []
+        },
+        "objectives": [
+          {
+            "id": "recover-idol",
+            "name": "Recover the idol",
+            "when": {
+              "pattern": {
+                "pattern_type": "item_acquired",
+                "item_id": "votive_idol"
+              },
+              "conditions": []
+            },
+            "hidden": false,
+            "reveal_when": null,
+            "narrative": {
+              "refusal": "",
+              "success": "",
+              "fired": "",
+              "offer": "",
+              "progress": "The idol comes out of its niche as if it were waiting.",
+              "completion": "",
+              "journal": "",
+              "guidance": "",
+              "speaker": ""
+            }
+          },
+          {
+            "id": "speak-the-rite",
+            "name": "Speak the rite",
+            "when": {
+              "pattern": {
+                "pattern_type": "flag_set",
+                "key": "barrow.rite",
+                "value": "spoken"
+              },
+              "conditions": []
+            },
+            "hidden": true,
+            "reveal_when": {
+              "pattern": {
+                "pattern_type": "area_entered",
+                "dungeon_id": "barrow",
+                "level_number": 1,
+                "area_id": "crypt"
+              },
+              "conditions": []
+            },
+            "narrative": {
+              "refusal": "",
+              "success": "",
+              "fired": "",
+              "offer": "The slab wants words said over it before the idol may leave.",
+              "progress": "The rite is spoken, and the cold goes out of the air.",
+              "completion": "",
+              "journal": "",
+              "guidance": "",
+              "speaker": ""
+            }
+          }
+        ],
+        "rewards": [
+          {
+            "command_type": "spawn_monsters",
+            "source": null,
+            "template_id": "goblin",
+            "count_dice": null,
+            "count_fixed": 1,
+            "distance_feet": 30
+          },
+          {
+            "command_type": "grant_coins",
+            "source": null,
+            "character_id": "@first",
+            "coins": {
+              "pp": 0,
+              "gp": 100,
+              "ep": 0,
+              "sp": 0,
+              "cp": 0
+            }
+          },
+          {
+            "command_type": "award_xp",
+            "source": null,
+            "character_id": "@party",
+            "amount": 100
+          },
+          {
+            "command_type": "set_flag",
+            "source": null,
+            "key": "quest.idol",
+            "value": "recovered"
+          }
+        ],
+        "completion": "all",
+        "concludes_adventure": true,
+        "narrative": {
+          "refusal": "",
+          "success": "",
+          "fired": "",
+          "offer": "Sister Halda wants the ninth idol back in the temple, rite and all.",
+          "progress": "",
+          "completion": "The barrow is quiet. The idol is yours to carry home.",
+          "journal": "",
+          "guidance": "",
+          "speaker": "Sister Halda"
+        }
+      }
+    ]
+  }
+}

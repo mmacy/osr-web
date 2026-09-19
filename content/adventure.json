@@ -1,0 +1,2945 @@
+{
+  "kind": "adventure",
+  "schema_version": 3,
+  "engine_version": "1.6.0",
+  "payload": {
+    "name": "The Cold Vein",
+    "description": "A silver mine in the moor above Cinderhope that emptied itself in a single shift and has stood open ever since. The captain never came back up the ladder. Neither did the pay.",
+    "hooks": [
+      "Cinderhope's smelt-house has been cold for two generations. The headman will stake anyone willing to prove the pay-vein is still down there, and pay twice over for the mine captain's day-book.",
+      "Ewes have started going off the top pasture, three and four at a time, and every trail of wool ends at the adit mouth. Whatever is fetching them is small. There is more than one.",
+      "A tinker who sheltered in the mine one winter night came down the hill at dawn with a fistful of good silver and no memory of the hours between. He will not go up again for any money offered him.",
+      "The last line the captain wrote was that the pay-vein had gone cold to the touch and the men would not work it. The line stops halfway across the page."
+    ],
+    "town": {
+      "name": "Cinderhope",
+      "description": "A smelting hamlet of black slag banks and low grey roofs, folded into the moor beneath the mine it was built to feed. The furnaces have been out for two generations; what keeps the place standing now is the drove road, the sheep, and a stubbornness about not being the last one to leave. Everybody here is somebody's grandchild, and everybody here knows exactly which grandfather did not come home.",
+      "services": [
+        "Barrow's forge at the crossroads: picks laid and steeled, spikes drawn, lamp oil by the flask, and no questions about what wants digging.",
+        "The Drift and Ladder: three beds, thin ale, and a fire that is never quite enough for the room.",
+        "Old Prew's counter: rope, sacking, tallow dips, and hard rations weighed out for anybody going up the hill.",
+        "The chapel of Saint Verrow: the sexton sets bones for coin and says words over the ones he cannot set."
+      ],
+      "travel_turns": {
+        "cold-vein": 2
+      }
+    },
+    "dungeons": [
+      {
+        "id": "cold-vein",
+        "name": "The Cold Vein",
+        "levels": [
+          {
+            "number": 1,
+            "width": 20,
+            "height": 16,
+            "edges": {
+              "1,2:north": {
+                "kind": "open",
+                "door": null
+              },
+              "1,3:north": {
+                "kind": "open",
+                "door": null
+              },
+              "1,4:north": {
+                "kind": "open",
+                "door": null
+              },
+              "1,11:north": {
+                "kind": "open",
+                "door": null
+              },
+              "1,12:north": {
+                "kind": "open",
+                "door": null
+              },
+              "1,15:north": {
+                "kind": "open",
+                "door": null
+              },
+              "2,1:west": {
+                "kind": "open",
+                "door": null
+              },
+              "2,2:north": {
+                "kind": "open",
+                "door": null
+              },
+              "2,2:west": {
+                "kind": "open",
+                "door": null
+              },
+              "2,3:north": {
+                "kind": "open",
+                "door": null
+              },
+              "2,3:west": {
+                "kind": "open",
+                "door": null
+              },
+              "2,4:north": {
+                "kind": "open",
+                "door": null
+              },
+              "2,4:west": {
+                "kind": "open",
+                "door": null
+              },
+              "2,5:north": {
+                "kind": "open",
+                "door": null
+              },
+              "2,6:north": {
+                "kind": "open",
+                "door": null
+              },
+              "2,7:north": {
+                "kind": "open",
+                "door": null
+              },
+              "2,8:north": {
+                "kind": "open",
+                "door": null
+              },
+              "2,9:north": {
+                "kind": "open",
+                "door": null
+              },
+              "2,10:north": {
+                "kind": "open",
+                "door": null
+              },
+              "2,10:west": {
+                "kind": "open",
+                "door": null
+              },
+              "2,11:north": {
+                "kind": "open",
+                "door": null
+              },
+              "2,11:west": {
+                "kind": "open",
+                "door": null
+              },
+              "2,12:north": {
+                "kind": "open",
+                "door": null
+              },
+              "2,12:west": {
+                "kind": "open",
+                "door": null
+              },
+              "2,13:north": {
+                "kind": "open",
+                "door": null
+              },
+              "2,14:north": {
+                "kind": "open",
+                "door": null
+              },
+              "2,14:west": {
+                "kind": "open",
+                "door": null
+              },
+              "2,15:north": {
+                "kind": "open",
+                "door": null
+              },
+              "2,15:west": {
+                "kind": "open",
+                "door": null
+              },
+              "3,1:west": {
+                "kind": "open",
+                "door": null
+              },
+              "3,2:north": {
+                "kind": "open",
+                "door": null
+              },
+              "3,2:west": {
+                "kind": "open",
+                "door": null
+              },
+              "3,3:north": {
+                "kind": "open",
+                "door": null
+              },
+              "3,3:west": {
+                "kind": "open",
+                "door": null
+              },
+              "3,4:north": {
+                "kind": "open",
+                "door": null
+              },
+              "3,4:west": {
+                "kind": "open",
+                "door": null
+              },
+              "3,8:west": {
+                "kind": "open",
+                "door": null
+              },
+              "3,10:west": {
+                "kind": "open",
+                "door": null
+              },
+              "3,11:north": {
+                "kind": "open",
+                "door": null
+              },
+              "3,11:west": {
+                "kind": "open",
+                "door": null
+              },
+              "3,12:north": {
+                "kind": "open",
+                "door": null
+              },
+              "3,12:west": {
+                "kind": "open",
+                "door": null
+              },
+              "3,14:west": {
+                "kind": "open",
+                "door": null
+              },
+              "3,15:north": {
+                "kind": "open",
+                "door": null
+              },
+              "3,15:west": {
+                "kind": "open",
+                "door": null
+              },
+              "4,1:west": {
+                "kind": "open",
+                "door": null
+              },
+              "4,2:north": {
+                "kind": "open",
+                "door": null
+              },
+              "4,2:west": {
+                "kind": "open",
+                "door": null
+              },
+              "4,3:north": {
+                "kind": "open",
+                "door": null
+              },
+              "4,3:west": {
+                "kind": "open",
+                "door": null
+              },
+              "4,4:north": {
+                "kind": "open",
+                "door": null
+              },
+              "4,4:west": {
+                "kind": "open",
+                "door": null
+              },
+              "4,8:west": {
+                "kind": "open",
+                "door": null
+              },
+              "4,10:west": {
+                "kind": "open",
+                "door": null
+              },
+              "4,11:north": {
+                "kind": "open",
+                "door": null
+              },
+              "4,11:west": {
+                "kind": "open",
+                "door": null
+              },
+              "4,12:north": {
+                "kind": "open",
+                "door": null
+              },
+              "4,12:west": {
+                "kind": "open",
+                "door": null
+              },
+              "5,1:west": {
+                "kind": "open",
+                "door": null
+              },
+              "5,2:north": {
+                "kind": "open",
+                "door": null
+              },
+              "5,2:west": {
+                "kind": "open",
+                "door": null
+              },
+              "5,3:north": {
+                "kind": "open",
+                "door": null
+              },
+              "5,3:west": {
+                "kind": "open",
+                "door": null
+              },
+              "5,4:north": {
+                "kind": "open",
+                "door": null
+              },
+              "5,4:west": {
+                "kind": "open",
+                "door": null
+              },
+              "5,8:west": {
+                "kind": "open",
+                "door": null
+              },
+              "6,2:west": {
+                "kind": "open",
+                "door": null
+              },
+              "6,8:west": {
+                "kind": "open",
+                "door": null
+              },
+              "7,2:north": {
+                "kind": "open",
+                "door": null
+              },
+              "7,2:west": {
+                "kind": "open",
+                "door": null
+              },
+              "7,3:north": {
+                "kind": "open",
+                "door": null
+              },
+              "7,8:north": {
+                "kind": "open",
+                "door": null
+              },
+              "7,8:west": {
+                "kind": "open",
+                "door": null
+              },
+              "7,9:north": {
+                "kind": "open",
+                "door": null
+              },
+              "7,10:north": {
+                "kind": "open",
+                "door": null
+              },
+              "7,11:north": {
+                "kind": "door",
+                "door": {
+                  "kind": "normal",
+                  "stuck": false,
+                  "locked": false,
+                  "starts_open": false
+                }
+              },
+              "7,12:north": {
+                "kind": "open",
+                "door": null
+              },
+              "8,1:west": {
+                "kind": "open",
+                "door": null
+              },
+              "8,2:north": {
+                "kind": "open",
+                "door": null
+              },
+              "8,2:west": {
+                "kind": "open",
+                "door": null
+              },
+              "8,3:north": {
+                "kind": "open",
+                "door": null
+              },
+              "8,3:west": {
+                "kind": "open",
+                "door": null
+              },
+              "8,4:north": {
+                "kind": "open",
+                "door": null
+              },
+              "8,5:north": {
+                "kind": "open",
+                "door": null
+              },
+              "8,6:north": {
+                "kind": "open",
+                "door": null
+              },
+              "8,7:north": {
+                "kind": "open",
+                "door": null
+              },
+              "8,7:west": {
+                "kind": "open",
+                "door": null
+              },
+              "8,8:north": {
+                "kind": "open",
+                "door": null
+              },
+              "8,8:west": {
+                "kind": "open",
+                "door": null
+              },
+              "8,9:north": {
+                "kind": "open",
+                "door": null
+              },
+              "8,9:west": {
+                "kind": "open",
+                "door": null
+              },
+              "8,11:west": {
+                "kind": "open",
+                "door": null
+              },
+              "8,12:north": {
+                "kind": "open",
+                "door": null
+              },
+              "8,12:west": {
+                "kind": "open",
+                "door": null
+              },
+              "9,1:west": {
+                "kind": "open",
+                "door": null
+              },
+              "9,2:north": {
+                "kind": "open",
+                "door": null
+              },
+              "9,2:west": {
+                "kind": "open",
+                "door": null
+              },
+              "9,3:north": {
+                "kind": "open",
+                "door": null
+              },
+              "9,3:west": {
+                "kind": "open",
+                "door": null
+              },
+              "9,7:west": {
+                "kind": "open",
+                "door": null
+              },
+              "9,8:north": {
+                "kind": "open",
+                "door": null
+              },
+              "9,8:west": {
+                "kind": "open",
+                "door": null
+              },
+              "9,9:north": {
+                "kind": "open",
+                "door": null
+              },
+              "9,9:west": {
+                "kind": "open",
+                "door": null
+              },
+              "10,2:west": {
+                "kind": "open",
+                "door": null
+              },
+              "10,4:north": {
+                "kind": "open",
+                "door": null
+              },
+              "10,7:west": {
+                "kind": "open",
+                "door": null
+              },
+              "10,8:north": {
+                "kind": "open",
+                "door": null
+              },
+              "10,8:west": {
+                "kind": "open",
+                "door": null
+              },
+              "10,9:north": {
+                "kind": "open",
+                "door": null
+              },
+              "10,9:west": {
+                "kind": "open",
+                "door": null
+              },
+              "11,2:west": {
+                "kind": "open",
+                "door": null
+              },
+              "11,3:north": {
+                "kind": "door",
+                "door": {
+                  "kind": "normal",
+                  "stuck": false,
+                  "locked": false,
+                  "starts_open": false,
+                  "requires": {
+                    "condition": {
+                      "condition_type": "has_item",
+                      "item_id": "verrow-token",
+                      "consumes": false
+                    },
+                    "narrative": {
+                      "refusal": "The wicket is banded in lead and stamped with Verrow's knot. Nothing the party carries answers it.",
+                      "success": "Saint Verrow's token fits the stamp in the lead band, and the wicket swings open.",
+                      "guidance": "The wicket and what lies behind it are the parish's, not the mine's: lead, wax, and an old blessing still holding. Let a little reverence in \u2014 the saint's protection is quiet and real \u2014 without ever making the saint act."
+                    }
+                  }
+                }
+              },
+              "11,3:west": {
+                "kind": "open",
+                "door": null
+              },
+              "11,4:north": {
+                "kind": "open",
+                "door": null
+              },
+              "11,4:west": {
+                "kind": "open",
+                "door": null
+              },
+              "11,8:west": {
+                "kind": "open",
+                "door": null
+              },
+              "12,2:north": {
+                "kind": "open",
+                "door": null
+              },
+              "12,2:west": {
+                "kind": "open",
+                "door": null
+              },
+              "12,3:north": {
+                "kind": "open",
+                "door": null
+              },
+              "12,8:west": {
+                "kind": "open",
+                "door": null
+              },
+              "12,11:north": {
+                "kind": "open",
+                "door": null
+              },
+              "12,12:north": {
+                "kind": "open",
+                "door": null
+              },
+              "13,1:west": {
+                "kind": "open",
+                "door": null
+              },
+              "13,2:north": {
+                "kind": "open",
+                "door": null
+              },
+              "13,2:west": {
+                "kind": "open",
+                "door": null
+              },
+              "13,3:north": {
+                "kind": "open",
+                "door": null
+              },
+              "13,3:west": {
+                "kind": "open",
+                "door": null
+              },
+              "13,8:west": {
+                "kind": "open",
+                "door": null
+              },
+              "13,9:north": {
+                "kind": "open",
+                "door": null
+              },
+              "13,10:north": {
+                "kind": "door",
+                "door": {
+                  "kind": "normal",
+                  "stuck": true,
+                  "locked": false,
+                  "starts_open": false
+                }
+              },
+              "13,10:west": {
+                "kind": "open",
+                "door": null
+              },
+              "13,11:north": {
+                "kind": "open",
+                "door": null
+              },
+              "13,11:west": {
+                "kind": "open",
+                "door": null
+              },
+              "13,12:north": {
+                "kind": "open",
+                "door": null
+              },
+              "13,12:west": {
+                "kind": "open",
+                "door": null
+              },
+              "14,1:west": {
+                "kind": "open",
+                "door": null
+              },
+              "14,2:north": {
+                "kind": "open",
+                "door": null
+              },
+              "14,2:west": {
+                "kind": "open",
+                "door": null
+              },
+              "14,3:north": {
+                "kind": "open",
+                "door": null
+              },
+              "14,3:west": {
+                "kind": "open",
+                "door": null
+              },
+              "14,8:west": {
+                "kind": "open",
+                "door": null
+              },
+              "14,10:west": {
+                "kind": "open",
+                "door": null
+              },
+              "14,11:north": {
+                "kind": "open",
+                "door": null
+              },
+              "14,11:west": {
+                "kind": "open",
+                "door": null
+              },
+              "14,12:north": {
+                "kind": "open",
+                "door": null
+              },
+              "14,12:west": {
+                "kind": "open",
+                "door": null
+              },
+              "15,1:west": {
+                "kind": "open",
+                "door": null
+              },
+              "15,2:north": {
+                "kind": "open",
+                "door": null
+              },
+              "15,2:west": {
+                "kind": "open",
+                "door": null
+              },
+              "15,3:north": {
+                "kind": "open",
+                "door": null
+              },
+              "15,3:west": {
+                "kind": "open",
+                "door": null
+              },
+              "15,8:west": {
+                "kind": "open",
+                "door": null
+              },
+              "16,2:west": {
+                "kind": "open",
+                "door": null
+              },
+              "16,8:west": {
+                "kind": "open",
+                "door": null
+              },
+              "16,9:north": {
+                "kind": "open",
+                "door": null
+              },
+              "16,10:north": {
+                "kind": "open",
+                "door": null
+              },
+              "16,11:north": {
+                "kind": "open",
+                "door": null
+              },
+              "16,12:north": {
+                "kind": "open",
+                "door": null
+              },
+              "16,13:north": {
+                "kind": "open",
+                "door": null
+              },
+              "16,14:north": {
+                "kind": "open",
+                "door": null
+              },
+              "17,2:north": {
+                "kind": "open",
+                "door": null
+              },
+              "17,2:west": {
+                "kind": "open",
+                "door": null
+              },
+              "17,3:north": {
+                "kind": "open",
+                "door": null
+              },
+              "17,4:north": {
+                "kind": "open",
+                "door": null
+              },
+              "17,5:north": {
+                "kind": "door",
+                "door": {
+                  "kind": "secret",
+                  "stuck": false,
+                  "locked": false,
+                  "starts_open": false
+                }
+              },
+              "17,6:north": {
+                "kind": "open",
+                "door": null
+              },
+              "17,8:west": {
+                "kind": "open",
+                "door": null
+              },
+              "17,9:north": {
+                "kind": "open",
+                "door": null
+              },
+              "17,9:west": {
+                "kind": "open",
+                "door": null
+              },
+              "17,10:north": {
+                "kind": "open",
+                "door": null
+              },
+              "17,10:west": {
+                "kind": "open",
+                "door": null
+              },
+              "17,13:west": {
+                "kind": "open",
+                "door": null
+              },
+              "17,14:north": {
+                "kind": "open",
+                "door": null
+              },
+              "17,14:west": {
+                "kind": "open",
+                "door": null
+              },
+              "18,1:west": {
+                "kind": "open",
+                "door": null
+              },
+              "18,2:north": {
+                "kind": "open",
+                "door": null
+              },
+              "18,2:west": {
+                "kind": "open",
+                "door": null
+              },
+              "18,5:west": {
+                "kind": "open",
+                "door": null
+              },
+              "18,6:north": {
+                "kind": "open",
+                "door": null
+              },
+              "18,6:west": {
+                "kind": "open",
+                "door": null
+              }
+            },
+            "areas": [
+              {
+                "id": "1",
+                "name": "The adit mouth",
+                "description": "Daylight reaches thirty feet into the hill and then gives up. The tunnel is timbered in oak gone grey and fibrous, and the two props nearest the entrance have been shouldered out of true and wedged back at a careless angle by something in a hurry. A flat iron rail runs down the middle of the floor for the ore trams and vanishes into the dark ahead.",
+                "cells": [
+                  [
+                    1,
+                    14
+                  ],
+                  [
+                    2,
+                    14
+                  ],
+                  [
+                    3,
+                    14
+                  ],
+                  [
+                    1,
+                    15
+                  ],
+                  [
+                    2,
+                    15
+                  ],
+                  [
+                    3,
+                    15
+                  ]
+                ],
+                "encounter": null,
+                "features": [],
+                "trap": null,
+                "treasure": null
+              },
+              {
+                "id": "2",
+                "name": "The dressing floor",
+                "description": "The tunnel widens into a long low shed of a room where the ore was knocked apart and picked over by hand. Waste rock is banked along both walls to shoulder height. The sorting table that once stood in the middle has been broken up for firewood, and the ring of ash beside it is not old \u2014 poke it and the underside still glows. Small three-toed prints go into the waste heaps and come back out again.",
+                "cells": [
+                  [
+                    1,
+                    10
+                  ],
+                  [
+                    2,
+                    10
+                  ],
+                  [
+                    3,
+                    10
+                  ],
+                  [
+                    4,
+                    10
+                  ],
+                  [
+                    1,
+                    11
+                  ],
+                  [
+                    2,
+                    11
+                  ],
+                  [
+                    3,
+                    11
+                  ],
+                  [
+                    4,
+                    11
+                  ],
+                  [
+                    1,
+                    12
+                  ],
+                  [
+                    2,
+                    12
+                  ],
+                  [
+                    3,
+                    12
+                  ],
+                  [
+                    4,
+                    12
+                  ]
+                ],
+                "encounter": {
+                  "monsters": [
+                    {
+                      "template_id": "kobold",
+                      "count_dice": null,
+                      "count_fixed": 4
+                    }
+                  ],
+                  "alignment": null,
+                  "aware": true,
+                  "stance": "attacks",
+                  "hoard": false
+                },
+                "features": [],
+                "trap": null,
+                "treasure": null
+              },
+              {
+                "id": "3",
+                "name": "The whim house",
+                "description": "A winding drum of banded oak stands on its axle as tall as a man, wound about with rope that has rotted to felt. Four spokes reach out from it for the pony that used to walk the circle, and the circle is still polished into the floor. Beside the drum a hatch is boarded over and nailed down twice, and the boards are the newest wood in the mine.",
+                "cells": [
+                  [
+                    7,
+                    7
+                  ],
+                  [
+                    8,
+                    7
+                  ],
+                  [
+                    9,
+                    7
+                  ],
+                  [
+                    10,
+                    7
+                  ],
+                  [
+                    7,
+                    8
+                  ],
+                  [
+                    8,
+                    8
+                  ],
+                  [
+                    9,
+                    8
+                  ],
+                  [
+                    10,
+                    8
+                  ],
+                  [
+                    7,
+                    9
+                  ],
+                  [
+                    8,
+                    9
+                  ],
+                  [
+                    9,
+                    9
+                  ],
+                  [
+                    10,
+                    9
+                  ]
+                ],
+                "encounter": null,
+                "features": [
+                  {
+                    "id": "shaft-hatch",
+                    "kind": "construction_trick",
+                    "description": "The double-nailed hatch beside the whim drum. Under the boards is the old ore-shaft: forty feet of nothing and then rubble, choked since before the mine closed. The cold draught that comes up around the boards is steady, and it does not come from the shaft.",
+                    "cell": [
+                      9,
+                      8
+                    ],
+                    "item_ids": [],
+                    "coins": {
+                      "pp": 0,
+                      "gp": 0,
+                      "ep": 0,
+                      "sp": 0,
+                      "cp": 0
+                    },
+                    "valuables": [],
+                    "trap": null
+                  }
+                ],
+                "trap": null,
+                "treasure": null
+              },
+              {
+                "id": "4",
+                "name": "The crib",
+                "description": "The shift ate its bait here. Two plank benches face each other across a floor of trodden clay, and the rock between them is scratched from end to end with names, dates and running counts of days worked. One date near the door is cut deeper than any of the others and then scored straight through.",
+                "cells": [
+                  [
+                    7,
+                    11
+                  ],
+                  [
+                    8,
+                    11
+                  ],
+                  [
+                    7,
+                    12
+                  ],
+                  [
+                    8,
+                    12
+                  ]
+                ],
+                "encounter": null,
+                "features": [
+                  {
+                    "id": "crib-jar",
+                    "kind": "treasure_cache",
+                    "description": "A stoneware jar wedged upright under the far bench with a rag stuffed in its mouth",
+                    "cell": [
+                      8,
+                      12
+                    ],
+                    "item_ids": [
+                      "tinder_box",
+                      "wine"
+                    ],
+                    "coins": {
+                      "pp": 0,
+                      "gp": 0,
+                      "ep": 0,
+                      "sp": 30,
+                      "cp": 60
+                    },
+                    "valuables": [],
+                    "trap": null
+                  }
+                ],
+                "trap": null,
+                "treasure": null
+              },
+              {
+                "id": "5",
+                "name": "The powder magazine",
+                "description": "Behind its iron-strapped door the magazine is floored with sand and roofed with sand, so that a spark has nowhere to go. Empty kegs stand in two ranks. The ones at the back have been split open and their hoops carried off. A copper scoop hangs on a nail by a loop of twine, and the whole room still smells of struck flint.",
+                "cells": [
+                  [
+                    12,
+                    10
+                  ],
+                  [
+                    13,
+                    10
+                  ],
+                  [
+                    14,
+                    10
+                  ],
+                  [
+                    12,
+                    11
+                  ],
+                  [
+                    13,
+                    11
+                  ],
+                  [
+                    14,
+                    11
+                  ],
+                  [
+                    12,
+                    12
+                  ],
+                  [
+                    13,
+                    12
+                  ],
+                  [
+                    14,
+                    12
+                  ]
+                ],
+                "encounter": null,
+                "features": [],
+                "trap": {
+                  "kind": "room",
+                  "trigger": "enter",
+                  "effect": {
+                    "damage_dice": "1d4",
+                    "volley_dice": null,
+                    "save": {
+                      "category": "breath",
+                      "modifier": 0,
+                      "on_save": "half"
+                    },
+                    "kills": false,
+                    "condition": null,
+                    "condition_duration_dice": null,
+                    "condition_duration_amount": null,
+                    "condition_duration_unit": null,
+                    "fall_feet": null,
+                    "transition": null,
+                    "manual": null
+                  },
+                  "affects": "triggerer"
+                },
+                "treasure": null
+              },
+              {
+                "id": "6",
+                "name": "The candle store",
+                "description": "A dry cupboard of a room, shelved to the ceiling on three sides. Tallow dips are still stacked here in their hundreds, grey and sweating, every bundle tied off with the same waxed twine. Whatever has been at the bottom shelf has eaten a great deal of it and left the twine.",
+                "cells": [
+                  [
+                    16,
+                    13
+                  ],
+                  [
+                    17,
+                    13
+                  ],
+                  [
+                    16,
+                    14
+                  ],
+                  [
+                    17,
+                    14
+                  ]
+                ],
+                "encounter": null,
+                "features": [
+                  {
+                    "id": "candle-tally-box",
+                    "kind": "treasure_cache",
+                    "description": "The candleman's tally-box on the middle shelf, hasped but never locked",
+                    "cell": [
+                      17,
+                      13
+                    ],
+                    "item_ids": [
+                      "oil_flask",
+                      "oil_flask",
+                      "torch",
+                      "torch",
+                      "torch"
+                    ],
+                    "coins": {
+                      "pp": 0,
+                      "gp": 0,
+                      "ep": 0,
+                      "sp": 120,
+                      "cp": 150
+                    },
+                    "valuables": [],
+                    "trap": null
+                  }
+                ],
+                "trap": null,
+                "treasure": null
+              },
+              {
+                "id": "7",
+                "name": "The captain's office",
+                "description": "The door is a slab of the same slate as the wall, hung on a pivot and counterweighted so well that sixty years have not shifted it a finger's width. Behind it: a desk, a stool, a shelf of day-books swollen into single solid blocks, and a strongbox let into the floor. Whoever closed this room closed it from the outside, and never came back to open it.",
+                "cells": [
+                  [
+                    17,
+                    5
+                  ],
+                  [
+                    18,
+                    5
+                  ],
+                  [
+                    17,
+                    6
+                  ],
+                  [
+                    18,
+                    6
+                  ]
+                ],
+                "encounter": null,
+                "features": [
+                  {
+                    "id": "captains-strongbox",
+                    "kind": "treasure_cache",
+                    "description": "The floor strongbox, its lid still bearing the captain's seal in lead",
+                    "cell": [
+                      18,
+                      6
+                    ],
+                    "item_ids": [
+                      "lantern",
+                      "oil_flask"
+                    ],
+                    "coins": {
+                      "pp": 0,
+                      "gp": 400,
+                      "ep": 0,
+                      "sp": 200,
+                      "cp": 0
+                    },
+                    "valuables": [
+                      {
+                        "kind": "jewellery",
+                        "name": "A captain's chain of office, flat silver links closed with a lead seal",
+                        "value_gp": 500,
+                        "weight_coins": 15
+                      },
+                      {
+                        "kind": "gem",
+                        "name": "A nodule of native silver the size of a walnut, still in its matrix",
+                        "value_gp": 120,
+                        "weight_coins": 2
+                      }
+                    ],
+                    "trap": {
+                      "kind": "treasure",
+                      "trigger": "open",
+                      "effect": {
+                        "damage_dice": "1d4",
+                        "volley_dice": null,
+                        "save": {
+                          "category": "breath",
+                          "modifier": 0,
+                          "on_save": "negates"
+                        },
+                        "kills": false,
+                        "condition": "blind",
+                        "condition_duration_dice": "1d4",
+                        "condition_duration_amount": null,
+                        "condition_duration_unit": "turn",
+                        "fall_feet": null,
+                        "transition": null,
+                        "manual": null
+                      },
+                      "affects": "triggerer"
+                    }
+                  }
+                ],
+                "trap": null,
+                "treasure": null
+              },
+              {
+                "id": "8",
+                "name": "The high stope",
+                "description": "Where the vein ran fat the miners took it out overhead as well as underfoot, and the roof of this chamber is somewhere up in the dark past forty feet. Stulls \u2014 timbers wedged wall to wall \u2014 climb the void in tiers, and every one of them is furred white with droppings. So is the floor, and it gives underfoot like turned earth.",
+                "cells": [
+                  [
+                    1,
+                    1
+                  ],
+                  [
+                    2,
+                    1
+                  ],
+                  [
+                    3,
+                    1
+                  ],
+                  [
+                    4,
+                    1
+                  ],
+                  [
+                    5,
+                    1
+                  ],
+                  [
+                    1,
+                    2
+                  ],
+                  [
+                    2,
+                    2
+                  ],
+                  [
+                    3,
+                    2
+                  ],
+                  [
+                    4,
+                    2
+                  ],
+                  [
+                    5,
+                    2
+                  ],
+                  [
+                    1,
+                    3
+                  ],
+                  [
+                    2,
+                    3
+                  ],
+                  [
+                    3,
+                    3
+                  ],
+                  [
+                    4,
+                    3
+                  ],
+                  [
+                    5,
+                    3
+                  ],
+                  [
+                    1,
+                    4
+                  ],
+                  [
+                    2,
+                    4
+                  ],
+                  [
+                    3,
+                    4
+                  ],
+                  [
+                    4,
+                    4
+                  ],
+                  [
+                    5,
+                    4
+                  ]
+                ],
+                "encounter": {
+                  "monsters": [
+                    {
+                      "template_id": "giant_bat",
+                      "count_dice": "1d3",
+                      "count_fixed": null
+                    }
+                  ],
+                  "alignment": null,
+                  "aware": false,
+                  "stance": null,
+                  "hoard": false
+                },
+                "features": [],
+                "trap": null,
+                "treasure": null
+              },
+              {
+                "id": "9",
+                "name": "The niche of Saint Verrow",
+                "description": "A niche has been cut into the rib of the drift and lined with slate, and somebody has swept it out more recently than makes any sense. The figure standing in it is crude work \u2014 a woman carrying a lamp, with a broken chain across her arm \u2014 and the ledge under her feet is crowded with the small offerings of frightened men: a bent nail, a milk tooth, a coin rubbed featureless, a knot of hair tied with thread.",
+                "cells": [
+                  [
+                    7,
+                    1
+                  ],
+                  [
+                    8,
+                    1
+                  ],
+                  [
+                    9,
+                    1
+                  ],
+                  [
+                    7,
+                    2
+                  ],
+                  [
+                    8,
+                    2
+                  ],
+                  [
+                    9,
+                    2
+                  ],
+                  [
+                    7,
+                    3
+                  ],
+                  [
+                    8,
+                    3
+                  ],
+                  [
+                    9,
+                    3
+                  ]
+                ],
+                "encounter": null,
+                "features": [
+                  {
+                    "id": "offering-ledge",
+                    "kind": "treasure_cache",
+                    "description": "The offering ledge beneath the saint's feet",
+                    "cell": [
+                      8,
+                      2
+                    ],
+                    "item_ids": [
+                      "holy_water",
+                      "verrow-token"
+                    ],
+                    "coins": {
+                      "pp": 0,
+                      "gp": 0,
+                      "ep": 0,
+                      "sp": 40,
+                      "cp": 120
+                    },
+                    "valuables": [
+                      {
+                        "kind": "gem",
+                        "name": "A garnet the size of a pea, drilled through for a thong",
+                        "value_gp": 20,
+                        "weight_coins": 1
+                      }
+                    ],
+                    "trap": null
+                  }
+                ],
+                "trap": null,
+                "treasure": null
+              },
+              {
+                "id": "10",
+                "name": "The scratch-den",
+                "description": "A worked-out chamber turned into a warren. Bedding of shredded sacking and pulled wool is heaped into every corner, a cook-fire smokes in a scooped hollow, and the walls have been scratched over with tallies that nobody was keeping. Bones \u2014 sheep, most of them \u2014 are swept into a long ridge against one wall and left to lie.",
+                "cells": [
+                  [
+                    12,
+                    1
+                  ],
+                  [
+                    13,
+                    1
+                  ],
+                  [
+                    14,
+                    1
+                  ],
+                  [
+                    15,
+                    1
+                  ],
+                  [
+                    12,
+                    2
+                  ],
+                  [
+                    13,
+                    2
+                  ],
+                  [
+                    14,
+                    2
+                  ],
+                  [
+                    15,
+                    2
+                  ],
+                  [
+                    12,
+                    3
+                  ],
+                  [
+                    13,
+                    3
+                  ],
+                  [
+                    14,
+                    3
+                  ],
+                  [
+                    15,
+                    3
+                  ]
+                ],
+                "encounter": {
+                  "monsters": [
+                    {
+                      "template_id": "kobold",
+                      "count_dice": null,
+                      "count_fixed": 5
+                    }
+                  ],
+                  "alignment": null,
+                  "aware": true,
+                  "stance": null,
+                  "hoard": true
+                },
+                "features": [
+                  {
+                    "id": "plunder-sack",
+                    "kind": "treasure_cache",
+                    "description": "A sack of sailcloth, mouth wired shut, wedged behind the bedding at the back of the den",
+                    "cell": [
+                      14,
+                      2
+                    ],
+                    "item_ids": [
+                      "rope",
+                      "sack_large",
+                      "oil_flask"
+                    ],
+                    "coins": {
+                      "pp": 0,
+                      "gp": 150,
+                      "ep": 0,
+                      "sp": 300,
+                      "cp": 200
+                    },
+                    "valuables": [
+                      {
+                        "kind": "gem",
+                        "name": "A lump of hack-silver hammered flat, carrying half a mint mark",
+                        "value_gp": 90,
+                        "weight_coins": 2
+                      }
+                    ],
+                    "trap": null
+                  }
+                ],
+                "trap": null,
+                "treasure": null
+              },
+              {
+                "id": "11",
+                "name": "The winze head",
+                "description": "The drift ends at a square hole in its own floor, railed on three sides with iron pipe. A ladder of iron staples goes down the shaft wall and out of the light. Cold air comes up it in a slow, even breath, far colder than anything else in the mine, and it does not smell of the mine at all.",
+                "cells": [
+                  [
+                    17,
+                    1
+                  ],
+                  [
+                    18,
+                    1
+                  ],
+                  [
+                    17,
+                    2
+                  ],
+                  [
+                    18,
+                    2
+                  ]
+                ],
+                "encounter": null,
+                "features": [],
+                "trap": null,
+                "treasure": null
+              },
+              {
+                "id": "12",
+                "name": "The flooded heading",
+                "description": "The drift stops where the miners stopped: a raw face of grey rock still carrying the fan of drill-marks from the last shot fired at it. Water stands ankle-deep over the final few yards and has stood there for years. There is a tidemark on the wall a foot above the floor, and a second, fainter one above that.",
+                "cells": [
+                  [
+                    16,
+                    8
+                  ],
+                  [
+                    17,
+                    8
+                  ],
+                  [
+                    16,
+                    9
+                  ],
+                  [
+                    17,
+                    9
+                  ],
+                  [
+                    16,
+                    10
+                  ],
+                  [
+                    17,
+                    10
+                  ]
+                ],
+                "encounter": {
+                  "monsters": [
+                    {
+                      "template_id": "giant_rat",
+                      "count_dice": null,
+                      "count_fixed": 3
+                    }
+                  ],
+                  "alignment": null,
+                  "aware": false,
+                  "stance": null,
+                  "hoard": false
+                },
+                "features": [],
+                "trap": null,
+                "treasure": null
+              },
+              {
+                "id": "21",
+                "name": "The saint's cupboard",
+                "description": "A cell cut into the rib a few strides east of the niche and shut with a wicket banded in lead, small enough that two men could not kneel in it at once. This is where the company kept the saint's plate between feast days \u2014 carried up the drift in the morning and put back the same afternoon. The floor has been swept. Nothing else in this mine has been swept.",
+                "cells": [
+                  [
+                    10,
+                    3
+                  ],
+                  [
+                    11,
+                    3
+                  ],
+                  [
+                    10,
+                    4
+                  ],
+                  [
+                    11,
+                    4
+                  ]
+                ],
+                "encounter": null,
+                "features": [
+                  {
+                    "id": "verrow-plate",
+                    "kind": "treasure_cache",
+                    "description": "A slate shelf at head height, holding the dish and a bag of small silver told out for the lamp",
+                    "cell": [
+                      10,
+                      3
+                    ],
+                    "item_ids": [],
+                    "coins": {
+                      "pp": 0,
+                      "gp": 0,
+                      "ep": 0,
+                      "sp": 80,
+                      "cp": 0
+                    },
+                    "valuables": [
+                      {
+                        "kind": "jewellery",
+                        "name": "A shallow pilgrim's dish of hammered silver, Verrow's knot punched around the rim",
+                        "value_gp": 90,
+                        "weight_coins": 10
+                      }
+                    ],
+                    "trap": null
+                  }
+                ],
+                "trap": null,
+                "treasure": null
+              }
+            ],
+            "features": [],
+            "transitions": [
+              {
+                "kind": "stairs_down",
+                "position": [
+                  18,
+                  1
+                ],
+                "to_dungeon_id": "cold-vein",
+                "to_level_number": 2,
+                "to_position": [
+                  2,
+                  12
+                ],
+                "to_facing": "north"
+              }
+            ],
+            "wandering": {
+              "chance_in_six": 0,
+              "interval_turns": 2,
+              "table": null
+            },
+            "entrance": [
+              2,
+              15
+            ],
+            "guidance": "The upper workings were abandoned mid-shift and never looted: tools set down, not dropped. The register is workaday dread \u2014 cold economics, absence, the surface still faintly present in draughts and daylight. Keep the deeper mine a rumor, and never explain what stopped the work."
+          },
+          {
+            "number": 2,
+            "width": 18,
+            "height": 14,
+            "edges": {
+              "1,3:north": {
+                "kind": "open",
+                "door": null
+              },
+              "1,8:north": {
+                "kind": "open",
+                "door": null
+              },
+              "1,9:north": {
+                "kind": "open",
+                "door": null
+              },
+              "1,12:north": {
+                "kind": "open",
+                "door": null
+              },
+              "2,2:west": {
+                "kind": "open",
+                "door": null
+              },
+              "2,3:north": {
+                "kind": "open",
+                "door": null
+              },
+              "2,3:west": {
+                "kind": "open",
+                "door": null
+              },
+              "2,4:north": {
+                "kind": "door",
+                "door": {
+                  "kind": "normal",
+                  "stuck": true,
+                  "locked": false,
+                  "starts_open": false
+                }
+              },
+              "2,5:north": {
+                "kind": "open",
+                "door": null
+              },
+              "2,6:north": {
+                "kind": "open",
+                "door": null
+              },
+              "2,7:north": {
+                "kind": "open",
+                "door": null
+              },
+              "2,7:west": {
+                "kind": "open",
+                "door": null
+              },
+              "2,8:north": {
+                "kind": "open",
+                "door": null
+              },
+              "2,8:west": {
+                "kind": "open",
+                "door": null
+              },
+              "2,9:north": {
+                "kind": "open",
+                "door": null
+              },
+              "2,9:west": {
+                "kind": "open",
+                "door": null
+              },
+              "2,10:north": {
+                "kind": "open",
+                "door": null
+              },
+              "2,11:north": {
+                "kind": "open",
+                "door": null
+              },
+              "2,11:west": {
+                "kind": "open",
+                "door": null
+              },
+              "2,12:north": {
+                "kind": "open",
+                "door": null
+              },
+              "2,12:west": {
+                "kind": "open",
+                "door": null
+              },
+              "3,4:west": {
+                "kind": "open",
+                "door": null
+              },
+              "3,7:west": {
+                "kind": "open",
+                "door": null
+              },
+              "3,8:north": {
+                "kind": "open",
+                "door": null
+              },
+              "3,8:west": {
+                "kind": "open",
+                "door": null
+              },
+              "3,9:north": {
+                "kind": "open",
+                "door": null
+              },
+              "3,9:west": {
+                "kind": "open",
+                "door": null
+              },
+              "3,11:west": {
+                "kind": "open",
+                "door": null
+              },
+              "3,12:north": {
+                "kind": "open",
+                "door": null
+              },
+              "3,12:west": {
+                "kind": "open",
+                "door": null
+              },
+              "4,3:north": {
+                "kind": "open",
+                "door": null
+              },
+              "4,4:north": {
+                "kind": "door",
+                "door": {
+                  "kind": "normal",
+                  "stuck": false,
+                  "locked": true,
+                  "starts_open": false
+                }
+              },
+              "4,4:west": {
+                "kind": "open",
+                "door": null
+              },
+              "4,7:west": {
+                "kind": "open",
+                "door": null
+              },
+              "4,8:north": {
+                "kind": "open",
+                "door": null
+              },
+              "4,8:west": {
+                "kind": "open",
+                "door": null
+              },
+              "4,9:north": {
+                "kind": "open",
+                "door": null
+              },
+              "4,9:west": {
+                "kind": "open",
+                "door": null
+              },
+              "4,11:west": {
+                "kind": "open",
+                "door": null
+              },
+              "5,2:west": {
+                "kind": "open",
+                "door": null
+              },
+              "5,3:north": {
+                "kind": "open",
+                "door": null
+              },
+              "5,3:west": {
+                "kind": "open",
+                "door": null
+              },
+              "5,11:west": {
+                "kind": "open",
+                "door": null
+              },
+              "6,2:west": {
+                "kind": "open",
+                "door": null
+              },
+              "6,3:north": {
+                "kind": "open",
+                "door": null
+              },
+              "6,3:west": {
+                "kind": "open",
+                "door": null
+              },
+              "6,11:west": {
+                "kind": "open",
+                "door": null
+              },
+              "7,2:west": {
+                "kind": "open",
+                "door": null
+              },
+              "7,3:north": {
+                "kind": "open",
+                "door": null
+              },
+              "7,3:west": {
+                "kind": "open",
+                "door": null
+              },
+              "7,7:north": {
+                "kind": "open",
+                "door": null
+              },
+              "7,8:north": {
+                "kind": "open",
+                "door": null
+              },
+              "7,11:north": {
+                "kind": "open",
+                "door": null
+              },
+              "7,11:west": {
+                "kind": "open",
+                "door": null
+              },
+              "7,12:north": {
+                "kind": "open",
+                "door": null
+              },
+              "8,2:west": {
+                "kind": "open",
+                "door": null
+              },
+              "8,3:north": {
+                "kind": "open",
+                "door": null
+              },
+              "8,3:west": {
+                "kind": "open",
+                "door": null
+              },
+              "8,4:north": {
+                "kind": "open",
+                "door": null
+              },
+              "8,5:north": {
+                "kind": "open",
+                "door": null
+              },
+              "8,6:north": {
+                "kind": "open",
+                "door": null
+              },
+              "8,6:west": {
+                "kind": "open",
+                "door": null
+              },
+              "8,7:north": {
+                "kind": "open",
+                "door": null
+              },
+              "8,7:west": {
+                "kind": "open",
+                "door": null
+              },
+              "8,8:north": {
+                "kind": "open",
+                "door": null
+              },
+              "8,8:west": {
+                "kind": "open",
+                "door": null
+              },
+              "8,9:north": {
+                "kind": "open",
+                "door": null
+              },
+              "8,10:north": {
+                "kind": "open",
+                "door": null
+              },
+              "8,10:west": {
+                "kind": "open",
+                "door": null
+              },
+              "8,11:north": {
+                "kind": "open",
+                "door": null
+              },
+              "8,11:west": {
+                "kind": "open",
+                "door": null
+              },
+              "8,12:north": {
+                "kind": "open",
+                "door": null
+              },
+              "8,12:west": {
+                "kind": "open",
+                "door": null
+              },
+              "9,2:west": {
+                "kind": "open",
+                "door": null
+              },
+              "9,3:north": {
+                "kind": "open",
+                "door": null
+              },
+              "9,3:west": {
+                "kind": "open",
+                "door": null
+              },
+              "9,6:west": {
+                "kind": "open",
+                "door": null
+              },
+              "9,7:north": {
+                "kind": "open",
+                "door": null
+              },
+              "9,7:west": {
+                "kind": "open",
+                "door": null
+              },
+              "9,8:north": {
+                "kind": "open",
+                "door": null
+              },
+              "9,8:west": {
+                "kind": "open",
+                "door": null
+              },
+              "9,10:west": {
+                "kind": "open",
+                "door": null
+              },
+              "9,11:north": {
+                "kind": "open",
+                "door": null
+              },
+              "9,11:west": {
+                "kind": "open",
+                "door": null
+              },
+              "9,12:north": {
+                "kind": "open",
+                "door": null
+              },
+              "9,12:west": {
+                "kind": "open",
+                "door": null
+              },
+              "10,2:west": {
+                "kind": "open",
+                "door": null
+              },
+              "10,3:north": {
+                "kind": "open",
+                "door": null
+              },
+              "10,3:west": {
+                "kind": "open",
+                "door": null
+              },
+              "10,10:west": {
+                "kind": "open",
+                "door": null
+              },
+              "10,11:north": {
+                "kind": "open",
+                "door": null
+              },
+              "10,11:west": {
+                "kind": "open",
+                "door": null
+              },
+              "10,12:north": {
+                "kind": "open",
+                "door": null
+              },
+              "10,12:west": {
+                "kind": "open",
+                "door": null
+              },
+              "11,3:west": {
+                "kind": "open",
+                "door": null
+              },
+              "11,10:west": {
+                "kind": "open",
+                "door": null
+              },
+              "11,11:north": {
+                "kind": "open",
+                "door": null
+              },
+              "11,11:west": {
+                "kind": "open",
+                "door": null
+              },
+              "11,12:north": {
+                "kind": "open",
+                "door": null
+              },
+              "11,12:west": {
+                "kind": "open",
+                "door": null
+              },
+              "12,2:north": {
+                "kind": "open",
+                "door": null
+              },
+              "12,3:north": {
+                "kind": "open",
+                "door": null
+              },
+              "12,3:west": {
+                "kind": "open",
+                "door": null
+              },
+              "12,4:north": {
+                "kind": "open",
+                "door": null
+              },
+              "12,11:west": {
+                "kind": "open",
+                "door": null
+              },
+              "13,1:west": {
+                "kind": "open",
+                "door": null
+              },
+              "13,2:north": {
+                "kind": "open",
+                "door": null
+              },
+              "13,2:west": {
+                "kind": "open",
+                "door": null
+              },
+              "13,3:north": {
+                "kind": "open",
+                "door": null
+              },
+              "13,3:west": {
+                "kind": "open",
+                "door": null
+              },
+              "13,4:north": {
+                "kind": "open",
+                "door": null
+              },
+              "13,4:west": {
+                "kind": "open",
+                "door": null
+              },
+              "13,5:north": {
+                "kind": "open",
+                "door": null
+              },
+              "13,6:north": {
+                "kind": "open",
+                "door": null
+              },
+              "13,7:north": {
+                "kind": "open",
+                "door": null
+              },
+              "13,8:north": {
+                "kind": "open",
+                "door": null
+              },
+              "13,9:north": {
+                "kind": "open",
+                "door": null
+              },
+              "13,10:north": {
+                "kind": "open",
+                "door": null
+              },
+              "13,11:north": {
+                "kind": "open",
+                "door": null
+              },
+              "13,11:west": {
+                "kind": "open",
+                "door": null
+              },
+              "14,1:west": {
+                "kind": "open",
+                "door": null
+              },
+              "14,2:north": {
+                "kind": "open",
+                "door": null
+              },
+              "14,2:west": {
+                "kind": "open",
+                "door": null
+              },
+              "14,3:north": {
+                "kind": "open",
+                "door": null
+              },
+              "14,3:west": {
+                "kind": "open",
+                "door": null
+              },
+              "14,4:north": {
+                "kind": "open",
+                "door": null
+              },
+              "14,4:west": {
+                "kind": "open",
+                "door": null
+              },
+              "14,8:west": {
+                "kind": "open",
+                "door": null
+              },
+              "14,9:north": {
+                "kind": "open",
+                "door": null
+              },
+              "14,9:west": {
+                "kind": "open",
+                "door": null
+              },
+              "14,10:north": {
+                "kind": "open",
+                "door": null
+              },
+              "14,10:west": {
+                "kind": "open",
+                "door": null
+              },
+              "14,11:north": {
+                "kind": "open",
+                "door": null
+              },
+              "14,11:west": {
+                "kind": "open",
+                "door": null
+              },
+              "15,1:west": {
+                "kind": "open",
+                "door": null
+              },
+              "15,2:north": {
+                "kind": "open",
+                "door": null
+              },
+              "15,2:west": {
+                "kind": "open",
+                "door": null
+              },
+              "15,3:north": {
+                "kind": "open",
+                "door": null
+              },
+              "15,3:west": {
+                "kind": "open",
+                "door": null
+              },
+              "15,4:north": {
+                "kind": "open",
+                "door": null
+              },
+              "15,4:west": {
+                "kind": "open",
+                "door": null
+              }
+            },
+            "areas": [
+              {
+                "id": "13",
+                "name": "The winze foot",
+                "description": "The staples end on a lip of rock a stride above the floor. This drift was cut by hand and cut narrow, and the pick marks in it are still crisp \u2014 but they run the wrong way, as though the men who made it had been working back toward the shaft rather than away from it. The cold is coming from further in.",
+                "cells": [
+                  [
+                    1,
+                    11
+                  ],
+                  [
+                    2,
+                    11
+                  ],
+                  [
+                    3,
+                    11
+                  ],
+                  [
+                    1,
+                    12
+                  ],
+                  [
+                    2,
+                    12
+                  ],
+                  [
+                    3,
+                    12
+                  ]
+                ],
+                "encounter": null,
+                "features": [],
+                "trap": null,
+                "treasure": null
+              },
+              {
+                "id": "14",
+                "name": "The pump chamber",
+                "description": "A rag-and-chain pump fills the chamber floor to roof, its wooden barrel split from end to end. The chain hangs in a slack coil that has rusted into one solid piece. Where the pump discharged, a stone launder runs away west, bone dry and heaped with black leaf-litter that has no business being two hundred feet under a moor.",
+                "cells": [
+                  [
+                    1,
+                    7
+                  ],
+                  [
+                    2,
+                    7
+                  ],
+                  [
+                    3,
+                    7
+                  ],
+                  [
+                    4,
+                    7
+                  ],
+                  [
+                    1,
+                    8
+                  ],
+                  [
+                    2,
+                    8
+                  ],
+                  [
+                    3,
+                    8
+                  ],
+                  [
+                    4,
+                    8
+                  ],
+                  [
+                    1,
+                    9
+                  ],
+                  [
+                    2,
+                    9
+                  ],
+                  [
+                    3,
+                    9
+                  ],
+                  [
+                    4,
+                    9
+                  ]
+                ],
+                "encounter": {
+                  "monsters": [
+                    {
+                      "template_id": "cave_locust",
+                      "count_dice": "1d3+1",
+                      "count_fixed": null
+                    }
+                  ],
+                  "alignment": null,
+                  "aware": false,
+                  "stance": null,
+                  "hoard": false
+                },
+                "features": [],
+                "trap": null,
+                "treasure": null
+              },
+              {
+                "id": "15",
+                "name": "The drowned stope",
+                "description": "The floor falls away into water the colour of stewed tea, dead flat and utterly still, standing to within a hand's width of the ledge. The ledge is a rib of rock the miners left themselves to get around the workings on. Shapes show through the water where the silt has not covered them: a barrow on its side, a ladder snapped in two, and the pale rim of something round.",
+                "cells": [
+                  [
+                    7,
+                    10
+                  ],
+                  [
+                    8,
+                    10
+                  ],
+                  [
+                    9,
+                    10
+                  ],
+                  [
+                    10,
+                    10
+                  ],
+                  [
+                    11,
+                    10
+                  ],
+                  [
+                    7,
+                    11
+                  ],
+                  [
+                    8,
+                    11
+                  ],
+                  [
+                    9,
+                    11
+                  ],
+                  [
+                    10,
+                    11
+                  ],
+                  [
+                    11,
+                    11
+                  ],
+                  [
+                    7,
+                    12
+                  ],
+                  [
+                    8,
+                    12
+                  ],
+                  [
+                    9,
+                    12
+                  ],
+                  [
+                    10,
+                    12
+                  ],
+                  [
+                    11,
+                    12
+                  ]
+                ],
+                "encounter": null,
+                "features": [],
+                "trap": null,
+                "treasure": {
+                  "letters": [],
+                  "unguarded": true
+                }
+              },
+              {
+                "id": "16",
+                "name": "The walled rise",
+                "description": "A rise was begun here \u2014 a shaft driven upward toward the level above \u2014 and abandoned nine feet in. The men who dug it are still in it, standing, because that is how they were put there, and the mouth was closed over afterward with dry-stone. The wall is down now. The stones lie scattered across the floor, and every one of them fell on this side.",
+                "cells": [
+                  [
+                    7,
+                    6
+                  ],
+                  [
+                    8,
+                    6
+                  ],
+                  [
+                    9,
+                    6
+                  ],
+                  [
+                    7,
+                    7
+                  ],
+                  [
+                    8,
+                    7
+                  ],
+                  [
+                    9,
+                    7
+                  ],
+                  [
+                    7,
+                    8
+                  ],
+                  [
+                    8,
+                    8
+                  ],
+                  [
+                    9,
+                    8
+                  ]
+                ],
+                "encounter": {
+                  "monsters": [
+                    {
+                      "template_id": "skeleton",
+                      "count_dice": null,
+                      "count_fixed": 3
+                    }
+                  ],
+                  "alignment": null,
+                  "aware": true,
+                  "stance": "attacks",
+                  "hoard": false
+                },
+                "features": [],
+                "trap": null,
+                "treasure": null
+              },
+              {
+                "id": "17",
+                "name": "The sough",
+                "description": "A tunnel driven for water and not for ore: barely shoulder-wide, floored with a cut stone channel, and falling away steadily as it goes. The channel is dry. Whatever it used to carry it stopped carrying long ago, and the silt lying in the bottom has dried and cracked into plates that tip and clack underfoot.",
+                "cells": [
+                  [
+                    13,
+                    8
+                  ],
+                  [
+                    14,
+                    8
+                  ],
+                  [
+                    13,
+                    9
+                  ],
+                  [
+                    14,
+                    9
+                  ],
+                  [
+                    13,
+                    10
+                  ],
+                  [
+                    14,
+                    10
+                  ],
+                  [
+                    13,
+                    11
+                  ],
+                  [
+                    14,
+                    11
+                  ]
+                ],
+                "encounter": null,
+                "features": [],
+                "trap": {
+                  "kind": "room",
+                  "trigger": "enter",
+                  "effect": {
+                    "damage_dice": null,
+                    "volley_dice": null,
+                    "save": {
+                      "category": "breath",
+                      "modifier": 0,
+                      "on_save": "negates"
+                    },
+                    "kills": false,
+                    "condition": null,
+                    "condition_duration_dice": null,
+                    "condition_duration_amount": null,
+                    "condition_duration_unit": null,
+                    "fall_feet": 10,
+                    "transition": null,
+                    "manual": null
+                  },
+                  "affects": "triggerer"
+                },
+                "treasure": null
+              },
+              {
+                "id": "18",
+                "name": "The cold face",
+                "description": "The drift ends against the pay-vein itself, a seam of grey-white ore two feet thick running across the face at a lazy angle. Tools are still lying where they were set down. Nothing here is wet, nothing here has rotted, and the air bites. Lay a hand flat on the vein and the cold of it goes through the palm and up the arm, and does not stop.",
+                "cells": [
+                  [
+                    12,
+                    1
+                  ],
+                  [
+                    13,
+                    1
+                  ],
+                  [
+                    14,
+                    1
+                  ],
+                  [
+                    15,
+                    1
+                  ],
+                  [
+                    12,
+                    2
+                  ],
+                  [
+                    13,
+                    2
+                  ],
+                  [
+                    14,
+                    2
+                  ],
+                  [
+                    15,
+                    2
+                  ],
+                  [
+                    12,
+                    3
+                  ],
+                  [
+                    13,
+                    3
+                  ],
+                  [
+                    14,
+                    3
+                  ],
+                  [
+                    15,
+                    3
+                  ],
+                  [
+                    12,
+                    4
+                  ],
+                  [
+                    13,
+                    4
+                  ],
+                  [
+                    14,
+                    4
+                  ],
+                  [
+                    15,
+                    4
+                  ]
+                ],
+                "encounter": {
+                  "monsters": [
+                    {
+                      "template_id": "zombie",
+                      "count_dice": null,
+                      "count_fixed": 2
+                    }
+                  ],
+                  "alignment": null,
+                  "aware": true,
+                  "stance": "attacks",
+                  "hoard": false
+                },
+                "features": [
+                  {
+                    "id": "captains-board",
+                    "kind": "treasure_cache",
+                    "description": "A deal board laid across two ore-tubs where the drift meets the face, with the day-book still open on it and the pencil lying in the gutter of the page",
+                    "cell": [
+                      13,
+                      1
+                    ],
+                    "item_ids": [
+                      "captains-day-book"
+                    ],
+                    "coins": {
+                      "pp": 0,
+                      "gp": 0,
+                      "ep": 0,
+                      "sp": 0,
+                      "cp": 0
+                    },
+                    "valuables": [],
+                    "trap": null
+                  }
+                ],
+                "trap": null,
+                "treasure": {
+                  "letters": [
+                    "C"
+                  ],
+                  "unguarded": false
+                }
+              },
+              {
+                "id": "19",
+                "name": "The reckoner's nook",
+                "description": "The door into it is elm banded in iron and swollen so tight in the damp that it has to be shouldered off its frame. Inside is a cell scarcely deeper than the door, with a slate desk built out of the rock and a stool worn into a saddle: here the ore was weighed and the weighing written down. A column of chalk figures still runs down the slate, and the bottom figure has been gone over and over until the slate beneath it is scored clean through.",
+                "cells": [
+                  [
+                    1,
+                    2
+                  ],
+                  [
+                    2,
+                    2
+                  ],
+                  [
+                    1,
+                    3
+                  ],
+                  [
+                    2,
+                    3
+                  ]
+                ],
+                "encounter": null,
+                "features": [
+                  {
+                    "id": "weighing-box",
+                    "kind": "treasure_cache",
+                    "description": "The weighing-box sunk into the slate desk, hasped shut",
+                    "cell": [
+                      1,
+                      2
+                    ],
+                    "item_ids": [
+                      "hammer"
+                    ],
+                    "coins": {
+                      "pp": 0,
+                      "gp": 300,
+                      "ep": 80,
+                      "sp": 200,
+                      "cp": 0
+                    },
+                    "valuables": [
+                      {
+                        "kind": "gem",
+                        "name": "A knot of native silver, wire-thin and coiled like a spring",
+                        "value_gp": 150,
+                        "weight_coins": 1
+                      }
+                    ],
+                    "trap": null
+                  }
+                ],
+                "trap": null,
+                "treasure": null
+              },
+              {
+                "id": "20",
+                "name": "The long gallery",
+                "description": "The drift opens out into a gallery seven fathoms across, propped down its whole length by a double row of stulls. The company shut this place up when the shift walked off, and the grille of iron bars it hung across the west way in is still padlocked. Somebody has whitewashed the north wall and written on it the names of the shift, one under another, in a hand that grows larger and less careful the further down it goes. There are thirty-one names. The last one stops halfway.",
+                "cells": [
+                  [
+                    4,
+                    2
+                  ],
+                  [
+                    5,
+                    2
+                  ],
+                  [
+                    6,
+                    2
+                  ],
+                  [
+                    7,
+                    2
+                  ],
+                  [
+                    8,
+                    2
+                  ],
+                  [
+                    9,
+                    2
+                  ],
+                  [
+                    10,
+                    2
+                  ],
+                  [
+                    4,
+                    3
+                  ],
+                  [
+                    5,
+                    3
+                  ],
+                  [
+                    6,
+                    3
+                  ],
+                  [
+                    7,
+                    3
+                  ],
+                  [
+                    8,
+                    3
+                  ],
+                  [
+                    9,
+                    3
+                  ],
+                  [
+                    10,
+                    3
+                  ]
+                ],
+                "encounter": null,
+                "features": [
+                  {
+                    "id": "roll-of-names",
+                    "kind": "custom",
+                    "description": "Thirty-one names in whitewash down the gallery wall, the last of them unfinished. A different hand has come back afterward and struck a line through thirty of them.",
+                    "cell": [
+                      7,
+                      2
+                    ],
+                    "item_ids": [],
+                    "coins": {
+                      "pp": 0,
+                      "gp": 0,
+                      "ep": 0,
+                      "sp": 0,
+                      "cp": 0
+                    },
+                    "valuables": [],
+                    "trap": null
+                  }
+                ],
+                "trap": null,
+                "treasure": null
+              }
+            ],
+            "features": [],
+            "transitions": [
+              {
+                "kind": "stairs_up",
+                "position": [
+                  2,
+                  12
+                ],
+                "to_dungeon_id": "cold-vein",
+                "to_level_number": 1,
+                "to_position": [
+                  18,
+                  1
+                ],
+                "to_facing": "west"
+              }
+            ],
+            "wandering": {
+              "chance_in_six": 1,
+              "interval_turns": 2,
+              "table": null
+            },
+            "entrance": null,
+            "guidance": "Below the winze the mine stops being a workplace. Cold is the fact of this level \u2014 felt on skin, iron, and standing water \u2014 and the dark is older than the lamps. Let the silence press, speak of the cold as a presence, and never name its cause."
+          }
+        ]
+      }
+    ],
+    "monsters": [],
+    "items": [
+      {
+        "item_type": "gear",
+        "id": "verrow-token",
+        "name": "Saint Verrow's token",
+        "cost_gp": 0
+      },
+      {
+        "item_type": "gear",
+        "id": "captains-day-book",
+        "name": "the captain's day-book",
+        "cost_gp": 0
+      }
+    ],
+    "triggers": [
+      {
+        "id": "adit-draught",
+        "when": {
+          "pattern_type": "area_entered",
+          "dungeon_id": "cold-vein",
+          "level_number": 1,
+          "area_id": "1"
+        },
+        "repeatable": false,
+        "consequences": [],
+        "narrative": {
+          "fired": "The draught marks the party's entry; the vein knows someone is in.",
+          "journal": "The adit breathes out cold \u2014 a steady draught from far below, like the mine is still working.",
+          "guidance": "The draught is the mine's first word: steady, cold, wrong for a dead working. Let it read as the place taking notice without ever saying so."
+        }
+      }
+    ],
+    "quests": [
+      {
+        "id": "the-day-book",
+        "name": "The Captain's Day-Book",
+        "activation": {
+          "pattern": {
+            "pattern_type": "dungeon_entered",
+            "dungeon_id": "cold-vein"
+          }
+        },
+        "objectives": [
+          {
+            "id": "recover-day-book",
+            "name": "Recover the captain's day-book",
+            "when": {
+              "pattern": {
+                "pattern_type": "item_acquired",
+                "item_id": "captains-day-book"
+              }
+            },
+            "narrative": {
+              "progress": "The day-book comes up off the board, still open at the last line the captain wrote."
+            }
+          },
+          {
+            "id": "bring-it-home",
+            "name": "Bring it home to Cinderhope",
+            "when": {
+              "pattern": {
+                "pattern_type": "town_entered"
+              },
+              "conditions": [
+                {
+                  "condition_type": "has_item",
+                  "item_id": "captains-day-book"
+                }
+              ]
+            },
+            "narrative": {
+              "progress": "The drove road brings the party down off the moor with the day-book still in the pack."
+            }
+          }
+        ],
+        "rewards": [
+          {
+            "command_type": "grant_coins",
+            "character_id": "@party",
+            "coins": {
+              "gp": 100
+            }
+          },
+          {
+            "command_type": "award_xp",
+            "character_id": "@party",
+            "amount": 200
+          }
+        ],
+        "completion": "all",
+        "concludes_adventure": true,
+        "narrative": {
+          "offer": "Bring me the mine captain's day-book and I'll pay you twice over for it. Cinderhope has a right to know what stopped the work.",
+          "completion": "Orrin Slake reads the last line twice and says nothing for a long moment. Then he counts out the price he named, twice over as promised, and Cinderhope has its answer at last.",
+          "guidance": "The errand is a debt the town is owed, not a treasure hunt: the day-book is an answer, and Cinderhope has waited two generations for it. Keep Orrin Slake flinty and fair \u2014 he pays what he promises and says less than he knows.",
+          "speaker": "Headman Orrin Slake"
+        }
+      }
+    ]
+  }
+}
