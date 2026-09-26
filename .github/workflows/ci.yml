@@ -74,7 +74,7 @@ jobs:
         # fail the job outright with an unresolvable action. Bumping it is therefore a
         # manual edit. Staying on 8.3.2 rather than 9.0.0, which is days old at the time of
         # writing and changes the cache-pruning default.
-        uses: astral-sh/setup-uv@v10.1.0
+        uses: astral-sh/setup-uv@v10.2.0
         with:
           enable-cache: true
 
@@ -141,7 +141,7 @@ jobs:
 
       - name: Install uv
         # Exact tag, and kept in step with the Tests job — see the note there.
-        uses: astral-sh/setup-uv@v10.1.0
+        uses: astral-sh/setup-uv@v10.2.0
         with:
           enable-cache: true
 
