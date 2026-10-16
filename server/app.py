@@ -499,9 +499,11 @@ def _cell_info(session: GameSession) -> dict:
             # nothing — and a pile holding only a left-behind wand is not empty.
             "count": len(pile.items) + len(pile.valuables) + len(pile.magic_items),
         }
-    for transition in level.transitions:
-        if tuple(transition.position) == tuple(position):
-            info["transition"] = transition.kind
+    # The engine's own answer to "what can `use_stairs` take here?": passages
+    # never match, because the party crosses them with `move_party`.
+    transition = level.transition_at(position)
+    if transition is not None:
+        info["transition"] = transition.kind
     if level.entrance is not None:
         info["at_entrance"] = tuple(level.entrance) == tuple(position)
     return info
