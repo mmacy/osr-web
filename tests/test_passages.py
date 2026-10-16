@@ -18,8 +18,6 @@ from server import library
 from server.app import _games, create_game, execute_command
 from server.library import add_adventure
 
-pytestmark = pytest.mark.xfail(reason="chunk: passages")
-
 DUNGEON = "keep"
 
 
