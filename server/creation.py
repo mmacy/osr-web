@@ -86,7 +86,7 @@ EQUIPMENT_KITS = (
         "id": "cleric",
         "class_id": "cleric",
         "name": "Cleric's kit",
-        "description": "Mace and mail, the holy symbol, and provisions for the crypt.",
+        "description": "Mace, mail, a holy symbol, and provisions.",
         "items": (
             ("mace", 1),
             ("chainmail", 1),
@@ -103,7 +103,7 @@ EQUIPMENT_KITS = (
         "id": "dwarf",
         "class_id": "dwarf",
         "name": "Dwarf's kit",
-        "description": "Axe, mail, and the spikes and hammer of a born tunneler.",
+        "description": "Axe, mail, a hammer, and iron spikes.",
         "items": (
             ("battle_axe", 1),
             ("chainmail", 1),
@@ -188,7 +188,7 @@ EQUIPMENT_KITS = (
         "id": "thief",
         "class_id": "thief",
         "name": "Thief's kit",
-        "description": "Leather, blades, rope, and the tools of the trade.",
+        "description": "Leather, blades, rope, and thieves' tools.",
         "items": (
             ("short_sword", 1),
             ("dagger", 1),
@@ -220,7 +220,7 @@ _REJECTION_TEXT = {
     "creation.draft.in_progress": "A character is already in progress. Finish or discard them first.",
     "creation.step.out_of_order": "First things first: {needs} comes before this.",
     "creation.step.locked": "That decision is already locked in.",
-    "creation.step.already_done": "Those dice are already cast.",
+    "creation.step.already_done": "Those dice are already rolled.",
     "creation.class.unknown": "No such class.",
     "creation.item.unknown": "The provisioner stocks no such thing.",
     "creation.kit.unknown": "The provisioner packs no such kit.",
@@ -231,7 +231,7 @@ _REJECTION_TEXT = {
     "creation.member.unknown_index": "No such member.",
     "creation.name.invalid": "Every character needs a name (at most {max} characters).",
     "creation.alignment.unknown": "Choose lawful, neutral, or chaotic.",
-    "creation.adjustment.malformed": "Adjustments trade whole, positive points.",
+    "creation.adjustment.malformed": "Adjustments must be whole numbers of points, and none can be negative.",
     "creation.house_rules.locked": "House rules lock once the first character is rolled.",
     "creation.house_rules.unknown_method": "Unknown ability-score method.",
     # osrlib creation codes.

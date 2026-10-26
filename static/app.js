@@ -1682,7 +1682,7 @@ function renderActions() {
       ctx.appendChild(button(`Wedge (${spikes})`, () => command({ command_type: "wedge_door", direction: S.view.location.facing }), {
         disabled: !spikes,
         title: spikes
-          ? "Drive an iron spike so the door cannot swing (one spike is spent)."
+          ? "Drive an iron spike into the door so it can't swing shut. This uses one spike."
           : "The party has no iron spikes. The provisioner in town sells them.",
       }));
     }
@@ -1706,8 +1706,8 @@ function renderActions() {
         if (thief && !inspected) command({ command_type: "inspect_treasure", character_id: thief.id, feature_id: feature.id });
       }, {
         key: "I", disabled: !thief || inspected,
-        title: !thief ? "A thief's work."
-          : inspected ? `${thief.name} has already gone over it.`
+        title: !thief ? "Only a thief can inspect treasure, and the party has no living thief."
+          : inspected ? `${thief.name} has already inspected this treasure.`
           : "Check the treasure for a trap (one turn).",
       }));
       if (trapSet) {
@@ -1715,7 +1715,7 @@ function renderActions() {
           if (thief) command({ command_type: "remove_treasure_trap", character_id: thief.id, feature_id: feature.id });
         }, {
           disabled: !thief,
-          title: !thief ? "A thief's work." : "Failure springs the trap on the thief.",
+          title: !thief ? "Only a thief can disarm a trap, and the party has no living thief." : "If disarming fails, the trap springs on the thief.",
         }));
       }
     }
@@ -2665,7 +2665,7 @@ function carrySection(m, sheet, inv) {
            .map((r) => `<option value="${r.id}">${esc(r.name)}</option>`)
            .join("")}</select>
        </label>`
-    : '<span class="give-none">No one else can carry.</span>';
+    : '<span class="give-none">There\'s no other living member to give items to.</span>';
 
   // Dropping goods onto the floor is an exploring (or encounter) action — never
   // in town, where a character would sell or hand off instead. Giving and
@@ -3151,7 +3151,7 @@ async function deleteAdventure(entry, card) {
     if (!known(UI.libSel)) UI.libSel = payload.default_id;
     if (!known(S.adventureId)) S.adventureId = null;
     if (UI.screen === "library") renderLibrary(card);
-    toast(`${entry.name} is out of the library.`, true);
+    toast(`${entry.name} is removed from the library.`, true);
   } catch (error) {
     toast(error.message, false);
   }
@@ -3252,7 +3252,7 @@ function renderStaging(card) {
         ${chosen ? '<button class="btn danger" id="st-save-del" type="button">Delete</button>' : ""}
       </div>
       <div class="roster staging-roster">${rows}</div>
-      <div class="roster-hint">Levels, experience, and gear carry over. Wounds and spent effects don't.</div>`;
+      <div class="roster-hint">Levels, experience, gear, and wounds carry over. Active effects and items bundled with the last adventure don't.</div>`;
   }
 
   card.innerHTML = `
@@ -4257,7 +4257,7 @@ function renderWizShop(card) {
       .map((it) => it.lots > 1 ? `${it.name} ×${it.lots}` : it.name).join(" · ");
     const dupes = kit.items.filter((it) => owned.has(it.item_id));
     const dupeNote = dupes.length
-      ? `<div class="kit-dupe">Already in your pack: ${esc(dupes.map((d) => d.name).join(", "))} . Buying the kit adds another.</div>`
+      ? `<div class="kit-dupe">Already in your pack: ${esc(dupes.map((d) => d.name).join(", "))}. Buying the kit adds another.</div>`
       : "";
     kitPanel = `
     <div class="wiz-panel kit-panel">

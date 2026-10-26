@@ -42,7 +42,7 @@ _REJECTION_TEXT = {
     "exploration.door.locked": "The door is locked.",
     "exploration.door.stuck": "The door is stuck fast. Someone will have to force it.",
     "exploration.door.not_stuck": "The door isn't stuck. It opens normally.",
-    "exploration.door.wedged": "The door is wedged and cannot swing.",
+    "exploration.door.wedged": "The door is already wedged with an iron spike.",
     "exploration.door.no_spike": "No one carries an iron spike.",
     "exploration.door.gate_refused": "The door will not open for the party.",
     "exploration.action.requires_light": "It is too dark to do that.",
@@ -85,7 +85,7 @@ _REJECTION_TEXT = {
     "items.use.unknown_target": "No such target.",
     "items.device.inert": "Nothing happens.",
     "items.scroll.spent": "The scroll is spent.",
-    "items.scroll.no_such_spell": "The scroll holds no such spell.",
+    "items.scroll.no_such_spell": "That spell isn't on the scroll.",
     "items.scroll.wrong_caster": "That scroll is not written for them.",
     "items.purchase.insufficient_funds": "Not enough gold.",
     "items.purchase.not_stocked": "The trader doesn't carry that.",
@@ -778,8 +778,7 @@ class Narrator:
             for event in events
             if event.item_ids
         ]
-        if clauses:
-            sentences.append(f"{'; '.join(clauses)}.")
+        sentences.extend(f"{clause}." for clause in clauses)
         return {"kind": "treasure", "text": " ".join(sentences)}
 
     def _on_items_left_behind(self, event):

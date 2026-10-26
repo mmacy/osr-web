@@ -582,7 +582,7 @@ class TestDistributedHaul:
                 "kind": "treasure",
                 "text": (
                     "The party splits 114 gp in coin. "
-                    "Corwin takes A river-green beryl the size of a thumbnail; "
+                    "Corwin takes A river-green beryl the size of a thumbnail. "
                     "Fox takes Silver dagger, Holy water (vial)."
                 ),
             }
