@@ -68,7 +68,7 @@ player commands — but this document's one trigger authors no consequences. The
 *not* restricted to player commands, though: a single `{"command_type": "set_flag", "key":
 "barrow.rite", "value": "spoken"}` after the idol is taken completes the quest and puts the session
 in `victory`. That is by design, and since phase 3 of the authored-layer spec the client answers it
-with the victory overlay: "the adventure is won", *The tale is told*, the fortune line, the roster,
+with the victory overlay: "victory", *The adventure is won*, the fortune line, the roster,
 the journal on the card, and three verbs (Roll a new party, Save the party, Return to the title).
 Esc is the floor there, and a reload comes back to the same screen.
 
@@ -352,7 +352,7 @@ Three things measured on that leg at seed 42, none of them guesses:
   180-third turn threshold: the clock reads the same at the landing (turn 7, 420 rounds) as it did at
   the vault.
 - **The torch dies on the way to town, not underground.** `travel_to_town` spends the two travel
-  turns, and its delta opens with "The light gutters and dies."
+  turns, and its delta opens with "The light burns out."
 
 The homecoming completes `return-it`, the quest concludes the adventure, and the session goes
 `victory` — which is what raises the overlay the shot is of. The card's fortune line reads *The party

@@ -709,7 +709,7 @@ class TestTheSpine:
         assert payload["view"]["quests"] == []
         lines = texts(payload)
         assert lines.count(f"Quest complete: {QUEST}.") == 1
-        assert lines.count(f"The adventure is won — {QUEST} is done.") == 1
+        assert lines.count(f"The adventure is won. {QUEST} is complete.") == 1
         # The two terminal events carry the same authored beat; it renders on
         # `quest_completed` alone, and the journal records it once.
         assert lines.count(COMPLETION) == 1

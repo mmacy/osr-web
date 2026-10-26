@@ -133,7 +133,7 @@ class TestAttackRolled:
         )
         assert entry == {
             "kind": "mech",
-            "text": "Flarg strikes the helpless Kobold with dagger — no roll needed.",
+            "text": "Flarg strikes the helpless Kobold with dagger. No roll is needed.",
         }
 
     def test_natural_twenty_tags_the_hit(self):
@@ -177,24 +177,24 @@ class TestSearchFinds:
         entry = combat_narrator()._render_event(search("secret_doors", "secret_door:east"))
         assert entry == {
             "kind": "treasure",
-            "text": "Flarg searches for secret doors — and finds a secret door to the east!",
+            "text": "Flarg searches for secret doors and finds a secret door to the east!",
         }
 
     def test_room_trap_never_names_its_area(self):
         entry = combat_narrator()._render_event(search("room_traps", "room_trap:4"))
-        assert entry["text"] == "Flarg searches for traps — and finds a hidden trap!"
+        assert entry["text"] == "Flarg searches for traps and finds a hidden trap!"
         assert "room_trap" not in entry["text"]
         assert "4" not in entry["text"]
 
     def test_construction_never_names_its_feature(self):
         entry = combat_narrator()._render_event(search("construction", "construction:feature-2"))
-        assert entry["text"] == ("Flarg searches for odd construction — and finds a stretch of odd construction!")
+        assert entry["text"] == ("Flarg searches for odd construction and finds a stretch of odd construction!")
         assert "feature-2" not in entry["text"]
 
     def test_two_finds_read_as_a_sentence(self):
         entry = combat_narrator()._render_event(search("secret_doors", "secret_door:north", "secret_door:west"))
         assert entry["text"] == (
-            "Flarg searches for secret doors — and finds a secret door to the north and a secret door to the west!"
+            "Flarg searches for secret doors and finds a secret door to the north and a secret door to the west!"
         )
 
     def test_three_finds_take_a_serial_comma(self):
@@ -207,7 +207,7 @@ class TestSearchFinds:
             )
         )
         assert entry["text"] == (
-            "Flarg searches for secret doors — and finds a secret door to the north, "
+            "Flarg searches for secret doors and finds a secret door to the north, "
             "a hidden trap, and a stretch of odd construction!"
         )
 
@@ -215,11 +215,11 @@ class TestSearchFinds:
         entry = combat_narrator()._render_event(
             search("construction", "construction:feature-2", "construction:feature-9")
         )
-        assert entry["text"] == ("Flarg searches for odd construction — and finds a stretch of odd construction!")
+        assert entry["text"] == ("Flarg searches for odd construction and finds a stretch of odd construction!")
 
     def test_unknown_token_shape_degrades_instead_of_leaking(self):
         entry = combat_narrator()._render_event(search("secret_doors", "portcullis:winch-7"))
-        assert entry["text"] == ("Flarg searches for secret doors — and finds something out of place!")
+        assert entry["text"] == ("Flarg searches for secret doors and finds something out of place!")
         assert "portcullis" not in entry["text"]
         assert "winch-7" not in entry["text"]
 
@@ -229,7 +229,7 @@ class TestSearchFinds:
 
     def test_secret_door_without_a_known_direction_drops_the_bearing(self):
         entry = combat_narrator()._render_event(search("secret_doors", "secret_door:widdershins"))
-        assert entry["text"] == ("Flarg searches for secret doors — and finds a secret door!")
+        assert entry["text"] == ("Flarg searches for secret doors and finds a secret door!")
         assert "widdershins" not in entry["text"]
 
     def test_nothing_found_says_so(self):
@@ -582,7 +582,7 @@ class TestDistributedHaul:
                 "kind": "treasure",
                 "text": (
                     "The party splits 114 gp in coin. "
-                    "Corwin takes A river-green beryl the size of a thumbnail; "
+                    "Corwin takes A river-green beryl the size of a thumbnail. "
                     "Fox takes Silver dagger, Holy water (vial)."
                 ),
             }
@@ -739,14 +739,14 @@ class TestLeftBehind:
         assert haul_narrator().render([self.left_behind(coins_gp_value=439)]) == [
             {
                 "kind": "system",
-                "text": "The party cannot carry it all — 439 gp in coin stays where it lies.",
+                "text": "The party cannot carry it all and leaves 439 gp in coin behind.",
             }
         ]
 
     def test_items_and_coins(self):
         entry = haul_narrator().render([self.left_behind(("plate_mail", "torch", "torch"), 40)])[0]
         assert entry["text"] == (
-            "The party cannot carry it all — Plate mail, Torches (6) ×2 and 40 gp in coin stays where it lies."
+            "The party cannot carry it all and leaves Plate mail, Torches (6) ×2 and 40 gp in coin behind."
         )
 
     def test_it_never_falls_through_to_the_engine_message(self):
@@ -755,7 +755,7 @@ class TestLeftBehind:
         entry = haul_narrator().render([self.left_behind(("silver_dagger",))])[0]
         assert entry["kind"] == "system"
         assert "silver_dagger" not in entry["text"]
-        assert entry["text"].startswith("The party cannot carry it all —")
+        assert entry["text"].startswith("The party cannot carry it all and leaves")
 
 
 class TestTownSpoils:
@@ -839,7 +839,7 @@ class TestAdvancementLines:
         )
         assert entry == {
             "kind": "system",
-            "text": "Corwin is now level 2 — Seer (+4 hp).",
+            "text": "Corwin is now level 2 (Seer, +4 hp).",
         }
 
     def test_a_level_past_the_title_list_drops_the_clause(self):
@@ -987,7 +987,7 @@ class TestItemUse:
         )
         assert entry == {
             "kind": "danger",
-            "text": "A curse — Fox cannot be rid of the Sword -1, Cursed.",
+            "text": "The Sword -1, Cursed is cursed, and Fox cannot get rid of it.",
         }
         assert "magic-item" not in entry["text"]
 
@@ -1016,7 +1016,7 @@ class TestMonstersLeftBehind:
         )
         assert entry == {
             "kind": "mech",
-            "text": "Kobold abandon 2 helpless fellows where they lie.",
+            "text": "The Kobold group abandons 2 helpless fellows where they lie.",
         }
 
     def test_one_abandoned_reads_singular(self):
@@ -1025,7 +1025,7 @@ class TestMonstersLeftBehind:
         entry = narrator._on_monsters_left_behind(
             MonstersLeftBehindEvent(group_id="group-0002", source_group_id="group-0001", count=1)
         )
-        assert entry["text"] == "Kobold abandon 1 helpless fellow where they lie."
+        assert entry["text"] == "The Kobold group abandons 1 helpless fellow where they lie."
 
 
 REFUSAL = "The wicket is banded in lead. Nothing the party carries answers it."
@@ -1154,8 +1154,8 @@ class TestAuthoredLayerLines:
             for model in (ObjectiveRevealedEvent, ObjectiveCompletedEvent)
         ]
         assert texts == [
-            "New objective: Find the day-book — The pay-vein.",
-            "Objective complete: Find the day-book — The pay-vein.",
+            "New objective in The pay-vein: Find the day-book.",
+            "Objective complete in The pay-vein: Find the day-book.",
         ]
 
     def test_an_unnamed_objective_prints_the_label_the_engine_gave_it(self):
@@ -1172,7 +1172,7 @@ class TestAuthoredLayerLines:
         )
         assert entry == {
             "kind": "system",
-            "text": "Objective complete: find-day-book — The pay-vein.",
+            "text": "Objective complete in The pay-vein: find-day-book.",
         }
 
     def test_the_ending_speaks_its_beat_exactly_once(self):
@@ -1188,7 +1188,7 @@ class TestAuthoredLayerLines:
         assert entries == [
             {"kind": "system", "text": "Quest complete: The pay-vein."},
             {"kind": "prose", "text": beat},
-            {"kind": "system", "text": "The adventure is won — The pay-vein is done."},
+            {"kind": "system", "text": "The adventure is won. The pay-vein is complete."},
         ]
         assert [entry["text"] for entry in entries].count(beat) == 1
 

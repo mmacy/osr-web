@@ -74,7 +74,7 @@ class TestSaveSummaries:
     def test_unnamed_save_gets_a_derived_name_with_place_and_turn(self, game_id):
         result = save(game_id)
         summary = saves()["saves"][0]
-        assert summary["name"] == "The Cold Vein — turn 0"
+        assert summary["name"] == "The Cold Vein, turn 0"
         assert result["name"] == summary["name"]
         assert summary["turn"] == 0
         assert summary["place"] == "Cinderhope"
@@ -84,7 +84,7 @@ class TestSaveSummaries:
         save(game_id)
         summary = saves()["saves"][0]
         assert summary["place"] == "The Cold Vein, level 1"
-        assert summary["name"].startswith("The Cold Vein — level 1, turn ")
+        assert summary["name"].startswith("The Cold Vein, level 1, turn ")
 
     def test_custom_name_is_stored_and_listed(self, game_id):
         result = save(game_id, {"name": "  Before the vault  "})
@@ -93,7 +93,7 @@ class TestSaveSummaries:
 
     def test_blank_name_falls_back_to_derived(self, game_id):
         result = save(game_id, {"name": "   "})
-        assert result["name"] == "The Cold Vein — turn 0"
+        assert result["name"] == "The Cold Vein, turn 0"
 
     def test_overlong_name_is_422(self, game_id):
         with pytest.raises(HTTPException) as excinfo:

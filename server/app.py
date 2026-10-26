@@ -235,7 +235,7 @@ def _save_version_error(request: Request, error: SaveVersionError) -> JSONRespon
 def _game_or_404(game_id: str) -> Game:
     game = _touch(_games, game_id)
     if game is None:
-        raise HTTPException(status_code=404, detail=f"unknown game id {game_id!r}")
+        raise HTTPException(status_code=404, detail=f"No game with id {game_id!r} is running on the server.")
     return game
 
 
@@ -470,7 +470,7 @@ def _cell_info(session: GameSession) -> dict:
             info["features"].append(
                 {
                     "id": feature.id,
-                    "description": feature.description or "a treasure cache",
+                    "description": feature.description or "A treasure cache",
                     "trap_found": ref in state.found_traps
                     and ref not in state.removed_traps
                     and ref not in state.sprung_traps,
@@ -485,7 +485,7 @@ def _cell_info(session: GameSession) -> dict:
             info["features"].append(
                 {
                     "id": cache_id,
-                    "description": "treasure, free for the taking",
+                    "description": "An untrapped treasure hoard",
                     "trap_found": False,
                     "inspected_by": list(state.inspect_attempts.get(cache_id, [])),
                 }
@@ -514,7 +514,7 @@ def _current_battle_round(view: dict) -> dict:
 
     osrlib's `EncounterView.battle_round` is `session.battle.round`: the count of
     battle rounds already **resolved**, which is one behind the round the party is
-    about to declare — and one behind the `— Round N —` header the transcript
+    about to declare — and one behind the `Round N` header the transcript
     prints when that round resolves (`server.narrate.Narrator._on_battle_round`,
     reading the engine's own `battle_round` event). The client reads this field as
     the current round for the declaration panel and the roundbar, so the
@@ -665,7 +665,7 @@ async def upload_adventure(request: Request) -> dict:
     """
     raw = await request.body()
     if len(raw) > _MAX_ADVENTURE_BYTES:
-        raise HTTPException(status_code=422, detail="adventure document too large (20 MB limit)")
+        raise HTTPException(status_code=422, detail="The adventure file is too large. The limit is 20 MB.")
     entry = add_adventure(raw)
     return {"adventure_id": entry.id, **adventures()}
 
@@ -687,7 +687,7 @@ def delete_adventure(adventure_id: str) -> dict:
     """
     entry = adventure_entry(adventure_id)
     if entry is None:
-        raise HTTPException(status_code=404, detail=f"unknown adventure id {adventure_id!r}")
+        raise HTTPException(status_code=404, detail=f"No adventure with id {adventure_id!r} is in the library.")
     if not entry.removable:
         raise HTTPException(
             status_code=422,
@@ -715,14 +715,14 @@ def _save_path(save_id: str) -> Path:
     into `_saves_dir()`.
     """
     if not _SAVE_ID_PATTERN.match(save_id):
-        raise HTTPException(status_code=404, detail=f"unknown save id {save_id!r}")
+        raise HTTPException(status_code=404, detail=f"No save with id {save_id!r} is on the server.")
     return _saves_dir() / f"{save_id}.json"
 
 
 def _save_document(save_id: str) -> dict:
     path = _save_path(save_id)
     if not path.is_file():
-        raise HTTPException(status_code=404, detail=f"unknown save id {save_id!r}")
+        raise HTTPException(status_code=404, detail=f"No save with id {save_id!r} is on the server.")
     with path.open(encoding="utf-8") as handle:
         return json.load(handle)
 
@@ -763,7 +763,7 @@ def _save_place(payload: dict) -> str:
         level = location.get("level_number")
         return f"{dungeon_name or 'The dungeon'}, level {level}"
     town = adventure.get("town") or {}
-    return str(town.get("name") or "") or "town"
+    return str(town.get("name") or "") or "Town"
 
 
 def _derived_save_name(payload: dict) -> str:
@@ -772,8 +772,8 @@ def _derived_save_name(payload: dict) -> str:
     turn = int(payload.get("clock_rounds") or 0) // 60
     location = (payload.get("dungeon_state") or {}).get("location") or {}
     if location.get("kind") == "dungeon":
-        return f"{adventure_name} — level {location.get('level_number')}, turn {turn}"
-    return f"{adventure_name} — turn {turn}"
+        return f"{adventure_name}, level {location.get('level_number')}, turn {turn}"
+    return f"{adventure_name}, turn {turn}"
 
 
 def _save_summary(save_id: str, document: dict, saved_at: int) -> dict:
@@ -839,7 +839,7 @@ def rename_save(save_id: str, body: dict) -> dict:
         raise HTTPException(status_code=422, detail="save name must not be empty")
     path = _save_path(save_id)
     if not path.is_file():
-        raise HTTPException(status_code=404, detail=f"unknown save id {save_id!r}")
+        raise HTTPException(status_code=404, detail=f"No save with id {save_id!r} is on the server.")
     with path.open(encoding="utf-8") as handle:
         document = json.load(handle)
     document["name"] = name
@@ -856,7 +856,7 @@ def delete_save(save_id: str) -> dict:
     """Delete one save file; unknown ids are a 404."""
     path = _save_path(save_id)
     if not path.is_file():
-        raise HTTPException(status_code=404, detail=f"unknown save id {save_id!r}")
+        raise HTTPException(status_code=404, detail=f"No save with id {save_id!r} is on the server.")
     path.unlink()
     return {"save_id": save_id, "deleted": True}
 
@@ -887,7 +887,7 @@ def delete_all_saves() -> dict:
 def _builder_or_404(builder_id: str) -> PartyBuilder:
     builder = _touch(_builders, builder_id)
     if builder is None:
-        raise HTTPException(status_code=404, detail=f"unknown party builder id {builder_id!r}")
+        raise HTTPException(status_code=404, detail=f"No party builder with id {builder_id!r} is open on the server.")
     return builder
 
 
@@ -1053,7 +1053,7 @@ def create_game(body: dict | None = None) -> dict:
         adventure_id = body.get("adventure_id")
         entry = adventure_entry(adventure_id if isinstance(adventure_id, str) else None)
         if entry is None:
-            raise HTTPException(status_code=404, detail=f"unknown adventure id {adventure_id!r}")
+            raise HTTPException(status_code=404, detail=f"No adventure with id {adventure_id!r} is in the library.")
         party = None
         party_builder_id = body.get("party_builder_id")
         party_save_id = body.get("party_save_id")
@@ -1102,7 +1102,7 @@ def delete_game(game_id: str) -> dict:
     with _store_lock:
         game = _games.pop(game_id, None)
     if game is None:
-        raise HTTPException(status_code=404, detail=f"unknown game id {game_id!r}")
+        raise HTTPException(status_code=404, detail=f"No game with id {game_id!r} is running on the server.")
     return {"game_id": game_id, "deleted": True}
 
 
