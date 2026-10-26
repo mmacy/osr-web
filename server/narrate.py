@@ -113,7 +113,7 @@ _REJECTION_TEXT = {
         "The spell book is full at that spell level. "
         "It has room for as many spells as the caster can memorize at each level."
     ),
-    "battle.declaration.not_in_front_rank": "Only the front rank can reach with melee weapons.",
+    "battle.declaration.not_in_front_rank": "Only the front rank can make melee attacks.",
     "battle.declaration.roster_mismatch": "Every able member needs exactly one action.",
     "combat.attack.out_of_reach": "The enemy is out of reach. Close the distance first.",
     "combat.attack.out_of_range": "The target is out of range.",
