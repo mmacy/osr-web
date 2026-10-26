@@ -1016,7 +1016,7 @@ class TestMonstersLeftBehind:
         )
         assert entry == {
             "kind": "mech",
-            "text": "Kobold abandon 2 helpless fellows where they lie.",
+            "text": "The Kobold group abandons 2 helpless fellows where they lie.",
         }
 
     def test_one_abandoned_reads_singular(self):
@@ -1025,7 +1025,7 @@ class TestMonstersLeftBehind:
         entry = narrator._on_monsters_left_behind(
             MonstersLeftBehindEvent(group_id="group-0002", source_group_id="group-0001", count=1)
         )
-        assert entry["text"] == "Kobold abandon 1 helpless fellow where they lie."
+        assert entry["text"] == "The Kobold group abandons 1 helpless fellow where they lie."
 
 
 REFUSAL = "The wicket is banded in lead. Nothing the party carries answers it."

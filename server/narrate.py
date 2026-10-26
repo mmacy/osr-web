@@ -459,6 +459,17 @@ class Narrator:
             return "the monsters"
         return ref
 
+    def _group_name(self, ref: str) -> str:
+        """A capitalized noun phrase for a monster group, such as "The Kobold group".
+
+        A group's label is a singular monster name, so the transcript names the group
+        instead and the verb agrees with it.
+        """
+        label = self._name(ref)
+        if label in ("the monsters", ref):
+            return "The monster group"
+        return f"The {label} group"
+
     def _substitute_ids(self, text: str) -> str:
         return re.sub(
             r"\b(character|monster|npc|group)-\d+\b",
@@ -981,30 +992,30 @@ class Narrator:
         }
 
     def _on_monster_fled(self, event):
-        label = self._name(event.group_id)
+        label = self._group_name(event.group_id)
         if event.code == "battle.side.surrendered":
             return {
                 "kind": "mech",
-                "text": f"{label} throw down their arms and surrender!",
+                "text": f"{label} throws down its arms and surrenders!",
             }
-        return {"kind": "mech", "text": f"{label} break and flee!"}
+        return {"kind": "mech", "text": f"{label} breaks and flees!"}
 
     def _on_monsters_left_behind(self, event):
         # A routing group left its immobilized (asleep, paralysed, webbed)
         # members where they lie, as their own group. Without this line the
         # sidebar sprouts a second group the log never explained — and the LLM
         # narrator, fed the same transcript, would invent its own reason.
-        label = self._name(event.source_group_id)
+        label = self._group_name(event.source_group_id)
         fellows = "fellow" if event.count == 1 else "fellows"
         return {
             "kind": "mech",
-            "text": f"{label} abandon {event.count} helpless {fellows} where they lie.",
+            "text": f"{label} abandons {event.count} helpless {fellows} where they lie.",
         }
 
     def _on_group_moved(self, event):
         return {
             "kind": "mech",
-            "text": f"{self._name(event.group_id)} now {event.distance_feet} feet away.",
+            "text": f"{self._group_name(event.group_id)} is now {event.distance_feet} feet away.",
         }
 
     def _on_attack_rolled(self, event):
