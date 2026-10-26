@@ -100,10 +100,10 @@ _REJECTION_TEXT = {
     "magic.cast.not_memorized": "That spell is not prepared.",
     "magic.cast.target_count": "That's the wrong number of targets for this spell.",
     "magic.cast.out_of_range": "The target is beyond the spell's reach.",
-    "magic.cast.silenced_area": "Magical silence smothers the casting.",
+    "magic.cast.silenced_area": "Magical silence covers the party's position, so the caster can't cast.",
     "magic.cast.caster_incapacitated": "The caster cannot act.",
-    "magic.cast.caster_restrained": "The caster cannot move to cast.",
-    "magic.cast.anti_magic_shell": "An anti-magic shell smothers the casting.",
+    "magic.cast.caster_restrained": "The caster is bound or gagged and can't cast.",
+    "magic.cast.anti_magic_shell": "The caster is inside an anti-magic shell and can't cast.",
     "magic.memorize.needs_sleep": "The caster must sleep before preparing spells again.",
     "magic.book.not_arcane": "Only arcane casters keep spell books.",
     "magic.book.unknown_spell": "No such spell.",
@@ -930,7 +930,7 @@ class Narrator:
             "exploration.light.lit": "A light flares up.",
             "exploration.light.failed": "The tinder fails to catch.",
             "exploration.light.extinguished": "The light is put out.",
-            "exploration.light.expired": "The light gutters and dies.",
+            "exploration.light.expired": "The light burns out.",
         }
         kind = "danger" if event.code == "exploration.light.expired" else "mech"
         return {
@@ -994,7 +994,7 @@ class Narrator:
 
     def _on_monster_defeated(self, event):
         name = self._monster_name(event.template_id)
-        outcomes = {"slain": "slain", "routed": "routed", "surrendered": "taken"}
+        outcomes = {"slain": "slain", "routed": "routed", "surrendered": "surrendered"}
         return {
             "kind": "mech",
             "text": f"{name} {outcomes.get(event.outcome, event.outcome)} ({event.xp} XP).",
@@ -1061,14 +1061,14 @@ class Narrator:
     def _on_evasion(self, event):
         if event.code == "encounter.evasion.succeeded":
             return {"kind": "system", "text": "The party gets away clean."}
-        return {"kind": "danger", "text": "They give chase!"}
+        return {"kind": "danger", "text": "The monsters give chase!"}
 
     def _on_pursuit(self, event):
         texts = {
             "encounter.pursuit.round": f"The chase continues. The gap is {event.gap_feet} feet.",
             "encounter.pursuit.distracted": "The pursuers stop for the bait!",
             "encounter.pursuit.escaped": "The party escapes!",
-            "encounter.pursuit.caught": "The pursuers are on the party's heels!",
+            "encounter.pursuit.caught": "The pursuers catch the party!",
         }
         kind = "system" if event.code == "encounter.pursuit.escaped" else "danger"
         return {

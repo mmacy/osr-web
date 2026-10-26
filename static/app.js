@@ -77,7 +77,7 @@ async function apiFetch(path, body, method) {
   const response = await fetch("/api" + path, options);
   if (!response.ok) {
     const detail = await response.json().catch(() => ({}));
-    throw new Error(detail.detail || `request failed (${response.status})`);
+    throw new Error(detail.detail || `The request failed with status ${response.status}.`);
   }
   return response.json();
 }
@@ -3111,7 +3111,7 @@ async function addAdventureFile(card) {
     });
     if (!response.ok) {
       const detail = await response.json().catch(() => ({}));
-      throw new Error(detail.detail || `request failed (${response.status})`);
+      throw new Error(detail.detail || `The request failed with status ${response.status}.`);
     }
     const payload = await response.json();
     S.adventures = payload.adventures;
@@ -3585,7 +3585,7 @@ function renderGameOver(card) {
   card.innerHTML = `
     <div class="overlay-eyebrow">game over</div>
     <h2 class="overlay-title">The party<br>is dead</h2>
-    <div class="overlay-sub">every member of the party has died, but you can roll a new party and start again in ${esc(S.view.town_name)}</div>
+    <div class="overlay-sub">Every member of the party has died, but you can roll a new party and start again in ${esc(S.view.town_name)}.</div>
     <div class="overlay-actions">
       <button class="btn accent big" id="ov-again" type="button">Roll a new party</button>
       <button class="btn big" id="ov-door" type="button">Return to the title</button>
@@ -3628,7 +3628,7 @@ function renderVictory(card) {
   card.innerHTML = `
     <div class="overlay-eyebrow">victory</div>
     <h2 class="overlay-title">The adventure is won</h2>
-    <div class="overlay-sub">the party has finished ${esc(S.view.adventure_name)}</div>
+    <div class="overlay-sub">The party has finished ${esc(S.view.adventure_name)}.</div>
     <div class="victory-fortune${fortune.quiet ? " quiet" : ""}">${esc(fortune.text)}</div>
     <div class="roster">${rows}</div>
     <div class="overlay-actions">
@@ -3855,7 +3855,7 @@ function houseRulesPanel(rules) {
       ${toggle("hr-maxhp", r.max_hp,
         "Maximum starting hit points", "take the top of the hit die instead of rolling")}
       <div class="wiz-note">${r.locked
-        ? "House rules locked when you rolled the first character."
+        ? "The house rules were locked when you rolled the first character."
         : "Optional, and set for the whole party."}</div>
     </div>`;
 }
@@ -4003,7 +4003,7 @@ function renderWizClass(card) {
       </button>`;
   }).join("");
   card.innerHTML = `
-    ${wizChrome("Choose a class", "your rolls determine which classes are available")}
+    ${wizChrome("Choose a class", "Your rolls determine which classes are available.")}
     <div class="class-grid">${cards}</div>
     <div class="overlay-actions">
       ${wizScrapButton()}
@@ -4054,12 +4054,12 @@ function renderWizAdjust(card) {
     if (lowerable.includes(a)) {
       controls.push(`<button class="btn tiny wiz-adj" data-ability="${a}" data-op="lower" type="button"
         ${now - 2 < 9 ? "disabled" : ""}>−2</button>`);
-      if (pending.lowered[a]) controls.push(`<button class="btn tiny wiz-adj" data-ability="${a}" data-op="unlower" type="button">undo</button>`);
+      if (pending.lowered[a]) controls.push(`<button class="btn tiny wiz-adj" data-ability="${a}" data-op="unlower" type="button">Undo</button>`);
     }
     if (prime) {
       controls.push(`<button class="btn tiny wiz-adj" data-ability="${a}" data-op="raise" type="button"
         ${points <= 0 || now >= 18 ? "disabled" : ""}>+1</button>`);
-      if (pending.raised[a]) controls.push(`<button class="btn tiny wiz-adj" data-ability="${a}" data-op="unraise" type="button">undo</button>`);
+      if (pending.raised[a]) controls.push(`<button class="btn tiny wiz-adj" data-ability="${a}" data-op="unraise" type="button">Undo</button>`);
     }
     return `
       <tr>
@@ -4070,12 +4070,12 @@ function renderWizAdjust(card) {
       </tr>`;
   }).join("");
   card.innerHTML = `
-    ${wizChrome("Adjust ability scores", "lower STR, INT, or WIS by 2 to raise a prime requisite by 1. You can't lower a score below 9 or raise one above 18.")}
+    ${wizChrome("Adjust ability scores", "Lower STR, INT, or WIS by 2 to raise a prime requisite by 1. You can't lower a score below 9 or raise one above 18.")}
     <div class="wiz-panel">
       <table class="ability-table"><tbody>${rows}</tbody></table>
       <div class="wiz-note points-line">${points > 0
         ? `${points} point${points === 1 ? "" : "s"} still to place`
-        : points < 0 ? "too many points placed" : "balanced"}
+        : points < 0 ? "Too many points placed" : "No points left to place"}
         · XP bonus now ${fmtMod(draft.xp_modifier_pct)}%</div>
     </div>
     <div class="overlay-actions">
@@ -4122,7 +4122,7 @@ function renderWizSpells(card) {
         <span class="s-intro">${esc(spell.intro.length > 110 ? spell.intro.slice(0, 107) + "…" : spell.intro)}</span>
       </label>`).join("");
   card.innerHTML = `
-    ${wizChrome("Choose a spell", `a beginning ${cls.name.toLowerCase()} knows exactly ${cls.spell_slots_level_1} spell${cls.spell_slots_level_1 === 1 ? "" : "s"}`)}
+    ${wizChrome("Choose a spell", `A beginning ${cls.name.toLowerCase()} knows exactly ${cls.spell_slots_level_1} spell${cls.spell_slots_level_1 === 1 ? "" : "s"}.`)}
     <div class="wiz-panel spell-list">${options}</div>
     <div class="overlay-actions">
       ${wizScrapButton()}
@@ -4154,8 +4154,8 @@ function renderWizHp(card) {
     ? `d${cls.hit_die} maximum${mod ? ` ${fmtMod(mod)} for Constitution` : ""}, no fewer than 1`
     : `1d${cls.hit_die}${mod ? ` ${fmtMod(mod)} for Constitution` : ""}, no fewer than 1`;
   const doneNote = maxHp
-    ? `maximum die face ${result ? result.rolls[result.rolls.length - 1] : cls.hit_die}${mod ? `, ${fmtMod(mod)}` : ""}`
-    : `the die showed ${result ? result.rolls.join(", then ") : ""}${mod ? `, ${fmtMod(mod)}` : ""}${result && result.total === 1 && result.rolls[result.rolls.length - 1] + mod < 1 ? " (minimum 1)" : ""}`;
+    ? `Maximum die face ${result ? result.rolls[result.rolls.length - 1] : cls.hit_die}${mod ? `, ${fmtMod(mod)}` : ""}`
+    : `The die showed ${result ? result.rolls.join(", then ") : ""}${mod ? `, ${fmtMod(mod)}` : ""}${result && result.total === 1 && result.rolls[result.rolls.length - 1] + mod < 1 ? " (minimum 1)" : ""}`;
   card.innerHTML = `
     ${wizChrome("Hit points", sub)}
     <div class="wiz-panel wiz-roll-panel">
@@ -4185,7 +4185,7 @@ function renderWizGold(card) {
     <div class="wiz-panel wiz-roll-panel">
       ${result
         ? `<div class="big-roll">${result.total} gp</div>
-           <div class="wiz-note">the dice showed ${result.dice.join(" + ")}, times 10</div>`
+           <div class="wiz-note">The dice showed ${result.dice.join(" + ")}, times 10</div>`
         : '<div class="wiz-note">Not rolled yet.</div>'}
     </div>
     <div class="overlay-actions">
@@ -4283,7 +4283,7 @@ function renderWizShop(card) {
     </div>`;
   }
   card.innerHTML = `
-    ${wizChrome("The provisioner", "spend the starting gold. Gold you don't spend stays in the purse.")}
+    ${wizChrome("The provisioner", "Spend the starting gold. Gold you don't spend stays in the purse.")}
     ${kitPanel}
     <div class="shop-cols">
       <div class="wiz-panel shop-pane">

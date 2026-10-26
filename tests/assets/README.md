@@ -352,7 +352,7 @@ Three things measured on that leg at seed 42, none of them guesses:
   180-third turn threshold: the clock reads the same at the landing (turn 7, 420 rounds) as it did at
   the vault.
 - **The torch dies on the way to town, not underground.** `travel_to_town` spends the two travel
-  turns, and its delta opens with "The light gutters and dies."
+  turns, and its delta opens with "The light burns out."
 
 The homecoming completes `return-it`, the quest concludes the adventure, and the session goes
 `victory` — which is what raises the overlay the shot is of. The card's fortune line reads *The party

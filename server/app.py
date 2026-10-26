@@ -235,7 +235,7 @@ def _save_version_error(request: Request, error: SaveVersionError) -> JSONRespon
 def _game_or_404(game_id: str) -> Game:
     game = _touch(_games, game_id)
     if game is None:
-        raise HTTPException(status_code=404, detail=f"unknown game id {game_id!r}")
+        raise HTTPException(status_code=404, detail=f"No game with id {game_id!r} is running on the server.")
     return game
 
 
@@ -887,7 +887,7 @@ def delete_all_saves() -> dict:
 def _builder_or_404(builder_id: str) -> PartyBuilder:
     builder = _touch(_builders, builder_id)
     if builder is None:
-        raise HTTPException(status_code=404, detail=f"unknown party builder id {builder_id!r}")
+        raise HTTPException(status_code=404, detail=f"No party builder with id {builder_id!r} is open on the server.")
     return builder
 
 
@@ -1102,7 +1102,7 @@ def delete_game(game_id: str) -> dict:
     with _store_lock:
         game = _games.pop(game_id, None)
     if game is None:
-        raise HTTPException(status_code=404, detail=f"unknown game id {game_id!r}")
+        raise HTTPException(status_code=404, detail=f"No game with id {game_id!r} is running on the server.")
     return {"game_id": game_id, "deleted": True}
 
 
