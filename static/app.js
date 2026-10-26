@@ -1806,7 +1806,10 @@ function renderExplorePanel(panel) {
     if (S.cell.pile) {
       const p = document.createElement("div");
       p.className = "prose-sm";
-      p.textContent = `Goods are scattered on the floor (${S.cell.pile.coins_gp_value} gp in coin among them).`;
+      const { coins_gp_value: coin, count } = S.cell.pile;
+      p.textContent = !count ? `Coins worth ${coin} gp are scattered on the floor.`
+        : coin ? `Goods are scattered on the floor, with ${coin} gp in coin among them.`
+        : "Goods are scattered on the floor.";
       card.appendChild(p);
     }
     panel.appendChild(card);
