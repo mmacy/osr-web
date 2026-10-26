@@ -263,9 +263,9 @@ def _delve_to_the_tithe_vault(page: Page) -> None:
     # Three steps north cross into the oil cellar, whose keyed encounter pins
     # `stance: "attacks"` — the party is in a battle the moment the move returns.
     step_forward(page, 3)
-    expect(page.locator("#hud-mode")).to_have_text("battle")
+    expect(page.locator("#hud-mode")).to_have_text("Battle")
     resolve_battle(page)
-    expect(page.locator("#hud-mode")).to_have_text("exploring")
+    expect(page.locator("#hud-mode")).to_have_text("Exploring")
 
     step_forward(page)
     turn_right(page)
@@ -409,9 +409,9 @@ def test_play_view(shot_page: Page, capture_server: CaptureServer, seeded_game: 
     turn_around(page)
     assert location(page)["facing"] == "west"
 
-    expect(page.locator("#hud-mode")).to_have_text("exploring")
+    expect(page.locator("#hud-mode")).to_have_text("Exploring")
     expect(page.locator("#hud-light")).to_have_class("hud-item lit")
-    expect(page.locator("#brand-sub")).to_have_text("level 1")
+    expect(page.locator("#brand-sub")).to_have_text("Level 1")
     expect(page.locator("#nameplate")).to_have_text("The tithe vault")
     expect(page.locator("#party .member")).to_have_count(6)
     # The standing charge, in the rail beneath the viewport: the ledger came up
@@ -505,7 +505,7 @@ def test_automap(shot_page: Page, capture_server: CaptureServer, seeded_game: di
         assert note_for_cell(page, cell) == text
     last_cell, last_note = MAP_NOTES[-1]
     expect(page.locator("#map-note")).to_have_value(last_note)
-    expect(page.locator("#map-note-hint")).to_have_text(f"cell {last_cell[0]},{last_cell[1]}")
+    expect(page.locator("#map-note-hint")).to_have_text(f"Cell {last_cell[0]},{last_cell[1]}")
 
     capture(page, "automap")
 
@@ -526,7 +526,7 @@ def test_combat_round(shot_page: Page, capture_server: CaptureServer, seeded_gam
     # pins `stance: "attacks"`, so the session lands in battle with no menu between.
     step_forward(page, 3)
 
-    expect(page.locator("#hud-mode")).to_have_text("battle")
+    expect(page.locator("#hud-mode")).to_have_text("Battle")
     expect(page.locator("#party .party-head")).to_contain_text("Round ")
     declared = _panel_round(page)
     expect(page.locator("#party .party-foot")).to_contain_text("Resolve round")
@@ -548,12 +548,12 @@ def test_combat_round(shot_page: Page, capture_server: CaptureServer, seeded_gam
     roundbar = page.locator("#roundbar")
     expect(roundbar).to_be_visible()
     assert "hidden" not in (roundbar.get_attribute("class") or "")
-    expect(page.locator("#round-label")).to_have_text(f"round {declared}")
+    expect(page.locator("#round-label")).to_have_text(f"Round {declared}")
     # The transcript header for the round now resolving. A reader of the image
     # sees it and the roundbar together, so they have to be the same number.
     expect(page.locator("#log .log-entry", has_text=re.compile(r"^Round \d+$")).last).to_have_text(f"Round {declared}")
     expect(page.locator("#round-beat")).not_to_have_text("")
-    expect(page.locator("#hud-mode")).to_have_text("battle")
+    expect(page.locator("#hud-mode")).to_have_text("Battle")
     assert page.locator("#round-ticks i.done").count() == min(REVEALED_BEATS, beats.count())
 
     capture(page, "combat-round")

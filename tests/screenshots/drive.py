@@ -258,7 +258,7 @@ def enter_dungeon(page: Page, dungeon_name: str) -> None:
         dungeon_name: The dungeon's display name, as the button spells it.
     """
     page.locator("#actions").get_by_role("button", name=f"Enter {dungeon_name}").click()
-    expect(page.locator("#hud-mode")).to_have_text("exploring")
+    expect(page.locator("#hud-mode")).to_have_text("Exploring")
     wait_idle(page)
 
 
@@ -349,7 +349,7 @@ def resolve_battle(page: Page) -> int:
     """
     hold_slow_timers(page)
     rounds = 0
-    while hud_mode(page) == "battle":
+    while hud_mode(page) == "Battle":
         assert rounds < _MAX_BATTLE_ROUNDS, (
             f"the battle was still running after {rounds} rounds — the route has drifted"
         )
@@ -402,7 +402,7 @@ def select_map_cell(page: Page, cell: tuple[int, int]) -> None:
     """
     point = page.evaluate(_CELL_POINT_JS, list(cell))
     page.mouse.click(point["x"], point["y"])
-    expect(page.locator("#map-note-hint")).to_have_text(f"cell {cell[0]},{cell[1]}")
+    expect(page.locator("#map-note-hint")).to_have_text(f"Cell {cell[0]},{cell[1]}")
 
 
 def write_note(page: Page, cell: tuple[int, int], text: str) -> None:

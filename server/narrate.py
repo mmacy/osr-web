@@ -687,7 +687,7 @@ class Narrator:
             }
         return {
             "kind": "mech",
-            "text": f"{who} listens at the {direction} door: silence.",
+            "text": f"{who} listens at the {direction} door and hears nothing.",
         }
 
     def _on_search_completed(self, event):

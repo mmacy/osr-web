@@ -687,7 +687,7 @@ def delete_adventure(adventure_id: str) -> dict:
     """
     entry = adventure_entry(adventure_id)
     if entry is None:
-        raise HTTPException(status_code=404, detail=f"unknown adventure id {adventure_id!r}")
+        raise HTTPException(status_code=404, detail=f"No adventure with id {adventure_id!r} is in the library.")
     if not entry.removable:
         raise HTTPException(
             status_code=422,
@@ -715,14 +715,14 @@ def _save_path(save_id: str) -> Path:
     into `_saves_dir()`.
     """
     if not _SAVE_ID_PATTERN.match(save_id):
-        raise HTTPException(status_code=404, detail=f"unknown save id {save_id!r}")
+        raise HTTPException(status_code=404, detail=f"No save with id {save_id!r} is on the server.")
     return _saves_dir() / f"{save_id}.json"
 
 
 def _save_document(save_id: str) -> dict:
     path = _save_path(save_id)
     if not path.is_file():
-        raise HTTPException(status_code=404, detail=f"unknown save id {save_id!r}")
+        raise HTTPException(status_code=404, detail=f"No save with id {save_id!r} is on the server.")
     with path.open(encoding="utf-8") as handle:
         return json.load(handle)
 
@@ -763,7 +763,7 @@ def _save_place(payload: dict) -> str:
         level = location.get("level_number")
         return f"{dungeon_name or 'The dungeon'}, level {level}"
     town = adventure.get("town") or {}
-    return str(town.get("name") or "") or "town"
+    return str(town.get("name") or "") or "Town"
 
 
 def _derived_save_name(payload: dict) -> str:
@@ -839,7 +839,7 @@ def rename_save(save_id: str, body: dict) -> dict:
         raise HTTPException(status_code=422, detail="save name must not be empty")
     path = _save_path(save_id)
     if not path.is_file():
-        raise HTTPException(status_code=404, detail=f"unknown save id {save_id!r}")
+        raise HTTPException(status_code=404, detail=f"No save with id {save_id!r} is on the server.")
     with path.open(encoding="utf-8") as handle:
         document = json.load(handle)
     document["name"] = name
@@ -856,7 +856,7 @@ def delete_save(save_id: str) -> dict:
     """Delete one save file; unknown ids are a 404."""
     path = _save_path(save_id)
     if not path.is_file():
-        raise HTTPException(status_code=404, detail=f"unknown save id {save_id!r}")
+        raise HTTPException(status_code=404, detail=f"No save with id {save_id!r} is on the server.")
     path.unlink()
     return {"save_id": save_id, "deleted": True}
 
@@ -1053,7 +1053,7 @@ def create_game(body: dict | None = None) -> dict:
         adventure_id = body.get("adventure_id")
         entry = adventure_entry(adventure_id if isinstance(adventure_id, str) else None)
         if entry is None:
-            raise HTTPException(status_code=404, detail=f"unknown adventure id {adventure_id!r}")
+            raise HTTPException(status_code=404, detail=f"No adventure with id {adventure_id!r} is in the library.")
         party = None
         party_builder_id = body.get("party_builder_id")
         party_save_id = body.get("party_save_id")

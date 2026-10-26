@@ -200,7 +200,7 @@ function paceBattle(entries, round) {
   S.pacing = true;
   const bar = $("roundbar");
   bar.classList.remove("hidden");
-  $("round-label").textContent = `round ${round}`;
+  $("round-label").textContent = `Round ${round}`;
   const ticks = $("round-ticks");
   ticks.innerHTML = entries.map(() => "<i></i>").join("");
   let i = 0;
@@ -704,23 +704,23 @@ function renderHud() {
   const mode = S.view.mode;
   const loc = S.view.location;
   $("brand-sub").textContent =
-    loc.kind === "dungeon" ? `level ${loc.level_number}` : S.view.town_name;
+    loc.kind === "dungeon" ? `Level ${loc.level_number}` : S.view.town_name;
   const hudMode = $("hud-mode");
-  hudMode.textContent = mode.replace("_", " ");
+  hudMode.textContent = capitalize(mode.replace(/_/g, " "));
   hudMode.className = "hud-item" + (mode === "encounter" || mode === "battle" ? " danger" : "");
-  $("hud-clock").textContent = `turn ${turnOf(S.view.clock_rounds)}`;
+  $("hud-clock").textContent = `Turn ${turnOf(S.view.clock_rounds)}`;
   $("hud-gold").textContent = `${partyGold()} gp`;
   const light = lightState();
   const hudLight = $("hud-light");
   if (S.view.location.kind !== "dungeon") {
-    hudLight.textContent = "daylight";
+    hudLight.textContent = "Daylight";
     hudLight.className = "hud-item";
   } else if (light !== null) {
     const turns = Math.max(1, Math.ceil(light / 60));
-    hudLight.textContent = `light ${turns} turn${turns === 1 ? "" : "s"}`;
+    hudLight.textContent = `Light ${turns} turn${turns === 1 ? "" : "s"}`;
     hudLight.className = "hud-item lit";
   } else {
-    hudLight.textContent = "darkness";
+    hudLight.textContent = "Darkness";
     hudLight.className = "hud-item unlit";
   }
 }
@@ -736,8 +736,8 @@ function renderParty() {
   const head = document.createElement("div");
   head.className = "party-head";
   head.innerHTML = battle
-    ? `Round ${enc.battle_round || 1} <span>declare, then resolve</span>`
-    : `The party <span>double-click for the sheet</span>`;
+    ? `Round ${enc.battle_round || 1} <span>Declare, then resolve</span>`
+    : `The party <span>Double-click for the sheet</span>`;
   container.appendChild(head);
 
   let defaults = {};
@@ -778,10 +778,10 @@ function renderParty() {
     const enc = dead ? null : encumbrance(S.sheets && S.sheets[m.id]);
     const canLearn = ((S.sheets[m.id] || {}).spell_picks || []).some((n) => n > 0);
     const tags = dead
-      ? '<span class="member-tag red">slain</span>'
-      : m.conditions.map((c) => `<span class="member-tag">${esc(c)}</span>`).join("") +
-        (enc && enc.overloaded ? '<span class="member-tag red">overloaded</span>' : "") +
-        (canLearn ? '<span class="member-tag accent">new spell</span>' : "");
+      ? '<span class="member-tag red">Slain</span>'
+      : m.conditions.map((c) => `<span class="member-tag">${esc(capitalize(c.replace(/_/g, " ")))}</span>`).join("") +
+        (enc && enc.overloaded ? '<span class="member-tag red">Overloaded</span>' : "") +
+        (canLearn ? '<span class="member-tag accent">New spell</span>' : "");
 
     const who = document.createElement("div");
     who.className = "member-who";
@@ -1025,7 +1025,7 @@ function renderViewport() {
   const loc = S.view.location;
   const lit = S.cell && S.cell.lit;
   $("nameplate").textContent = (S.cell && S.cell.area_name) || "";
-  facingEl.textContent = `facing ${loc.facing}`;
+  facingEl.textContent = `Facing ${loc.facing}`;
 
   if (level) {
     ctx.save();
@@ -1353,7 +1353,7 @@ function updateNoteEditor() {
     const notes = notesForLevel();
     input.disabled = false;
     input.value = notes[`${MAP.sel[0]},${MAP.sel[1]}`] || "";
-    hint.textContent = `cell ${MAP.sel[0]},${MAP.sel[1]}`;
+    hint.textContent = `Cell ${MAP.sel[0]},${MAP.sel[1]}`;
     input.focus();
   } else {
     input.disabled = false;
@@ -1527,7 +1527,7 @@ function buildJournalEntries() {
     const turn = document.createElement("span");
     turn.className = "j-turn";
     // The HUD clock's own helper, so the two can never disagree.
-    turn.textContent = `turn ${turnOf(entry.rounds)}`;
+    turn.textContent = `Turn ${turnOf(entry.rounds)}`;
     const text = document.createElement("span");
     text.className = "j-text";
     text.textContent = entry.text;
@@ -2239,7 +2239,7 @@ function buildCampPanel() {
         const select = document.createElement("select");
         const empty = document.createElement("option");
         empty.value = "";
-        empty.textContent = "(leave empty)";
+        empty.textContent = "(Leave empty)";
         select.appendChild(empty);
         for (const spellId of atLevel) {
           const option = document.createElement("option");
@@ -2565,6 +2565,10 @@ function languageName(id) {
   return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
+function capitalize(text) {
+  return text ? text.charAt(0).toUpperCase() + text.slice(1) : text;
+}
+
 function signed(n) {
   return n > 0 ? `+${n}` : `${n}`;
 }
@@ -2605,8 +2609,8 @@ function encumbrance(sheet) {
 }
 
 function itemName(it) {
-  if (it.template) return it.template.name || it.template.id || "item";
-  return it.name || it.display || "an item";
+  if (it.template) return it.template.name || it.template.id || "Item";
+  return it.name || it.display || "An item";
 }
 
 /* The id a drop/give/equip command names: the catalog id for a mundane item
@@ -2649,7 +2653,7 @@ function carrySection(m, sheet, inv) {
     ? `<div class="load-readout ${enc.overloaded ? "over" : ""}">
          <span class="lr-num">${enc.carried} / ${enc.max} cn</span>
          <span class="load-bar"><span style="width:${enc.pct}%"></span></span>
-         ${enc.overloaded ? '<span class="member-tag red">overloaded, cannot move</span>' : ""}
+         ${enc.overloaded ? '<span class="member-tag red">Overloaded, cannot move</span>' : ""}
        </div>`
     : "";
 
@@ -2724,7 +2728,7 @@ function carrySection(m, sheet, inv) {
         : "";
       const use = magic ? useBtn(attrs) : "";
       const hand = cursed
-        ? '<span class="cr-note">cursed, cannot remove</span>'
+        ? '<span class="cr-note">Cursed, cannot remove</span>'
         : `${giveBtn(attrs)}${dropBtn(attrs)}`;
       return `<div class="carry-row"><span class="cr-name">${label}</span>${equip}${use}${hand}</div>`;
     })
@@ -2739,7 +2743,7 @@ function carrySection(m, sheet, inv) {
       const id = itemActionId(it);
       const cursed = !it.template && it.cursed;
       return `<div class="carry-row">
-        <span class="cr-name">${esc(itemName(it))} <em>equipped</em></span>
+        <span class="cr-name">${esc(itemName(it))} <em>Equipped</em></span>
         <button class="btn mini ghost" data-act="unequip" data-id="${esc(id)}"${cursed ? " disabled title=\"A cursed item cannot be removed.\"" : ""}>Unequip</button>
       </div>`;
     })
@@ -2791,9 +2795,9 @@ function renderSheet() {
   const gear = [];
   if (inv.worn_armour && inv.worn_armour.template) gear.push({ name: inv.worn_armour.template.name });
   if (inv.shield) gear.push({ name: "Shield" });
-  for (const w of inv.wielded) gear.push({ name: w.template ? w.template.name : (w.name || "weapon") });
+  for (const w of inv.wielded) gear.push({ name: w.template ? w.template.name : (w.name || "Weapon") });
   for (const item of inv.items) {
-    gear.push({ name: item.template ? item.template.name : "item", qty: item.quantity > 1 ? item.quantity : null });
+    gear.push({ name: item.template ? item.template.name : "Item", qty: item.quantity > 1 ? item.quantity : null });
   }
   const gearRows = gear.map((g) =>
     `<li>${esc(g.name)}${g.qty ? `<span>×${g.qty}</span>` : ""}</li>`).join("");
@@ -2810,7 +2814,7 @@ function renderSheet() {
   const memorized = new Set(m.memorized_spells.map((s) => s.spell_id));
   const book = S.spellBooks[m.id] || [];
   const spellRows = book.map((id) =>
-    `<li>${esc(spellName(id))}${memorized.has(id) ? "<span>prepared</span>" : ""}</li>`).join("");
+    `<li>${esc(spellName(id))}${memorized.has(id) ? "<span>Prepared</span>" : ""}</li>`).join("");
   const spellPickHint = (sheet.spell_picks || []).some((n) => n > 0)
     ? '<div class="panel-hint">This character can learn a new spell in town.</div>'
     : "";
@@ -3012,7 +3016,7 @@ function renderTitle(card) {
       </button>` : ""}
       <button class="btn big ${newest ? "" : "accent "}door-btn" id="door-new" type="button">
         New adventure
-        <span class="btn-sub">choose an adventure and a party</span>
+        <span class="btn-sub">Choose an adventure and a party</span>
       </button>
       ${S.saves.length ? `
       <button class="btn big door-btn" id="door-load" type="button">
@@ -3246,7 +3250,7 @@ function renderStaging(card) {
       <div class="roster-row${p.dead ? " dead" : ""}">
         <span class="r-name">${p.dead ? "†" : ""}${esc(p.name)}</span>
         <span class="r-class">${esc(CLASS_NAMES[p.class_id] || p.class_id)} ${p.level > 1 ? p.level : ""}</span>
-        <span class="r-hp">${p.dead ? "slain" : ""}</span>
+        <span class="r-hp">${p.dead ? "Slain" : ""}</span>
       </div>`).join("") : "";
     body = `
       <div class="vet-pick">
@@ -3262,7 +3266,7 @@ function renderStaging(card) {
   card.innerHTML = `
     <div class="overlay-eyebrow">new adventure, step two</div>
     <h2 class="overlay-title wiz-title">The party</h2>
-    <div class="overlay-sub wiz-sub">${adventure ? `setting out for ${esc(adventure.name)}` : ""}</div>
+    <div class="overlay-sub wiz-sub">${adventure ? `Setting out for ${esc(adventure.name)}` : ""}</div>
     <div class="stage-tabs">
       <button class="stage-tab${veterans ? "" : " selected"}" id="tab-premade" type="button">Premade party</button>
       ${saves.length ? `<button class="stage-tab${veterans ? " selected" : ""}" id="tab-veterans" type="button">Veterans of a saved game</button>` : ""}
@@ -3721,12 +3725,12 @@ const ARMOUR_WORDS = { any: "any armour", leather_only: "leather only", none: "n
 function fmtMod(n) { return n >= 0 ? `+${n}` : `${n}`; }
 
 function abilityHint(ability, mods) {
-  if (ability === "str") return `melee ${fmtMod(mods.melee)}, open doors ${mods.open_doors}-in-6`;
-  if (ability === "int") return `${mods.literacy}, ${mods.additional_languages} extra language${mods.additional_languages === 1 ? "" : "s"}`;
-  if (ability === "wis") return `magic saves ${fmtMod(mods.magic_saves)}`;
+  if (ability === "str") return `Melee ${fmtMod(mods.melee)}, open doors ${mods.open_doors}-in-6`;
+  if (ability === "int") return `${capitalize(mods.literacy)}, ${mods.additional_languages} extra language${mods.additional_languages === 1 ? "" : "s"}`;
+  if (ability === "wis") return `Magic saves ${fmtMod(mods.magic_saves)}`;
   if (ability === "dex") return `AC ${fmtMod(mods.ac)}, missile ${fmtMod(mods.missile)}`;
-  if (ability === "con") return `hp ${fmtMod(mods.hit_points)} per die`;
-  return `reactions ${fmtMod(mods.npc_reactions)}`;
+  if (ability === "con") return `Hit points ${fmtMod(mods.hit_points)} per die`;
+  return `Reactions ${fmtMod(mods.npc_reactions)}`;
 }
 
 function builderClass() {
@@ -3851,9 +3855,9 @@ function houseRulesPanel(rules) {
     <div class="wiz-panel house-rules">
       <div class="hr-head">House rules</div>
       ${toggle("hr-4d6", r.ability_method === "4d6_drop_lowest",
-        "4d6, drop the lowest", "roll four dice per ability, keep the best three")}
+        "4d6, drop the lowest", "Roll four dice per ability, keep the best three")}
       ${toggle("hr-maxhp", r.max_hp,
-        "Maximum starting hit points", "take the top of the hit die instead of rolling")}
+        "Maximum starting hit points", "Take the top of the hit die instead of rolling")}
       <div class="wiz-note">${r.locked
         ? "The house rules were locked when you rolled the first character."
         : "Optional, and set for the whole party."}</div>
@@ -3902,7 +3906,7 @@ function renderWizRoster(card) {
          <button class="btn danger tiny" id="wiz-scrap" type="button">Discard</button></div>`
     : "";
   card.innerHTML = `
-    ${wizChrome("The party", adventure ? `playing ${adventure.name}` : "")}
+    ${wizChrome("The party", adventure ? `Playing ${adventure.name}` : "")}
     ${houseRulesPanel(st.house_rules)}
     <div class="wiz-panel">
       ${rows || '<div class="wiz-note">No characters yet.</div>'}
@@ -3999,7 +4003,7 @@ function renderWizClass(card) {
         <span class="c-name">${esc(cls.name)}</span>
         ${cls.title ? `<span class="c-title">${esc(cls.title)}</span>` : ""}
         <span class="c-meta">${esc(meta)}</span>
-        ${reqText ? `<span class="c-meta ${unmet.length ? "c-req" : ""}">needs ${reqText}</span>` : ""}
+        ${reqText ? `<span class="c-meta ${unmet.length ? "c-req" : ""}">Needs ${reqText}</span>` : ""}
       </button>`;
   }).join("");
   card.innerHTML = `
