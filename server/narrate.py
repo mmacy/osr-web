@@ -969,7 +969,13 @@ class Narrator:
         return {"kind": kind, "text": text}
 
     def _on_encounter_ended(self, event):
-        return {"kind": "system", "text": f"The encounter is over ({event.outcome})."}
+        endings = {
+            "victory": "The encounter is over. The party beat the monsters.",
+            "evaded": "The encounter is over. The party got away.",
+            "escaped": "The encounter is over. The party escaped the chase.",
+            "turned": "The encounter is over. The party drove off the undead.",
+        }
+        return {"kind": "system", "text": endings.get(event.outcome, f"The encounter is over ({event.outcome}).")}
 
     def _on_battle_started(self, event):
         return {"kind": "danger", "text": "Battle is joined!"}
