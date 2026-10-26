@@ -716,7 +716,8 @@ function renderHud() {
     hudLight.textContent = "daylight";
     hudLight.className = "hud-item";
   } else if (light !== null) {
-    hudLight.textContent = `light ${Math.max(1, Math.ceil(light / 60))} turns`;
+    const turns = Math.max(1, Math.ceil(light / 60));
+    hudLight.textContent = `light ${turns} turn${turns === 1 ? "" : "s"}`;
     hudLight.className = "hud-item lit";
   } else {
     hudLight.textContent = "darkness";
@@ -1655,7 +1656,7 @@ function renderActions() {
         if (forcer) command({ command_type: "force_door", direction: S.view.location.facing, character_id: forcer.id });
       }, {
         key: "F", disabled: !forcer,
-        title: forcer ? "" : "No one left standing to force it.",
+        title: forcer ? "" : "No one left standing to force the door.",
       }));
       const listener = memberByClass("thief");
       ctx.appendChild(button(withActor("Listen", listener), () => {
@@ -1727,7 +1728,7 @@ function renderActions() {
     const kind = S.cell.transition;
     const label = kind === "stairs_down" ? "Descend the stairs"
       : kind === "stairs_up" ? "Climb the stairs"
-      : "Use stairs";
+      : `Use the ${kind}`;
     ctx.appendChild(button(label, () => command({ command_type: "use_stairs" })));
   }
 
@@ -2377,7 +2378,7 @@ function renderEncounterPanel(panel) {
   const row2 = document.createElement("div");
   row2.className = "panel-row";
   const dropSelect = document.createElement("select");
-  for (const [value, label] of [["none", "drop nothing"], ["treasure", "drop treasure"], ["food", "drop food"]]) {
+  for (const [value, label] of [["none", "Drop nothing"], ["treasure", "Drop treasure"], ["food", "Drop food"]]) {
     const option = document.createElement("option");
     option.value = value;
     option.textContent = label;
@@ -2744,7 +2745,7 @@ function carrySection(m, sheet, inv) {
   const rows = coinRows + valuableRows + packRows + equippedRows;
   return `<div class="sheet-manage">
     <div class="manage-head"><h4>Carry</h4>${readout}${giveTo}</div>
-    <div class="manage-grid">${rows || '<div class="cr-empty">Nothing to carry.</div>'}</div>
+    <div class="manage-grid">${rows || '<div class="cr-empty">This character carries nothing.</div>'}</div>
   </div>`;
 }
 
@@ -2815,7 +2816,7 @@ function renderSheet() {
   const nextXp = sheet.next_level_xp;
   const xpLine = `${sheet.xp.toLocaleString()} xp` +
     (nextXp ? ` · ${nextXp.toLocaleString()} for level ${m.level + 1}` : " · highest level") +
-    (sheet.xp_bonus_pct ? ` · ${signed(sheet.xp_bonus_pct)}% earned` : "");
+    (sheet.xp_bonus_pct ? ` · XP bonus ${signed(sheet.xp_bonus_pct)}%` : "");
   const xpWidth = nextXp ? Math.min(100, (sheet.xp / nextXp) * 100) : 100;
   const alignment = sheet.alignment.charAt(0).toUpperCase() + sheet.alignment.slice(1);
 
@@ -2864,7 +2865,7 @@ function renderSheet() {
     </div>
     ${carrySection(m, sheet, inv)}
     <div class="sheet-foot">
-      <span>esc to close</span>
+      <span>Esc to close</span>
       <span>&larr; &rarr; other members</span>
     </div>`;
 }
@@ -3522,7 +3523,7 @@ function renderMenu(card) {
       <button class="btn big" id="mn-new" type="button">New adventure</button>
       <button class="btn danger big" id="mn-abandon" type="button">Abandon adventure</button>
     </div>
-    <div class="overlay-note">Esc returns to the game. Nothing on this menu changes your adventure unless you abandon it.</div>`;
+    <div class="overlay-note">Esc returns to the game. If you load a game, begin a new adventure, or abandon this one, the current game ends and you lose anything you haven't saved.</div>`;
   $("mn-return").addEventListener("click", () => showScreen("game"));
   $("mn-save").addEventListener("click", saveGame);
   $("mn-load").addEventListener("click", () => { UI.origin = "game"; openSavesBrowser(); });
