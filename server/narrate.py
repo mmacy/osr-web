@@ -35,13 +35,13 @@ client ignores keys it does not know.
 
 _REJECTION_TEXT = {
     "exploration.move.blocked": "A wall blocks the way.",
-    "exploration.move.cannot_move": "The party cannot move — someone is overloaded or unable to walk.",
+    "exploration.move.cannot_move": "The party cannot move. Someone is overloaded or unable to walk.",
     "exploration.door.no_door": "There is no door there.",
     "exploration.door.already_open": "The door already stands open.",
     "exploration.door.already_closed": "The door is already closed.",
     "exploration.door.locked": "The door is locked.",
-    "exploration.door.stuck": "The door is stuck fast — someone will have to force it.",
-    "exploration.door.not_stuck": "The door isn't stuck; it opens normally.",
+    "exploration.door.stuck": "The door is stuck fast. Someone will have to force it.",
+    "exploration.door.not_stuck": "The door isn't stuck. It opens normally.",
     "exploration.door.wedged": "The door is wedged and cannot swing.",
     "exploration.door.no_spike": "No one carries an iron spike.",
     "exploration.door.gate_refused": "The door will not open for the party.",
@@ -51,7 +51,7 @@ _REJECTION_TEXT = {
     "exploration.lock.not_a_thief": "Only a thief can pick locks.",
     "exploration.lock.no_tools": "Picking a lock needs thieves' tools.",
     "exploration.lock.not_locked": "There is no lock left to pick.",
-    "exploration.lock.locked_out": "That lock has defeated them — until they learn more.",
+    "exploration.lock.locked_out": "They can't pick that lock until they gain a level.",
     "exploration.trap.not_a_thief": "Only a thief can do that.",
     "exploration.trap.not_found": "No trap has been found there.",
     "exploration.trap.already_resolved": "That trap has already been dealt with.",
@@ -61,7 +61,7 @@ _REJECTION_TEXT = {
     "exploration.stairs.none": "There are no stairs here.",
     "exploration.travel.not_at_entrance": "The party must return to the entrance to leave.",
     "exploration.transition.gate_refused": "The way is barred to the party.",
-    "exploration.light.no_flame": "No open flame and no tinder box — nothing to light it with.",
+    "exploration.light.no_flame": "There's no open flame and no tinder box to light it with.",
     "exploration.light.not_burning": "Nothing is burning.",
     "exploration.light.not_a_source": "That is not a light source.",
     "exploration.item.not_carried": "They do not carry that.",
@@ -112,7 +112,7 @@ _REJECTION_TEXT = {
     "magic.book.capacity_exceeded": "The book has no room at that spell level until they gain more capacity.",
     "battle.declaration.not_in_front_rank": "Only the front rank can reach with melee weapons.",
     "battle.declaration.roster_mismatch": "Every able member needs exactly one action.",
-    "combat.attack.out_of_reach": "The enemy is out of reach — close the distance first.",
+    "combat.attack.out_of_reach": "The enemy is out of reach. Close the distance first.",
     "combat.attack.out_of_range": "The target is out of range.",
 }
 
@@ -669,7 +669,7 @@ class Narrator:
         if event.code == "exploration.listen.heard":
             return {
                 "kind": "danger",
-                "text": f"{who} presses an ear to the {direction} door — something stirs beyond.",
+                "text": f"{who} presses an ear to the {direction} door and hears something stir beyond it.",
             }
         return {
             "kind": "mech",
@@ -690,7 +690,7 @@ class Narrator:
             phrases = list(dict.fromkeys(_found_phrase(token) for token in event.found))
             return {
                 "kind": "treasure",
-                "text": f"{who} searches for {what} — and finds {_and_list(phrases)}!",
+                "text": f"{who} searches for {what} and finds {_and_list(phrases)}!",
             }
         return {"kind": "mech", "text": f"{who} searches for {what} and finds nothing."}
 
@@ -792,7 +792,7 @@ class Narrator:
         """
         return {
             "kind": "system",
-            "text": (f"The party cannot carry it all — {self._goods_and_coin(event)} stays where it lies."),
+            "text": (f"The party cannot carry it all, so {self._goods_and_coin(event)} stays where it lies."),
         }
 
     def _on_items_dropped(self, event):
@@ -876,7 +876,7 @@ class Narrator:
         if event.code == "items.potion.mixed":
             return {
                 "kind": "danger",
-                "text": (f"The potions mix badly inside {who} — both effects are lost, and sickness takes hold."),
+                "text": (f"The potions mix badly inside {who}. Both effects are lost, and {who} falls sick."),
             }
         if event.code == "items.scroll.cursed":
             return {"kind": "danger", "text": f"The scroll {who} reads is cursed!"}
@@ -909,7 +909,7 @@ class Narrator:
         self._item_labels[event.instance_id] = name
         return {
             "kind": "danger",
-            "text": f"A curse — {who} cannot be rid of the {name}.",
+            "text": f"The {name} is cursed, and {who} cannot get rid of it.",
         }
 
     def _on_light(self, event):
@@ -962,7 +962,7 @@ class Narrator:
         return {"kind": "danger", "text": "Battle is joined!"}
 
     def _on_battle_round(self, event):
-        return {"kind": "system", "text": f"— Round {event.round} —"}
+        return {"kind": "system", "text": f"Round {event.round}"}
 
     def _on_battle_ended(self, event):
         texts = {
@@ -1014,7 +1014,7 @@ class Narrator:
         if event.code == "combat.attack.auto_hit":
             return {
                 "kind": "mech",
-                "text": f"{attacker} strikes the helpless {defender} with {event.attack_name} — no roll needed.",
+                "text": f"{attacker} strikes the helpless {defender} with {event.attack_name}. No roll is needed.",
             }
         roll = f"rolled {event.roll}{event.modifier:+d} = {event.total}"
         if event.code == "combat.attack.hit":
@@ -1046,7 +1046,7 @@ class Narrator:
 
     def _on_pursuit(self, event):
         texts = {
-            "encounter.pursuit.round": f"The chase continues — the gap is {event.gap_feet} feet.",
+            "encounter.pursuit.round": f"The chase continues. The gap is {event.gap_feet} feet.",
             "encounter.pursuit.distracted": "The pursuers stop for the bait!",
             "encounter.pursuit.escaped": "The party escapes!",
             "encounter.pursuit.caught": "The pursuers are on the party's heels!",
@@ -1074,7 +1074,7 @@ class Narrator:
             }
         return {
             "kind": "system",
-            "text": f"{who} is now level {event.level_after} — {event.title} (+{event.hp_gained} hp).",
+            "text": f"{who} is now level {event.level_after} ({event.title}, +{event.hp_gained} hp).",
         }
 
     def _on_adventure_xp_award(self, event):
@@ -1133,7 +1133,7 @@ class Narrator:
             return {"kind": "prose", "text": event.narrative}
         return {
             "kind": "system",
-            "text": f"New objective: {event.name} — {event.quest_name}.",
+            "text": f"New objective in {event.quest_name}: {event.name}.",
         }
 
     def _on_objective_completed(self, event):
@@ -1141,7 +1141,7 @@ class Narrator:
             return {"kind": "prose", "text": event.narrative}
         return {
             "kind": "system",
-            "text": f"Objective complete: {event.name} — {event.quest_name}.",
+            "text": f"Objective complete in {event.quest_name}: {event.name}.",
         }
 
     def _on_quest_completed(self, event):
@@ -1159,7 +1159,7 @@ class Narrator:
         # `narrative` is the beat `quest_completed` already spoke.
         return {
             "kind": "system",
-            "text": f"The adventure is won — {event.name} is done.",
+            "text": f"The adventure is won. {event.name} is complete.",
         }
 
     def _on_flag_set(self, event):
@@ -1184,7 +1184,7 @@ class Narrator:
         who = self._name(event.caster_id)
         spell = self._spell_name(event.spell_id)
         if event.code == "magic.cast.no_effect":
-            return {"kind": "mech", "text": f"{who} casts {spell} — it has no effect."}
+            return {"kind": "mech", "text": f"{who} casts {spell}, but it has no effect."}
         return {"kind": "mech", "text": f"{who} casts {spell}!"}
 
     def _on_spell_disrupted(self, event):

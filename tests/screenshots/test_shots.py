@@ -44,8 +44,8 @@ VAULT_CELL = (14, 6)
 """The tithe vault, one step through the secret door in the countinghouse's east wall."""
 
 MAP_NOTES = (
-    (VAULT_CELL, "Secret door — the tithe vault"),
-    (ENTRANCE_CELL, "Landing — the way out"),
+    (VAULT_CELL, "Secret door to the tithe vault"),
+    (ENTRANCE_CELL, "Landing, the way out"),
 )
 """The player notes the automap shot writes, in the order it writes them. The
 entrance goes last so the map footer is still showing it when the shutter fires."""
@@ -219,7 +219,7 @@ def _assert_quest_card(page: Page) -> None:
     expect(card).to_have_count(1)
     expect(card.locator("h3")).to_have_text("Quests")
     expect(card.locator(".quest-name")).to_have_text(QUEST_NAME)
-    expect(card.locator(".quest-speaker")).to_have_text("— the reeve of Thistlereach")
+    expect(card.locator(".quest-speaker")).to_have_text("Offered by the reeve of Thistlereach")
 
     objectives = card.locator(".quest-objectives li")
     expect(objectives).to_have_count(len(QUEST_OBJECTIVES))
@@ -384,7 +384,7 @@ def test_adventure_library(shot_page: Page) -> None:
     expect(page.locator("#overlay .lib-desc")).to_contain_text("river toll-keep")
     expect(page.locator("#overlay .lib-hook")).to_contain_text("reeve of Thistlereach")
     expect(page.locator("#overlay .lib-facts")).to_contain_text("the town of Thistlereach · one dungeon")
-    expect(page.locator("#overlay").get_by_role("button", name="Next — the party")).to_be_enabled()
+    expect(page.locator("#overlay").get_by_role("button", name="Next: the party")).to_be_enabled()
 
     capture(page, "adventure-library")
 
@@ -487,7 +487,7 @@ def test_automap(shot_page: Page, capture_server: CaptureServer, seeded_game: di
 
     open_map(page)
     expect(page.locator("#map-overlay")).to_be_visible()
-    expect(page.locator("#map-title")).to_have_text(f"{ADVENTURE_NAME} — level 1")
+    expect(page.locator("#map-title")).to_have_text(f"{ADVENTURE_NAME}, level 1")
     assert canvas_ink_ratio(page, "automap") > MIN_CANVAS_INK, "the automap drew nothing"
 
     # The whole point of the shot: a map, not a postage stamp in a black pane.
@@ -517,7 +517,7 @@ def test_combat_round(shot_page: Page, capture_server: CaptureServer, seeded_gam
     and the number is asserted three ways rather than hard-coded, because all
     three surfaces are in the published image at once: the declaration panel's
     header, the roundbar at the foot of the stage, and the transcript's own
-    `— Round N —` line a few entries above.
+    `Round N` line a few entries above.
     """
     page = shot_page
     enter_dungeon(page, DUNGEON_NAME)
@@ -551,7 +551,7 @@ def test_combat_round(shot_page: Page, capture_server: CaptureServer, seeded_gam
     expect(page.locator("#round-label")).to_have_text(f"round {declared}")
     # The transcript header for the round now resolving. A reader of the image
     # sees it and the roundbar together, so they have to be the same number.
-    expect(page.locator("#log .log-entry", has_text="— Round ").last).to_have_text(f"— Round {declared} —")
+    expect(page.locator("#log .log-entry", has_text=re.compile(r"^Round \d+$")).last).to_have_text(f"Round {declared}")
     expect(page.locator("#round-beat")).not_to_have_text("")
     expect(page.locator("#hud-mode")).to_have_text("battle")
     assert page.locator("#round-ticks i.done").count() == min(REVEALED_BEATS, beats.count())
@@ -584,7 +584,7 @@ def test_party_builder(shot_page: Page) -> None:
 
     page.locator("#door-new").click()
     expect(page.locator("#overlay .wiz-title")).to_have_text("Choose an adventure")
-    page.locator("#overlay").get_by_role("button", name="Next — the party").click()
+    page.locator("#overlay").get_by_role("button", name="Next: the party").click()
     expect(page.locator("#overlay .wiz-title")).to_have_text("The party")
     # The staged premade roster is rolled server-side before the wizard opens.
     expect(page.locator("#overlay .r-name-input")).to_have_count(6)
@@ -599,7 +599,7 @@ def test_party_builder(shot_page: Page) -> None:
     page.locator("#wiz-roll").click()
 
     expect(page.locator("#overlay .wiz-title")).to_have_text("Ability scores")
-    expect(page.locator("#overlay .wiz-sub")).to_have_text("3d6 down the line — STR, INT, WIS, DEX, CON, CHA")
+    expect(page.locator("#overlay .wiz-sub")).to_have_text("3d6 in order: STR, INT, WIS, DEX, CON, CHA")
     rolled = page.locator("#overlay .ability-table tr").evaluate_all(
         "rows => rows.map((row) => ["
         " row.querySelector('.a-name').textContent.trim(),"
@@ -646,8 +646,8 @@ def test_victory_screen(shot_page: Page, capture_server: CaptureServer, seeded_g
     assert page.evaluate("S.view.mode") == "victory"
     overlay = page.locator("#overlay")
     expect(overlay).to_be_visible()
-    expect(overlay.locator(".overlay-eyebrow")).to_have_text("the adventure is won")
-    expect(overlay.locator(".overlay-title")).to_have_text("The tale is told")
+    expect(overlay.locator(".overlay-eyebrow")).to_have_text("victory")
+    expect(overlay.locator(".overlay-title")).to_have_text("The adventure is won")
     expect(overlay.locator(".overlay-sub")).to_contain_text(ADVENTURE_NAME)
 
     fortune = (overlay.locator(".victory-fortune").text_content() or "").strip()

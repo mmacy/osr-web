@@ -68,7 +68,7 @@ player commands — but this document's one trigger authors no consequences. The
 *not* restricted to player commands, though: a single `{"command_type": "set_flag", "key":
 "barrow.rite", "value": "spoken"}` after the idol is taken completes the quest and puts the session
 in `victory`. That is by design, and since phase 3 of the authored-layer spec the client answers it
-with the victory overlay: "the adventure is won", *The tale is told*, the fortune line, the roster,
+with the victory overlay: "victory", *The adventure is won*, the fortune line, the roster,
 the journal on the card, and three verbs (Roll a new party, Save the party, Return to the title).
 Esc is the floor there, and a reload comes back to the same screen.
 

@@ -514,7 +514,7 @@ def _current_battle_round(view: dict) -> dict:
 
     osrlib's `EncounterView.battle_round` is `session.battle.round`: the count of
     battle rounds already **resolved**, which is one behind the round the party is
-    about to declare — and one behind the `— Round N —` header the transcript
+    about to declare — and one behind the `Round N` header the transcript
     prints when that round resolves (`server.narrate.Narrator._on_battle_round`,
     reading the engine's own `battle_round` event). The client reads this field as
     the current round for the declaration panel and the roundbar, so the
@@ -772,8 +772,8 @@ def _derived_save_name(payload: dict) -> str:
     turn = int(payload.get("clock_rounds") or 0) // 60
     location = (payload.get("dungeon_state") or {}).get("location") or {}
     if location.get("kind") == "dungeon":
-        return f"{adventure_name} — level {location.get('level_number')}, turn {turn}"
-    return f"{adventure_name} — turn {turn}"
+        return f"{adventure_name}, level {location.get('level_number')}, turn {turn}"
+    return f"{adventure_name}, turn {turn}"
 
 
 def _save_summary(save_id: str, document: dict, saved_at: int) -> dict:

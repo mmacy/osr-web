@@ -334,7 +334,7 @@ def add_adventure(raw: bytes) -> AdventureEntry:
         detail = f"{where}: {first['msg']}"
         if more:
             detail += f" (and {more} more problem{'s' if more > 1 else ''})"
-        raise ContentValidationError(f"not a playable adventure — {detail}") from error
+        raise ContentValidationError(f"not a playable adventure: {detail}") from error
     # A model-valid document can still name an item, area, or monster that does
     # not exist. Caught here, it is a 422 on the upload; uncaught, it is a game
     # that loads and quietly never fires what the author wrote.

@@ -2,7 +2,7 @@
 
 Two round counters share the battle screen: the declaration panel and the
 roundbar render the player view's `encounter.battle_round`, while the transcript
-prints the engine's `battle_round` event as `— Round N —`. osrlib's projection
+prints the engine's `battle_round` event as `Round N`. osrlib's projection
 carries `session.battle.round`, the count of rounds already *resolved*, which is
 one behind the round the party is declaring. A surprise round is a resolved
 round, so the two numbers drifted apart the moment the party was surprised —
@@ -14,6 +14,8 @@ the monsters surprised (the party's free round is round one, monsters holding).
 Surprise is a die roll, so each opening is found by scanning seeds the way
 osrlib's own encounter tests do.
 """
+
+import re
 
 import pytest
 from osrlib.core.events import Visibility
@@ -119,7 +121,7 @@ def _resolve(game: Game) -> str:
         {"command_type": "resolve_battle_round", "declarations": declarations},
     )
     assert result["accepted"], result["rejections"]
-    return next(entry["text"] for entry in result["log"] if entry["text"].startswith("— Round"))
+    return next(entry["text"] for entry in result["log"] if re.fullmatch(r"Round \d+", entry["text"]))
 
 
 class _BattleCase:
@@ -131,7 +133,7 @@ class _BattleCase:
     def test_the_ui_number_is_the_number_the_transcript_prints(self):
         game = self.open_battle()
         shown = _panel_round(game)
-        assert _resolve(game) == f"— Round {shown} —"
+        assert _resolve(game) == f"Round {shown}"
 
     def test_the_two_stay_in_step_round_after_round(self):
         game = self.open_battle()
@@ -139,7 +141,7 @@ class _BattleCase:
             if game.session.battle is None:  # the goblins fell or the party did
                 break
             shown = _panel_round(game)
-            assert _resolve(game) == f"— Round {shown} —"
+            assert _resolve(game) == f"Round {shown}"
 
 
 class TestPartySurprised(_BattleCase):

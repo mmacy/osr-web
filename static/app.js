@@ -828,7 +828,7 @@ function orderControls(index) {
     btn.className = "btn mini ghost";
     btn.textContent = glyph;
     btn.disabled = index === edge;
-    btn.title = "Marching order — the melee rank fills from the front, as many as the space allows.";
+    btn.title = "Move this character in the marching order. Characters at the front fill the melee rank, as many as the space allows.";
     btn.addEventListener("click", (event) => {
       event.stopPropagation();
       const order = S.view.party.map((m) => m.id);
@@ -847,7 +847,7 @@ function orderControls(index) {
    The menu offers only declarations the engine will accept: a round is
    all-or-nothing, so one illegal pick costs the whole party's turn. What the
    engine would refuse is still *shown* — disabled, with the reason in the label
-   ("Attack — Dagger (back rank)") — because a weapon that silently vanished from
+   ("Attack with Dagger (back rank)") — because a weapon that silently vanished from
    the menu reads as a bug too. `fallback` is the member's computed default for
    this round: when a pick the player made by hand has gone stale (spell spent,
    weapon gone, the range closed past what the weapon allows) the select resets
@@ -860,7 +860,7 @@ function declSelect(m, fallback) {
   for (const spell of m.memorized_spells) {
     options.push({
       value: JSON.stringify({ action: "cast", spell: spell.spell_id }),
-      label: `Cast — ${spellName(spell.spell_id)}`,
+      label: `Cast ${spellName(spell.spell_id)}`,
       legal: true,
     });
   }
@@ -1370,7 +1370,7 @@ function renderAutomap() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.fillStyle = PAL.bg;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  $("map-title").textContent = `${S.view.adventure_name} — level ${level.level_number}`;
+  $("map-title").textContent = `${S.view.adventure_name}, level ${level.level_number}`;
 
   const maxX = Math.max(...level.cells.map(([x]) => x)) + 1;
   const maxY = Math.max(...level.cells.map(([, y]) => y)) + 1;
@@ -1559,10 +1559,10 @@ $("journal-overlay").addEventListener("click", (event) => {
 
 /* ---------- actions bar ---------- */
 
-/* Name the auto-picked actor on the button ("Search — Aravel"). Names are
+/* Name the auto-picked actor on the button ("Search · Aravel"). Names are
    player-authored and button() sets innerHTML, so esc() is mandatory. */
 function withActor(label, member) {
-  return member ? `${label}<span class="actor"> — ${esc(member.name)}</span>` : label;
+  return member ? `${label}<span class="actor"> · ${esc(member.name)}</span>` : label;
 }
 
 function button(label, onClick, opts) {
@@ -1646,7 +1646,7 @@ function renderActions() {
     const wedged = !!facingEdge.door_wedged;
     if (facingEdge.door_open) {
       ctx.appendChild(button("Close door", () => command({ command_type: "close_door", direction: S.view.location.facing }), {
-        key: "C", disabled: wedged, title: wedged ? "Wedged — the spike holds it." : "",
+        key: "C", disabled: wedged, title: wedged ? "An iron spike wedges this door open." : "",
       }));
     } else {
       ctx.appendChild(button("Open door", () => command({ command_type: "open_door", direction: S.view.location.facing }), { key: "O" }));
@@ -1671,7 +1671,7 @@ function renderActions() {
         disabled: !picker,
         title: picker
           ? `A failed pick locks ${picker.name} out of this lock until they gain a level.`
-          : "A thief's work — no living thief.",
+          : "Only a thief can pick a lock, and the party has no living thief.",
       }));
     }
     if (!wedged) {
@@ -1683,7 +1683,7 @@ function renderActions() {
         disabled: !spikes,
         title: spikes
           ? "Drive an iron spike so the door cannot swing (one spike is spent)."
-          : "No iron spikes — the provisioner sells them.",
+          : "The party has no iron spikes. The provisioner in town sells them.",
       }));
     }
   }
@@ -1694,7 +1694,7 @@ function renderActions() {
     const trapSet = !!(feature && feature.trap_found);
     ctx.appendChild(button("Take treasure", () => command({ command_type: "take_treasure", feature_id: target }), {
       cls: "accent", key: "T",
-      title: trapSet ? "A trap is set — taking it risks springing it." : "",
+      title: trapSet ? "This treasure has a trap. Taking the treasure can spring it." : "",
     }));
     if (feature) {
       // The thief's check-and-disarm play. Inspect is one attempt per thief
@@ -1744,7 +1744,7 @@ function renderActions() {
     if (burning) {
       ctx.appendChild(button("Snuff light", () => {
         command({ command_type: "extinguish_source", character_id: burning.character_id });
-      }, { cls: "ghost", title: "Put out the light — what's left of it is lost." }));
+      }, { cls: "ghost", title: "Put out the light. Whatever burn time it has left is lost." }));
     }
   }
   if (S.cell && S.cell.at_entrance) {
@@ -1853,7 +1853,7 @@ function buildQuestsCard() {
     if (quest.speaker) {
       const speaker = document.createElement("div");
       speaker.className = "quest-speaker";
-      speaker.textContent = `— ${quest.speaker}`;
+      speaker.textContent = `Offered by ${quest.speaker}`;
       card.appendChild(speaker);
     }
 
@@ -1897,7 +1897,7 @@ function renderCastCard(panel) {
   for (const m of casters) {
     const option = document.createElement("option");
     option.value = m.id;
-    option.textContent = `${m.name} — ${m.memorized_spells.length} prepared`;
+    option.textContent = `${m.name} (${m.memorized_spells.length} prepared)`;
     casterSelect.appendChild(option);
   }
   persistSelect(casterSelect, S.explore, "caster");
@@ -2041,8 +2041,8 @@ function persistTownSelect(select, key) {
   persistSelect(select, S.town, key);
 }
 
-const REST_HINT = "Sleep until morning — the party wakes ready to prepare spells; healing takes a full day of rest.";
-const PREP_HINT = "Rest the night first — spells are prepared after a night's sleep.";
+const REST_HINT = "Sleep until morning. After a night's sleep, casters can prepare spells. Healing takes a full day of rest.";
+const PREP_HINT = "Rest the night first. Casters prepare spells after a night's sleep.";
 
 function buildTemplePanel() {
   const anyone = livingMembers().length > 0;
@@ -2057,7 +2057,7 @@ function buildTemplePanel() {
     const option = document.createElement("option");
     option.value = m.id;
     const marks = m.conditions.filter((c) => c === "poisoned" || c === "diseased" || c === "dead");
-    const flags = marks.length ? ` — ${marks.join(", ")}` : "";
+    const flags = marks.length ? `, ${marks.join(", ")}` : "";
     option.textContent = `${m.name} (${m.current_hp}/${m.max_hp}${flags})`;
     whoSelect.appendChild(option);
   }
@@ -2066,7 +2066,7 @@ function buildTemplePanel() {
   for (const service of S.templeServices) {
     const option = document.createElement("option");
     option.value = service.id;
-    option.textContent = `${service.name} — ${service.cost_gp.toLocaleString()} gp`;
+    option.textContent = `${service.name} (${service.cost_gp.toLocaleString()} gp)`;
     serviceSelect.appendChild(option);
   }
   persistTownSelect(serviceSelect, "templeService");
@@ -2143,7 +2143,7 @@ function buildProvisionerPanel() {
       row.className = "shop-row";
       const name = document.createElement("span");
       name.className = "cr-name";
-      name.textContent = `${item.name} — ${item.cost_gp} gp`;
+      name.textContent = `${item.name} (${item.cost_gp} gp)`;
       row.appendChild(name);
       row.appendChild(button("Buy", () => {
         command({ command_type: "purchase_equipment", character_id: buyerSelect.value, item_ids: [item.id] });
@@ -2183,7 +2183,7 @@ function buildCampPanel() {
   campRow.className = "panel-row";
   const valuables = S.view.party.flatMap((m) => m.inventory.valuables);
   const total = valuables.reduce((sum, v) => sum + (v.value_gp || 0), 0);
-  campRow.appendChild(button(`Sell treasure — ${total.toLocaleString()} gp`, async () => {
+  campRow.appendChild(button(`Sell treasure for ${total.toLocaleString()} gp`, async () => {
     if (!valuables.length) return;
     const n = valuables.length;
     if (!await confirmDialog(`Sell ${n} piece${n === 1 ? "" : "s"} of treasure for ${total} gp?`, "Sell")) return;
@@ -2208,7 +2208,7 @@ function buildCampPanel() {
     head.className = "panel-row";
     const label = document.createElement("span");
     label.className = "panel-label";
-    label.textContent = `${caster.name} — prepared ${caster.memorized_spells.length} of ${totalSlots}`;
+    label.textContent = `${caster.name}: ${caster.memorized_spells.length} of ${totalSlots} prepared`;
     head.appendChild(label);
     camp.appendChild(head);
 
@@ -2288,7 +2288,7 @@ function buildStudyPanel() {
     head.className = "panel-row";
     const label = document.createElement("span");
     label.className = "panel-label";
-    label.textContent = `${caster.name} — ${total} spell${total === 1 ? "" : "s"} to learn`;
+    label.textContent = `${caster.name}: ${total} spell${total === 1 ? "" : "s"} to learn`;
     head.appendChild(label);
     study.appendChild(head);
 
@@ -2362,7 +2362,7 @@ function renderEncounterPanel(panel) {
   if (enc.pursuit_gap_feet !== null && enc.pursuit_gap_feet !== undefined) {
     const gap = document.createElement("div");
     gap.className = "prose-sm";
-    gap.textContent = `They pursue — the gap is ${enc.pursuit_gap_feet} feet.`;
+    gap.textContent = `They're pursuing the party. The gap is ${enc.pursuit_gap_feet} feet.`;
     card.appendChild(gap);
   }
   const row1 = document.createElement("div");
@@ -2453,7 +2453,7 @@ function attackChoices(m, enc, group) {
     const verb = missile ? "Shoot" : "Attack";
     choices.push({
       value: JSON.stringify({ action: "attack", weapon }),
-      label: `${verb} — ${weaponLabel(m, weapon)}` + (reason ? ` (${reason})` : ""),
+      label: `${verb} with ${weaponLabel(m, weapon)}` + (reason ? ` (${reason})` : ""),
       legal: !reason,
     });
   }
@@ -2462,7 +2462,7 @@ function attackChoices(m, enc, group) {
     const reason = !inRank ? "back rank" : distance > MELEE_REACH_FEET ? "out of reach" : "";
     choices.push({
       value: JSON.stringify({ action: "attack", weapon: null }),
-      label: "Attack — unarmed" + (reason ? ` (${reason})` : ""),
+      label: "Attack unarmed" + (reason ? ` (${reason})` : ""),
       legal: !reason,
     });
   }
@@ -2645,7 +2645,7 @@ function carrySection(m, sheet, inv) {
     ? `<div class="load-readout ${enc.overloaded ? "over" : ""}">
          <span class="lr-num">${enc.carried} / ${enc.max} cn</span>
          <span class="load-bar"><span style="width:${enc.pct}%"></span></span>
-         ${enc.overloaded ? '<span class="member-tag red">overloaded — cannot move</span>' : ""}
+         ${enc.overloaded ? '<span class="member-tag red">overloaded, cannot move</span>' : ""}
        </div>`
     : "";
 
@@ -2720,7 +2720,7 @@ function carrySection(m, sheet, inv) {
         : "";
       const use = magic ? useBtn(attrs) : "";
       const hand = cursed
-        ? '<span class="cr-note">cursed — stuck</span>'
+        ? '<span class="cr-note">cursed, cannot remove</span>'
         : `${giveBtn(attrs)}${dropBtn(attrs)}`;
       return `<div class="carry-row"><span class="cr-name">${label}</span>${equip}${use}${hand}</div>`;
     })
@@ -2808,7 +2808,7 @@ function renderSheet() {
   const spellRows = book.map((id) =>
     `<li>${esc(spellName(id))}${memorized.has(id) ? "<span>prepared</span>" : ""}</li>`).join("");
   const spellPickHint = (sheet.spell_picks || []).some((n) => n > 0)
-    ? '<div class="panel-hint">A new spell can be learned — visit the town.</div>'
+    ? '<div class="panel-hint">This character can learn a new spell in town.</div>'
     : "";
 
   const languages = sheet.languages.map(languageName).join(", ");
@@ -2842,7 +2842,7 @@ function renderSheet() {
         <div class="kv"><span class="k">THAC0</span><span class="v">${sheet.thac0} [${signed(sheet.attack_bonus)}]</span></div>
         <div class="kv"><span class="k">Movement</span><span class="v${enc && enc.overloaded ? " over" : ""}">${
           enc && enc.overloaded
-            ? "0&prime; — overloaded"
+            ? "0&prime; (overloaded)"
             : `${sheet.movement_per_turn}&prime; (${Math.floor(sheet.movement_per_turn / 3)}&prime;)`
         }</span></div>
         ${enc ? `<div class="kv"><span class="k">Load</span><span class="v${enc.overloaded ? " over" : ""}">${enc.carried} / ${enc.max} cn</span></div>` : ""}
@@ -3058,7 +3058,7 @@ function renderLibrary(card) {
     ${chosen.removable ? '<div class="lib-manage"><button class="btn danger" id="lib-delete" type="button">Delete</button></div>' : ""}` :
     '<div class="wiz-note">No adventures found.</div>';
   card.innerHTML = `
-    <div class="overlay-eyebrow">new adventure — step one</div>
+    <div class="overlay-eyebrow">new adventure, step one</div>
     <h2 class="overlay-title wiz-title">Choose an adventure</h2>
     <div class="lib-cols">
       <div class="lib-list">${list}
@@ -3069,7 +3069,7 @@ function renderLibrary(card) {
     <input type="file" id="lib-file" accept=".json,application/json" hidden>
     <div class="overlay-actions">
       <button class="btn ghost big push" id="lib-back" type="button">Back</button>
-      <button class="btn accent big" id="lib-next" type="button" ${chosen ? "" : "disabled"}>Next — the party</button>
+      <button class="btn accent big" id="lib-next" type="button" ${chosen ? "" : "disabled"}>Next: the party</button>
     </div>`;
   for (const btn of card.querySelectorAll(".lib-item")) {
     btn.addEventListener("click", () => {
@@ -3128,7 +3128,7 @@ async function addAdventureFile(card) {
    everything in it. The server sends the kind (never a path). */
 const ADVENTURE_DELETE_NOTE = {
   file: "Its file is removed from the server's adventures folder.",
-  link: "The link in the server's adventures folder is removed — the files it points at are left alone.",
+  link: "The link in the server's adventures folder is removed. The files it points at stay where they are.",
   folder: "Its folder in the server's adventures folder is deleted, with everything in it.",
 };
 
@@ -3252,11 +3252,11 @@ function renderStaging(card) {
         ${chosen ? '<button class="btn danger" id="st-save-del" type="button">Delete</button>' : ""}
       </div>
       <div class="roster staging-roster">${rows}</div>
-      <div class="roster-hint">Levels, experience, and gear carry over; wounds and spent effects do not.</div>`;
+      <div class="roster-hint">Levels, experience, and gear carry over. Wounds and spent effects don't.</div>`;
   }
 
   card.innerHTML = `
-    <div class="overlay-eyebrow">new adventure — step two</div>
+    <div class="overlay-eyebrow">new adventure, step two</div>
     <h2 class="overlay-title wiz-title">The party</h2>
     <div class="overlay-sub wiz-sub">${adventure ? `setting out for ${esc(adventure.name)}` : ""}</div>
     <div class="stage-tabs">
@@ -3522,14 +3522,14 @@ function renderMenu(card) {
       <button class="btn big" id="mn-new" type="button">New adventure</button>
       <button class="btn danger big" id="mn-abandon" type="button">Abandon adventure</button>
     </div>
-    <div class="overlay-note">Esc returns to the game. Nothing here touches your adventure until you abandon it.</div>`;
+    <div class="overlay-note">Esc returns to the game. Nothing on this menu changes your adventure unless you abandon it.</div>`;
   $("mn-return").addEventListener("click", () => showScreen("game"));
   $("mn-save").addEventListener("click", saveGame);
   $("mn-load").addEventListener("click", () => { UI.origin = "game"; openSavesBrowser(); });
   $("mn-new").addEventListener("click", () => { UI.origin = "game"; openLibrary(); });
   $("mn-abandon").addEventListener("click", async () => {
     const ok = await confirmDialog(
-      "Abandon this adventure? The session is discarded — anything not saved is gone.",
+      "Abandon this adventure? The game ends, and you lose anything you haven't saved.",
       "Abandon adventure"
     );
     if (!ok) return;
@@ -3579,9 +3579,9 @@ async function rollNewParty() {
 
 function renderGameOver(card) {
   card.innerHTML = `
-    <div class="overlay-eyebrow">the tale ends</div>
-    <h2 class="overlay-title">Darkness takes<br>the party</h2>
-    <div class="overlay-sub">the party has fallen — but ${esc(S.view.town_name)} still waits for characters</div>
+    <div class="overlay-eyebrow">game over</div>
+    <h2 class="overlay-title">The party<br>is dead</h2>
+    <div class="overlay-sub">every member of the party has died, but you can roll a new party and start again in ${esc(S.view.town_name)}</div>
     <div class="overlay-actions">
       <button class="btn accent big" id="ov-again" type="button">Roll a new party</button>
       <button class="btn big" id="ov-door" type="button">Return to the title</button>
@@ -3603,7 +3603,7 @@ function victoryFortune() {
   const valuables = S.view.party.flatMap((m) => m.inventory.valuables);
   const worth = valuables.reduce((sum, v) => sum + (v.value_gp || 0), 0);
   if (!coin && !valuables.length) {
-    return { text: "The party carries home nothing but the story.", quiet: true };
+    return { text: "The party carries home no coin and no treasure.", quiet: true };
   }
   const haul = valuables.length
     ? ` and ${valuables.length} treasure${valuables.length === 1 ? "" : "s"} worth ${worth.toLocaleString()} gp`
@@ -3622,9 +3622,9 @@ function renderVictory(card) {
       </div>`;
   }).join("");
   card.innerHTML = `
-    <div class="overlay-eyebrow">the adventure is won</div>
-    <h2 class="overlay-title">The tale is told</h2>
-    <div class="overlay-sub">${esc(S.view.adventure_name)} is done — ${esc(S.view.town_name)} will tell of it for a generation</div>
+    <div class="overlay-eyebrow">victory</div>
+    <h2 class="overlay-title">The adventure is won</h2>
+    <div class="overlay-sub">the party has finished ${esc(S.view.adventure_name)}</div>
     <div class="victory-fortune${fortune.quiet ? " quiet" : ""}">${esc(fortune.text)}</div>
     <div class="roster">${rows}</div>
     <div class="overlay-actions">
@@ -3692,8 +3692,8 @@ async function saveGame() {
   if (!S.gameId) return;
   try {
     const result = await api(`/${S.gameId}/save`, {});
-    toast(`Saved — ${result.name}.`, true);
-    appendLog([{ kind: "system", text: `Game saved — ${result.name}.` }]);
+    toast(`Saved as ${result.name}.`, true);
+    appendLog([{ kind: "system", text: `Game saved as ${result.name}.` }]);
   } catch (error) {
     toast(error.message, false);
   }
@@ -3818,7 +3818,7 @@ function wizChrome(title, sub) {
   const st = S.builder.state;
   const count = st.members.length;
   return `
-    <div class="overlay-eyebrow">roll up your party — ${count} of ${st.max_members} characters</div>
+    <div class="overlay-eyebrow">roll up your party, ${count} of ${st.max_members} characters</div>
     <h2 class="overlay-title wiz-title">${esc(title)}</h2>
     ${sub ? `<div class="overlay-sub wiz-sub">${esc(sub)}</div>` : ""}`;
 }
@@ -3851,7 +3851,7 @@ function houseRulesPanel(rules) {
       ${toggle("hr-maxhp", r.max_hp,
         "Maximum starting hit points", "take the top of the hit die instead of rolling")}
       <div class="wiz-note">${r.locked
-        ? "Locked in — house rules are set before the first character is rolled."
+        ? "House rules are locked. You set them before you roll the first character."
         : "Optional, and set for the whole party."}</div>
     </div>`;
 }
@@ -3955,8 +3955,8 @@ function renderWizAbilities(card) {
     </tr>`;
   }).join("");
   const method = fourD6
-    ? "4d6, drop the lowest — STR, INT, WIS, DEX, CON, CHA"
-    : "3d6 down the line — STR, INT, WIS, DEX, CON, CHA";
+    ? "4d6, drop the lowest: STR, INT, WIS, DEX, CON, CHA"
+    : "3d6 in order: STR, INT, WIS, DEX, CON, CHA";
   card.innerHTML = `
     ${wizChrome("Ability scores", method)}
     <div class="wiz-panel">
@@ -4066,7 +4066,7 @@ function renderWizAdjust(card) {
       </tr>`;
   }).join("");
   card.innerHTML = `
-    ${wizChrome("Adjust ability scores", "lower STR, INT, or WIS two points to raise a prime requisite one — never below 9, never above 18")}
+    ${wizChrome("Adjust ability scores", "lower STR, INT, or WIS by 2 to raise a prime requisite by 1. You can't lower a score below 9 or raise one above 18.")}
     <div class="wiz-panel">
       <table class="ability-table"><tbody>${rows}</tbody></table>
       <div class="wiz-note points-line">${points > 0
@@ -4151,7 +4151,7 @@ function renderWizHp(card) {
     : `1d${cls.hit_die}${mod ? ` ${fmtMod(mod)} for Constitution` : ""}, no fewer than 1`;
   const doneNote = maxHp
     ? `maximum die face ${result ? result.rolls[result.rolls.length - 1] : cls.hit_die}${mod ? `, ${fmtMod(mod)}` : ""}`
-    : `the die showed ${result ? result.rolls.join(", then ") : ""}${mod ? `, ${fmtMod(mod)}` : ""}${result && result.total === 1 && result.rolls[result.rolls.length - 1] + mod < 1 ? " — never below 1" : ""}`;
+    : `the die showed ${result ? result.rolls.join(", then ") : ""}${mod ? `, ${fmtMod(mod)}` : ""}${result && result.total === 1 && result.rolls[result.rolls.length - 1] + mod < 1 ? " (minimum 1)" : ""}`;
   card.innerHTML = `
     ${wizChrome("Hit points", sub)}
     <div class="wiz-panel wiz-roll-panel">
@@ -4181,7 +4181,7 @@ function renderWizGold(card) {
     <div class="wiz-panel wiz-roll-panel">
       ${result
         ? `<div class="big-roll">${result.total} gp</div>
-           <div class="wiz-note">the dice showed ${result.dice.join(" + ")} — × 10</div>`
+           <div class="wiz-note">the dice showed ${result.dice.join(" + ")}, times 10</div>`
         : '<div class="wiz-note">Not rolled yet.</div>'}
     </div>
     <div class="overlay-actions">
@@ -4257,11 +4257,11 @@ function renderWizShop(card) {
       .map((it) => it.lots > 1 ? `${it.name} ×${it.lots}` : it.name).join(" · ");
     const dupes = kit.items.filter((it) => owned.has(it.item_id));
     const dupeNote = dupes.length
-      ? `<div class="kit-dupe">Already in your pack: ${esc(dupes.map((d) => d.name).join(", "))} — buying the kit adds another.</div>`
+      ? `<div class="kit-dupe">Already in your pack: ${esc(dupes.map((d) => d.name).join(", "))} . Buying the kit adds another.</div>`
       : "";
     kitPanel = `
     <div class="wiz-panel kit-panel">
-      <div class="shop-kind">Class kit — optional</div>
+      <div class="shop-kind">Class kit (optional)</div>
       <div class="kit-grid">
         <div class="kit-card">
           <div class="kit-head">
@@ -4275,11 +4275,11 @@ function renderWizShop(card) {
             ${kit.cost_gp > purse ? "disabled" : ""}>Buy the kit</button>
         </div>
       </div>
-      <div class="wiz-note">The kit drops its gear straight into the pack; return any piece you don't want.</div>
+      <div class="wiz-note">Buying the kit puts its gear in the pack. Return any piece you don't want.</div>
     </div>`;
   }
   card.innerHTML = `
-    ${wizChrome("The provisioner", "spend the starting gold; unspent gold stays in the purse")}
+    ${wizChrome("The provisioner", "spend the starting gold. Gold you don't spend stays in the purse.")}
     ${kitPanel}
     <div class="shop-cols">
       <div class="wiz-panel shop-pane">
@@ -4288,7 +4288,7 @@ function renderWizShop(card) {
       <div class="wiz-panel shop-pane">
         <div class="purse-line">${purse} gp remain</div>
         <table class="shop-table"><tbody>${pack || '<tr><td class="wiz-note">Nothing bought yet.</td></tr>'}</tbody></table>
-        <div class="wiz-note">The best armour and every usable weapon are readied automatically.</div>
+        <div class="wiz-note">When you add the character to the party, they wear the best armour and wield every weapon they can use.</div>
       </div>
     </div>
     <div class="overlay-actions">
@@ -4329,7 +4329,7 @@ function renderWizFinalize(card) {
       </div>
     </div>` : "";
   card.innerHTML = `
-    ${wizChrome("Name the character", `${cls.name} — ${draft.hit_points.total} hp — ${draft.purse_gp} gp in the purse`)}
+    ${wizChrome("Name the character", `${cls.name}, ${draft.hit_points.total} hp, ${draft.purse_gp} gp in the purse`)}
     <div class="wiz-panel">
       <div class="wiz-field">
         <span class="f-label">Name</span>

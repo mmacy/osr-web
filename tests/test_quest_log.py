@@ -315,7 +315,7 @@ class TestTheEnding:
         # second states the terminal fact and repeats nothing.
         lines = texts(win_the_barrow(game_id))
         assert lines.count(f"Quest complete: {QUEST}.") == 1
-        assert lines.count(f"The adventure is won — {QUEST} is done.") == 1
+        assert lines.count(f"The adventure is won. {QUEST} is complete.") == 1
         assert lines.count(COMPLETION) == 1
 
 

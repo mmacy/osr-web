@@ -121,7 +121,7 @@ EQUIPMENT_KITS = (
         "id": "elf",
         "class_id": "elf",
         "name": "Elf's kit",
-        "description": "Sword and bow over mail — steel for the melee, arrows for the reach.",
+        "description": "Sword, bow, and mail, for fighting in melee and at range.",
         "items": (
             ("sword", 1),
             ("chainmail", 1),
@@ -138,7 +138,7 @@ EQUIPMENT_KITS = (
         "id": "fighter",
         "class_id": "fighter",
         "name": "Fighter's kit",
-        "description": "Sword, mail, and shield — the front line, provisioned.",
+        "description": "Sword, mail, and shield for the front line.",
         "items": (
             ("sword", 1),
             ("chainmail", 1),
@@ -155,7 +155,7 @@ EQUIPMENT_KITS = (
         "id": "halfling",
         "class_id": "halfling",
         "name": "Halfling's kit",
-        "description": "Short sword, leather, and a sling — light gear for light feet.",
+        "description": "Short sword, leather, and a sling, all of it light.",
         "items": (
             ("short_sword", 1),
             ("leather", 1),
@@ -173,7 +173,7 @@ EQUIPMENT_KITS = (
         "id": "magic_user",
         "class_id": "magic_user",
         "name": "Magic-user's kit",
-        "description": "A dagger, a lantern, and oil — light to read by, little to carry.",
+        "description": "A dagger, a lantern, and oil, with little weight to carry.",
         "items": (
             ("dagger", 1),
             ("lantern", 1),
@@ -215,10 +215,10 @@ _KITS_BY_ID = {kit["id"]: kit for kit in EQUIPMENT_KITS}
 
 _REJECTION_TEXT = {
     # Builder-owned codes.
-    "creation.party.full": "The party is full — {max} is the most.",
+    "creation.party.full": "The party is full. {max} characters is the most.",
     "creation.party.empty": "The party needs at least one character.",
-    "creation.draft.in_progress": "A character is already half-rolled — finish or scrap them first.",
-    "creation.step.out_of_order": "First things first — {needs} comes before this.",
+    "creation.draft.in_progress": "A character is already in progress. Finish or discard them first.",
+    "creation.step.out_of_order": "First things first: {needs} comes before this.",
     "creation.step.locked": "That decision is already locked in.",
     "creation.step.already_done": "Those dice are already cast.",
     "creation.class.unknown": "No such class.",
@@ -235,16 +235,17 @@ _REJECTION_TEXT = {
     "creation.house_rules.locked": "House rules lock once the first character is rolled.",
     "creation.house_rules.unknown_method": "Unknown ability-score method.",
     # osrlib creation codes.
-    "creation.class.requirements_not_met": "A {class} needs {ability} {minimum} — these dice rolled {score}.",
+    "creation.class.requirements_not_met": "A {class} needs {ability} {minimum}, and these dice rolled {score}.",
     "creation.adjustment.not_lowerable": "Only STR, INT, and WIS can be lowered.",
-    "creation.adjustment.prime_requisite_lowered": "{ability} is a prime requisite — it cannot be lowered.",
+    "creation.adjustment.prime_requisite_lowered": "{ability} is a prime requisite, so it cannot be lowered.",
     "creation.adjustment.class_restriction": "This class may not lower {ability}.",
     "creation.adjustment.reduction_not_even": "Scores are lowered two points at a time.",
     "creation.adjustment.below_floor": "No score may drop below 9.",
     "creation.adjustment.raise_not_prime_requisite": "Only a prime requisite can be raised.",
     "creation.adjustment.above_cap": "No score may rise above 18.",
     "creation.adjustment.points_mismatch": (
-        "Two points lowered buy one point raised — {points_available} to spend, {points_spent} spent."
+        "Each point raised costs two points lowered. "
+        "You have {points_available} to spend and have spent {points_spent}."
     ),
     "creation.languages.too_many": "INT grants only {allowed} extra language(s).",
     "creation.languages.duplicate_choice": "{language} is chosen twice.",
