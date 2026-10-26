@@ -739,14 +739,14 @@ class TestLeftBehind:
         assert haul_narrator().render([self.left_behind(coins_gp_value=439)]) == [
             {
                 "kind": "system",
-                "text": "The party cannot carry it all, so 439 gp in coin stays where it lies.",
+                "text": "The party cannot carry it all and leaves 439 gp in coin behind.",
             }
         ]
 
     def test_items_and_coins(self):
         entry = haul_narrator().render([self.left_behind(("plate_mail", "torch", "torch"), 40)])[0]
         assert entry["text"] == (
-            "The party cannot carry it all, so Plate mail, Torches (6) ×2 and 40 gp in coin stays where it lies."
+            "The party cannot carry it all and leaves Plate mail, Torches (6) ×2 and 40 gp in coin behind."
         )
 
     def test_it_never_falls_through_to_the_engine_message(self):
@@ -755,7 +755,7 @@ class TestLeftBehind:
         entry = haul_narrator().render([self.left_behind(("silver_dagger",))])[0]
         assert entry["kind"] == "system"
         assert "silver_dagger" not in entry["text"]
-        assert entry["text"].startswith("The party cannot carry it all, so")
+        assert entry["text"].startswith("The party cannot carry it all and leaves")
 
 
 class TestTownSpoils:

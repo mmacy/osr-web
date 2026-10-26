@@ -218,7 +218,7 @@ _REJECTION_TEXT = {
     "creation.party.full": "The party is full. {max} characters is the most.",
     "creation.party.empty": "The party needs at least one character.",
     "creation.draft.in_progress": "A character is already in progress. Finish or discard them first.",
-    "creation.step.out_of_order": "First things first: {needs} comes before this.",
+    "creation.step.out_of_order": "This step comes after {needs}.",
     "creation.step.locked": "That decision is already locked in.",
     "creation.step.already_done": "Those dice are already rolled.",
     "creation.class.unknown": "No such class.",
@@ -255,7 +255,9 @@ _REJECTION_TEXT = {
     "magic.book.duplicate": "{spell} is inscribed twice.",
     "magic.book.unknown_spell": "No such spell.",
     "magic.book.wrong_list": "{spell} is not on this class's spell list.",
-    "magic.book.capacity_mismatch": "The book holds exactly {capacity} level-{spell_level} spell(s), not {chosen}.",
+    "magic.book.capacity_mismatch": (
+        "The starting spell book must contain exactly {capacity} level-{spell_level} spell(s), not {chosen}."
+    ),
     "items.purchase.insufficient_funds": "Not enough gold.",
 }
 

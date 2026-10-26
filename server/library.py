@@ -323,7 +323,7 @@ def add_adventure(raw: bytes) -> AdventureEntry:
     try:
         document = json.loads(raw)
     except ValueError as error:
-        raise ContentValidationError(f"not valid JSON: {error}") from error
+        raise ContentValidationError(f"The file is not valid JSON: {error}") from error
     payload = check_document(document, "adventure")
     try:
         adventure = Adventure.model_validate(payload)
@@ -334,7 +334,7 @@ def add_adventure(raw: bytes) -> AdventureEntry:
         detail = f"{where}: {first['msg']}"
         if more:
             detail += f" (and {more} more problem{'s' if more > 1 else ''})"
-        raise ContentValidationError(f"not a playable adventure: {detail}") from error
+        raise ContentValidationError(f"The file is not a playable adventure: {detail}") from error
     # A model-valid document can still name an item, area, or monster that does
     # not exist. Caught here, it is a 422 on the upload; uncaught, it is a game
     # that loads and quietly never fires what the author wrote.
@@ -368,7 +368,7 @@ def add_adventure(raw: bytes) -> AdventureEntry:
         if entry.digest == digest:
             return entry
     # Unreachable when the write succeeded: the file just written is in the scan.
-    raise ContentValidationError("the uploaded adventure did not appear in the library")
+    raise ContentValidationError("The uploaded adventure did not appear in the library.")
 
 
 def remove_adventure(entry: AdventureEntry) -> None:

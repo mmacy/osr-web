@@ -828,7 +828,7 @@ function orderControls(index) {
     btn.className = "btn mini ghost";
     btn.textContent = glyph;
     btn.disabled = index === edge;
-    btn.title = "Move this character in the marching order. Characters at the front fill the melee rank, as many as the space allows.";
+    btn.title = "Move this character in the marching order. The first characters in the order form the front rank, as many as the space allows.";
     btn.addEventListener("click", (event) => {
       event.stopPropagation();
       const order = S.view.party.map((m) => m.id);
@@ -870,7 +870,7 @@ function declSelect(m, fallback) {
   // Movement is a declaration like any other: an entangled member's would reject
   // the round (battle.declaration.cannot_move).
   const canMove = !(enc.immobile || []).includes(m.id);
-  const held = canMove ? "" : " (held fast)";
+  const held = canMove ? "" : " (can't move)";
   options.push({
     value: JSON.stringify({ action: "move", move: "close" }),
     label: `Close in${held}`,
@@ -879,7 +879,7 @@ function declSelect(m, fallback) {
   // Both take effect only once every living member declares the same one, since
   // one holdout keeps the formation in place, so the label says so rather than
   // implying a lone declarer moves the party.
-  const heldNote = canMove ? "" : ", held fast";
+  const heldNote = canMove ? "" : ", can't move";
   options.push({
     value: JSON.stringify({ action: "move", move: "fighting_withdrawal" }),
     label: `Fighting withdrawal (half rate, all must agree${heldNote})`,
@@ -2320,7 +2320,7 @@ function buildStudyPanel() {
         row.appendChild(button("Learn", async () => {
           const spell = atLevel.find((s) => s.id === select.value);
           if (!spell) return;
-          const message = `Inscribe ${spell.name} into ${caster.name}'s spell book? A spell learned cannot be unlearned.`;
+          const message = `Inscribe ${spell.name} into ${caster.name}'s spell book? This cannot be undone.`;
           if (!await confirmDialog(message, "Inscribe")) return;
           command({ command_type: "learn_spell", character_id: caster.id, spell_id: spell.id });
         }, { cls: "accent" }));
@@ -2362,7 +2362,7 @@ function renderEncounterPanel(panel) {
   if (enc.pursuit_gap_feet !== null && enc.pursuit_gap_feet !== undefined) {
     const gap = document.createElement("div");
     gap.className = "prose-sm";
-    gap.textContent = `They're pursuing the party. The gap is ${enc.pursuit_gap_feet} feet.`;
+    gap.textContent = `The monsters are pursuing the party. The gap is ${enc.pursuit_gap_feet} feet.`;
     card.appendChild(gap);
   }
   const row1 = document.createElement("div");
@@ -3851,7 +3851,7 @@ function houseRulesPanel(rules) {
       ${toggle("hr-maxhp", r.max_hp,
         "Maximum starting hit points", "take the top of the hit die instead of rolling")}
       <div class="wiz-note">${r.locked
-        ? "House rules are locked. You set them before you roll the first character."
+        ? "House rules locked when you rolled the first character."
         : "Optional, and set for the whole party."}</div>
     </div>`;
 }

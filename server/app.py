@@ -665,7 +665,7 @@ async def upload_adventure(request: Request) -> dict:
     """
     raw = await request.body()
     if len(raw) > _MAX_ADVENTURE_BYTES:
-        raise HTTPException(status_code=422, detail="adventure document too large (20 MB limit)")
+        raise HTTPException(status_code=422, detail="The adventure file is too large. The limit is 20 MB.")
     entry = add_adventure(raw)
     return {"adventure_id": entry.id, **adventures()}
 
