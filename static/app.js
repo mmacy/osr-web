@@ -1930,7 +1930,7 @@ function renderCastCard(panel) {
     const info = S.spellbook[id] || {};
     if (info.target === "group") {
       option.disabled = true;
-      option.title = "No target outside battle.";
+      option.title = "You can cast this spell only in battle, where you choose its target.";
     }
     spellSelect.appendChild(option);
   }
@@ -2360,7 +2360,7 @@ function renderEncounterPanel(panel) {
     const stance = document.createElement("div");
     stance.className = "prose-sm";
     stance.style.marginTop = "8px";
-    stance.textContent = `Reaction: ${enc.stance}.`;
+    stance.textContent = `Reaction: ${enc.stance === "attacks" ? "attacking" : enc.stance}.`;
     card.appendChild(stance);
   }
   if (enc.pursuit_gap_feet !== null && enc.pursuit_gap_feet !== undefined) {
@@ -2521,7 +2521,7 @@ function renderBattleContext(panel) {
 function weaponLabel(m, id) {
   for (const w of m.inventory.wielded) {
     if (w.template && w.template.id === id) return w.template.name;
-    if (w.instance_id === id) return w.name || w.display || "magic arm";
+    if (w.instance_id === id) return w.name || w.display || "magic weapon";
   }
   return id;
 }
@@ -4261,7 +4261,7 @@ function renderWizShop(card) {
       .map((it) => it.lots > 1 ? `${it.name} ×${it.lots}` : it.name).join(" · ");
     const dupes = kit.items.filter((it) => owned.has(it.item_id));
     const dupeNote = dupes.length
-      ? `<div class="kit-dupe">Already in your pack: ${esc(dupes.map((d) => d.name).join(", "))}. Buying the kit adds another.</div>`
+      ? `<div class="kit-dupe">Already in your pack: ${esc(dupes.map((d) => d.name).join(", "))}. Buying the kit adds another${dupes.length > 1 ? " of each" : ""}.</div>`
       : "";
     kitPanel = `
     <div class="wiz-panel kit-panel">
@@ -4366,7 +4366,7 @@ function renderWizFinalize(card) {
       if (picks.size > slots) {
         input.checked = false;
         picks.delete(input.value);
-        toast(`Only ${slots} extra language${slots === 1 ? "" : "s"}.`, false);
+        toast(`${ABILITY_NAMES.int} grants only ${slots} extra language${slots === 1 ? "" : "s"}.`, false);
       }
       S.builder.langPicks = [...picks];
     });

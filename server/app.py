@@ -470,7 +470,7 @@ def _cell_info(session: GameSession) -> dict:
             info["features"].append(
                 {
                     "id": feature.id,
-                    "description": feature.description or "a treasure cache",
+                    "description": feature.description or "A treasure cache",
                     "trap_found": ref in state.found_traps
                     and ref not in state.removed_traps
                     and ref not in state.sprung_traps,
@@ -485,7 +485,7 @@ def _cell_info(session: GameSession) -> dict:
             info["features"].append(
                 {
                     "id": cache_id,
-                    "description": "treasure, free for the taking",
+                    "description": "An untrapped treasure hoard",
                     "trap_found": False,
                     "inspected_by": list(state.inspect_attempts.get(cache_id, [])),
                 }
