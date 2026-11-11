@@ -182,10 +182,11 @@ class Game:
         self.session = session
         # The interpreter is registered here and nowhere else: every session
         # route — premade, builder party, veteran import, save restore —
-        # converges on this constructor, listeners are code a save never
-        # carries, and registering a second time would fire every trigger twice
-        # (`register_listener` never dedupes). Forgetting it is silent: gates
-        # still work, but no trigger fires and no quest ever advances.
+        # converges on this constructor, and listeners are code a save never
+        # contains. A second registration raises ValueError, because
+        # `register_listener` refuses a key that's already registered.
+        # Forgetting it is silent: gates still work, but no trigger fires and
+        # no quest ever advances.
         session.register_listener(Interpreter(session))
         self.lock = threading.Lock()
         self.narrator = Narrator(session)
