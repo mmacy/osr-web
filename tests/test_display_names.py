@@ -15,8 +15,6 @@ from osrlib.data import load_equipment, load_monsters
 
 from server.narrate import Narrator
 
-pytestmark = pytest.mark.xfail(reason="chunk: display-names")
-
 FLARG = SimpleNamespace(id="character-0001", name="Flarg")
 
 
