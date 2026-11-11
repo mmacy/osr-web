@@ -1196,7 +1196,7 @@ def execute_command(game_id: str, body: dict) -> dict:
             message = rejection_text(rejection)
             who = rejection.params.get("character") or rejection.params.get("caster")
             if isinstance(who, str) and who:
-                message = f"{game.narrator._name(who)}: {message}"
+                message = f"{game.narrator.subject(who)}: {message}"
             rejections.append({"code": rejection.code, "message": message})
         state = _state(game)
     return {

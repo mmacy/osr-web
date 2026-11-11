@@ -230,6 +230,24 @@ def _found_phrase(token: str) -> str:
     return _SEARCH_FIND_WORDS.get(kind, _UNKNOWN_FIND_WORDS)
 
 
+_ENTITY_REF = re.compile(r"\b(character|monster|npc|group)-\d+\b")
+"""An entity id as the engine's own message lines print it."""
+
+
+def _capitalized(text: str) -> str:
+    """`text` with its first letter capitalized, for a noun phrase that starts a sentence."""
+    return text[:1].upper() + text[1:]
+
+
+def _group_noun(label: str) -> str:
+    """A monster group inside a sentence, such as "the kobold group".
+
+    A group's label is the singular display name, so the transcript names the
+    group and the verb agrees with it.
+    """
+    return f"the {label} group"
+
+
 def _and_list(phrases: list[str]) -> str:
     """Join phrases the way a sentence does: `a`, `a and b`, `a, b, and c`."""
     if len(phrases) <= 2:
@@ -425,7 +443,7 @@ class Narrator:
         self._item_labels: dict[str, str] = {}
 
     def _cache_labels(self) -> None:
-        """Remember group and monster labels while the encounter still exists.
+        """Remember what the encounter's groups and monsters are called while it still exists.
 
         The terminal battle round renders after the engine clears the encounter,
         so names learned during earlier commands must outlive it.
@@ -434,51 +452,76 @@ class Narrator:
         if encounter is None:
             return
         for group in encounter.groups:
-            self._labels[group.id] = group.label
+            self._labels[group.id] = _group_noun(group.label)
             for monster_id in group.monster_ids:
-                combatant = self.session.combatant(monster_id)
-                name = getattr(getattr(combatant, "template", None), "name", None)
-                if name:
-                    self._labels[monster_id] = name
+                noun = self._combatant_noun(monster_id)
+                if noun is not None:
+                    self._labels[monster_id] = noun
 
-    def _name(self, ref: str) -> str:
-        """A display name for any entity ref the events may carry."""
+    def _combatant_noun(self, ref: str) -> str | None:
+        """What the transcript calls a monster or NPC adventurer inside a sentence, or None for another ref.
+
+        A monster reads as "the" and its template's display name, because the
+        catalog `name` is an index entry ("Centipede, Giant", "Veteran (2)")
+        that can state Hit Dice the players can't see. An NPC adventurer is a
+        character, and its name ("Fighter adventurer 1") reads as written.
+        """
+        combatant = self.session.combatant(ref)
+        if combatant is None:
+            return None
+        template = getattr(combatant, "template", None)
+        if template is not None:
+            return f"the {template.display_name}"
+        return combatant.name
+
+    def noun(self, ref: str) -> str:
+        """What the transcript calls any entity ref the events may carry, inside a sentence.
+
+        Every line that names a party member, a monster, an NPC adventurer, or a
+        monster group gets its name here, so each creature reads the same in
+        every line. A party member reads by name ("Flarg"), a monster as "the
+        giant centipede", and a group as "the giant centipede group", which
+        takes a singular verb whatever the group's count.
+
+        Args:
+            ref: An entity id from an event, like `character-0001` or `group-0002`.
+
+        Returns:
+            The noun phrase, lowercase where the display name is. A line that
+            starts with it calls [`subject`][server.narrate.Narrator.subject]
+            instead.
+        """
         for member in self.session.party.members:
             if member.id == ref:
                 return member.name
-        combatant = self.session.combatant(ref)
-        if combatant is not None:
-            name = getattr(combatant, "name", None) or getattr(getattr(combatant, "template", None), "name", None)
-            if name:
-                return name
+        noun = self._combatant_noun(ref)
+        if noun is not None:
+            return noun
         encounter = self.session.encounter
         if encounter is not None:
             for group in encounter.groups:
                 if group.id == ref:
-                    return group.label
+                    return _group_noun(group.label)
         if ref in self._labels:
             return self._labels[ref]
         if ref.startswith("group-"):
-            return "the monsters"
+            return "the monster group"
         return ref
 
-    def _group_name(self, ref: str) -> str:
-        """A capitalized noun phrase for a monster group, such as "The Kobold group".
-
-        A group's label is a singular monster name, so the transcript names the group
-        instead and the verb agrees with it.
-        """
-        label = self._name(ref)
-        if label in ("the monsters", ref):
-            return "The monster group"
-        return f"The {label} group"
+    def subject(self, ref: str) -> str:
+        """[`noun`][server.narrate.Narrator.noun], capitalized for a line or sentence that starts with it."""
+        return _capitalized(self.noun(ref))
 
     def _substitute_ids(self, text: str) -> str:
-        return re.sub(
-            r"\b(character|monster|npc|group)-\d+\b",
-            lambda m: self._name(m.group(0)),
-            text,
-        )
+        """Replace the entity ids in an engine message with the names the transcript uses."""
+
+        def replace(match: re.Match) -> str:
+            before = text[: match.start()]
+            if not before or before.endswith((". ", "! ", "? ")):
+                return self.subject(match.group(0))
+            return self.noun(match.group(0))
+
+        return _ENTITY_REF.sub(replace, text)
 
     def _item_name(self, item_id: str) -> str:
         try:
@@ -586,7 +629,7 @@ class Narrator:
         if code == "effects.condition.gained" and getattr(event, "condition", "") == "dead":
             return None  # the combat.death.died line that follows says it better
         if code == "combat.death.died":
-            who = self._name(getattr(event, "target_id", ""))
+            who = self.subject(getattr(event, "target_id", ""))
             is_member = any(member.id == getattr(event, "target_id", "") for member in self.session.party.members)
             if is_member:
                 return {"kind": "danger", "text": f"{who} is slain!"}
@@ -667,7 +710,7 @@ class Narrator:
             "exploration.door.opened": f"The door to the {direction} swings open.",
             "exploration.door.closed": f"The door to the {direction} closes.",
             "exploration.door.forced": (
-                f"{self._name(event.character_id) if event.character_id else 'Someone'} "
+                f"{self.subject(event.character_id) if event.character_id else 'Someone'} "
                 f"forces the door to the {direction} with a crash!"
             ),
             "exploration.door.stuck": f"The door to the {direction} will not budge.",
@@ -678,7 +721,7 @@ class Narrator:
         return self._with_beat({"kind": "mech", "text": texts.get(event.code, event.code)}, event.narrative)
 
     def _on_listened(self, event):
-        who = self._name(event.character_id)
+        who = self.subject(event.character_id)
         direction = _DIRECTION_WORDS.get(event.direction, event.direction)
         if event.code == "exploration.listen.heard":
             return {
@@ -691,7 +734,7 @@ class Narrator:
         }
 
     def _on_search_completed(self, event):
-        who = self._name(event.character_id)
+        who = self.subject(event.character_id)
         kind_words = {
             "secret_doors": "secret doors",
             "room_traps": "traps",
@@ -709,9 +752,10 @@ class Narrator:
         return {"kind": "mech", "text": f"{who} searches for {what} and finds nothing."}
 
     def _on_trap(self, event):
-        who = self._name(event.character_id) if event.character_id else "Someone"
+        who = self.subject(event.character_id) if event.character_id else "Someone"
+        whom = self.noun(event.character_id) if event.character_id else "someone"
         texts = {
-            "exploration.trap.sprung": f"A trap springs on {who}!",
+            "exploration.trap.sprung": f"A trap springs on {whom}!",
             "exploration.trap.found": f"{who} finds a trap!",
             "exploration.trap.removed": f"{who} disarms the trap.",
             "exploration.trap.safe": "The trap fails to fire.",
@@ -743,7 +787,7 @@ class Narrator:
         return " and ".join(parts) if parts else "nothing"
 
     def _on_item_acquired(self, event):
-        who = self._name(event.character_id)
+        who = self.subject(event.character_id)
         return {
             "kind": "treasure",
             "text": f"{who} takes {self._goods_and_coin(event)}.",
@@ -788,7 +832,7 @@ class Narrator:
             # the engine emits nothing for a member who took nothing.
             sentences.append("The party splits the loose coin.")
         clauses = [
-            f"{self._name(event.character_id)} takes {self._item_list(event.item_ids)}"
+            f"{self.subject(event.character_id)} takes {self._item_list(event.item_ids)}"
             for event in events
             if event.item_ids
         ]
@@ -809,12 +853,12 @@ class Narrator:
         }
 
     def _on_items_dropped(self, event):
-        who = self._name(event.character_id)
+        who = self.subject(event.character_id)
         return {"kind": "mech", "text": f"{who} drops {self._goods_and_coin(event)}."}
 
     def _on_items_given(self, event):
-        who = self._name(event.character_id)
-        recipient = self._name(event.recipient_id)
+        who = self.subject(event.character_id)
+        recipient = self.noun(event.recipient_id)
         return {
             "kind": "mech",
             "text": f"{who} hands {self._goods_and_coin(event)} to {recipient}.",
@@ -838,7 +882,7 @@ class Narrator:
         resolves perfectly well and which the comparison would have thrown away
         to print "an item".
         """
-        who = self._name(event.character_id)
+        who = self.subject(event.character_id)
         return {
             "kind": "mech",
             "text": f"{who} gives up {self._consumed_item_phrase(event.item_id)}.",
@@ -885,7 +929,7 @@ class Narrator:
         return {"potion": "a potion", "scroll": "a scroll"}.get(kind, "an item")
 
     def _on_item_used(self, event):
-        who = self._name(event.character_id)
+        who = self.noun(event.character_id)
         if event.code == "items.potion.mixed":
             return {
                 "kind": "danger",
@@ -893,6 +937,7 @@ class Narrator:
             }
         if event.code == "items.scroll.cursed":
             return {"kind": "danger", "text": f"The scroll {who} reads is cursed!"}
+        who = self.subject(event.character_id)
         verbs = {
             "items.potion.drunk": "drinks",
             "items.scroll.read": "reads",
@@ -917,7 +962,7 @@ class Narrator:
         return {"kind": "treasure", "text": f"It is {article} {name}."}
 
     def _on_curse_revealed(self, event):
-        who = self._name(event.character_id)
+        who = self.noun(event.character_id)
         name = self._magic_item_name(event.template_id)
         self._item_labels[event.instance_id] = name
         return {
@@ -944,10 +989,11 @@ class Narrator:
         return {"kind": "mech", "text": "The party rests."}
 
     def _on_encounter_started(self, event):
+        monsters = event.monster_name if event.count == 1 else event.monster_name_plural
         entries = [
             {
                 "kind": "danger",
-                "text": f"Monsters! {event.count} × {event.monster_name}, {event.distance_feet} feet away.",
+                "text": f"Monsters! {event.count} {monsters}, {event.distance_feet} feet away.",
             }
         ]
         if event.party_surprised:
@@ -993,15 +1039,12 @@ class Narrator:
         return {"kind": kind, "text": texts.get(event.code, "The battle is over.")}
 
     def _on_monster_defeated(self, event):
-        name = self._monster_name(event.template_id)
-        outcomes = {"slain": "slain", "routed": "routed", "surrendered": "surrendered"}
-        return {
-            "kind": "mech",
-            "text": f"{name} {outcomes.get(event.outcome, event.outcome)} ({event.xp} XP).",
-        }
+        outcomes = {"slain": "is slain", "routed": "is routed", "surrendered": "surrenders"}
+        outcome = outcomes.get(event.outcome, f"is {event.outcome}")
+        return {"kind": "mech", "text": f"{self.subject(event.monster_id)} {outcome} ({event.xp} XP)."}
 
     def _on_monster_fled(self, event):
-        label = self._group_name(event.group_id)
+        label = self.subject(event.group_id)
         if event.code == "battle.side.surrendered":
             return {
                 "kind": "mech",
@@ -1014,7 +1057,7 @@ class Narrator:
         # members where they lie, as their own group. Without this line the
         # sidebar sprouts a second group the log never explained — and the LLM
         # narrator, fed the same transcript, would invent its own reason.
-        label = self._group_name(event.source_group_id)
+        label = self.subject(event.source_group_id)
         fellows = "fellow" if event.count == 1 else "fellows"
         return {
             "kind": "mech",
@@ -1024,16 +1067,17 @@ class Narrator:
     def _on_group_moved(self, event):
         return {
             "kind": "mech",
-            "text": f"{self._group_name(event.group_id)} is now {event.distance_feet} feet away.",
+            "text": f"{self.subject(event.group_id)} is now {event.distance_feet} feet away.",
         }
 
     def _on_attack_rolled(self, event):
-        attacker = self._name(event.attacker_id)
-        defender = self._name(event.defender_id)
+        attacker = self.subject(event.attacker_id)
+        defender = self.noun(event.defender_id)
         if event.code == "combat.attack.auto_hit":
+            helpless = f"the helpless {defender.removeprefix('the ')}"
             return {
                 "kind": "mech",
-                "text": f"{attacker} strikes the helpless {defender} with {event.attack_name}. No roll is needed.",
+                "text": f"{attacker} strikes {helpless} with {event.attack_name}. No roll is needed.",
             }
         roll = f"rolled {event.roll}{event.modifier:+d} = {event.total}"
         if event.code == "combat.attack.hit":
@@ -1049,14 +1093,6 @@ class Narrator:
                 f"{attacker} misses {defender} with {event.attack_name}: {roll}{natural} (needed {event.required})."
             ),
         }
-
-    def _monster_name(self, template_id: str) -> str:
-        try:
-            from osrlib.data import load_monsters
-
-            return load_monsters().get(template_id).name
-        except ValueError:
-            return template_id
 
     def _on_evasion(self, event):
         if event.code == "encounter.evasion.succeeded":
@@ -1077,14 +1113,14 @@ class Narrator:
         }
 
     def _on_xp_awarded(self, event):
-        who = self._name(event.character_id)
+        who = self.subject(event.character_id)
         return {
             "kind": "mech",
             "text": f"{who} gains {event.modified_award} XP (level {event.level_after}).",
         }
 
     def _on_leveled_up(self, event):
-        who = self._name(event.character_id)
+        who = self.subject(event.character_id)
         if event.title is None:
             # The SRD's title lists run only through name level.
             return {
@@ -1116,13 +1152,13 @@ class Narrator:
     def _on_treasure_sold(self, event):
         return {
             "kind": "treasure",
-            "text": f"{self._name(event.character_id)} sells treasure for {event.gp_value} gp.",
+            "text": f"{self.subject(event.character_id)} sells treasure for {event.gp_value} gp.",
         }
 
     def _on_healing_purchased(self, event):
         return {
             "kind": "mech",
-            "text": f"The temple tends to {self._name(getattr(event, 'character_id', ''))}.",
+            "text": f"The temple tends to {self.noun(getattr(event, 'character_id', ''))}.",
         }
 
     def _on_game_over(self, event):
@@ -1196,18 +1232,18 @@ class Narrator:
     def _on_spell_declared(self, event):
         return {
             "kind": "mech",
-            "text": f"{self._name(event.caster_id)} begins casting {self._spell_name(event.spell_id)}.",
+            "text": f"{self.subject(event.caster_id)} begins casting {self._spell_name(event.spell_id)}.",
         }
 
     def _on_spell_cast(self, event):
-        who = self._name(event.caster_id)
+        who = self.subject(event.caster_id)
         spell = self._spell_name(event.spell_id)
         if event.code == "magic.cast.no_effect":
             return {"kind": "mech", "text": f"{who} casts {spell}, but it has no effect."}
         return {"kind": "mech", "text": f"{who} casts {spell}!"}
 
     def _on_spell_disrupted(self, event):
-        who = self._name(event.caster_id)
+        who = self.subject(event.caster_id)
         spell = self._spell_name(event.spell_id)
         if event.code == "magic.cast.fizzled":
             if event.reason:
@@ -1223,11 +1259,9 @@ class Narrator:
         names = ", ".join(self._spell_name(copy.spell_id) for copy in event.prepared)
         return {
             "kind": "mech",
-            "text": f"{self._name(event.caster_id)} prepares: {names}.",
+            "text": f"{self.subject(event.caster_id)} prepares: {names}.",
         }
 
     def _on_spell_book_updated(self, event):
-        return {
-            "kind": "system",
-            "text": f"{self._name(event.caster_id)} inscribes {self._spell_name(event.spell_id)} in their spell book.",
-        }
+        who = self.subject(event.caster_id)
+        return {"kind": "system", "text": f"{who} inscribes {self._spell_name(event.spell_id)} in their spell book."}

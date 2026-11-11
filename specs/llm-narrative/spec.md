@@ -10,7 +10,7 @@ Add an optional narrative layer that asks a large language model to embellish si
 
 ## Motivation
 
-The narrator's lines are truthful and terse by design — `"Monsters! 3 × Skeleton, 30 feet away."` tells the player exactly what the kernel knows. What it can't do is sound like a referee at the table: react to the party's condition, connect this room to the last one, or give a battle its due drama. The adventure documents carry evocative descriptions, hooks, and named places; an LLM can weave those with the mechanical facts into storybook prose that matches the app's existing serif "referee voice" — without ever being trusted to state a fact the engine didn't.
+The narrator's lines are truthful and terse by design — `"Monsters! 3 skeletons, 30 feet away."` tells the player exactly what the kernel knows. What it can't do is sound like a referee at the table: react to the party's condition, connect this room to the last one, or give a battle its due drama. The adventure documents carry evocative descriptions, hooks, and named places; an LLM can weave those with the mechanical facts into storybook prose that matches the app's existing serif "referee voice" — without ever being trusted to state a fact the engine didn't.
 
 ## Goals
 

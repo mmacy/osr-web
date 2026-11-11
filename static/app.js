@@ -932,7 +932,7 @@ function battleFoot(enc) {
     for (const group of groups) {
       const option = document.createElement("option");
       option.value = group.id;
-      option.textContent = `${group.label} ×${group.count}`;
+      option.textContent = `${capitalize(group.label)} ×${group.count}`;
       targetSelect.appendChild(option);
     }
     targetSelect.value = S.declTarget;
@@ -2353,7 +2353,7 @@ function renderEncounterPanel(panel) {
   for (const group of enc.groups) {
     const chip = document.createElement("div");
     chip.className = "group-chip";
-    chip.innerHTML = `<span>${group.label}</span><span class="count">×${group.count}</span><span class="dist">${group.distance_feet} ft</span>`;
+    chip.innerHTML = `<span>${esc(capitalize(group.label))}</span><span class="count">×${group.count}</span><span class="dist">${group.distance_feet} ft</span>`;
     card.appendChild(chip);
   }
   if (enc.stance) {
@@ -2512,7 +2512,7 @@ function renderBattleContext(panel) {
   for (const group of enc.groups.filter((g) => g.count > 0)) {
     const chip = document.createElement("div");
     chip.className = "group-chip";
-    chip.innerHTML = `<span>${esc(group.label)}</span><span class="count">×${group.count}</span><span class="dist">${group.distance_feet} ft</span>`;
+    chip.innerHTML = `<span>${esc(capitalize(group.label))}</span><span class="count">×${group.count}</span><span class="dist">${group.distance_feet} ft</span>`;
     card.appendChild(chip);
   }
   panel.appendChild(card);

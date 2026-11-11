@@ -62,4 +62,4 @@ def test_the_opening_route_reaches_the_pinned_first_fight(game_id):
     encounter = third["encounter"]
     assert encounter["in_battle"] is True
     assert encounter["stance"] == "attacks"
-    assert [(group["label"], group["count"]) for group in encounter["groups"]] == [("Kobold", 4)]
+    assert [(group["label"], group["count"]) for group in encounter["groups"]] == [("kobold", 4)]
