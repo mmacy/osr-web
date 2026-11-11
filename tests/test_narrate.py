@@ -2,7 +2,7 @@
 
 These cover osr-web's presentation choices over osrlib's structured events: the
 `Narrator` resolves entity ids to names and decides phrasing. A lightweight fake
-session is enough — `_name` only walks the party, `combatant(...)`, and the
+session is enough — `noun` only walks the party, `combatant(...)`, and the
 encounter.
 
 Most tests here hand the renderer a `SimpleNamespace` standing in for an event,
@@ -62,7 +62,7 @@ def event(event_type="", code="", **attrs):
 
 
 def make_narrator(members=(), combatants=None):
-    """A `Narrator` over a fake session where `_name` resolves the given refs.
+    """A `Narrator` over a fake session where `noun` resolves the given refs.
 
     `effective_equipment` is the engine's own resolver for authored item ids
     (shipped ∪ adventure-bundled), which is what the narrator names items
@@ -96,7 +96,7 @@ def attack(code, **attrs):
 
 
 FLARG = SimpleNamespace(id="character-0001", name="Flarg")
-KOBOLD = SimpleNamespace(name="Kobold", template=None)
+KOBOLD = SimpleNamespace(name="Kobold", template=SimpleNamespace(display_name="kobold"))
 
 
 def combat_narrator():
@@ -108,7 +108,7 @@ class TestAttackRolled:
         entry = combat_narrator()._on_attack_rolled(attack("combat.attack.hit"))
         assert entry == {
             "kind": "mech",
-            "text": "Flarg hits Kobold with sword: rolled 15+2 = 17.",
+            "text": "Flarg hits the kobold with sword: rolled 15+2 = 17.",
         }
         assert "need" not in entry["text"]
 
@@ -116,7 +116,7 @@ class TestAttackRolled:
         entry = combat_narrator()._on_attack_rolled(attack("combat.attack.missed", roll=5, total=7))
         assert entry == {
             "kind": "mech",
-            "text": "Flarg misses Kobold with sword: rolled 5+2 = 7 (needed 13).",
+            "text": "Flarg misses the kobold with sword: rolled 5+2 = 7 (needed 13).",
         }
         assert entry["text"].endswith("(needed 13).")
 
@@ -133,25 +133,25 @@ class TestAttackRolled:
         )
         assert entry == {
             "kind": "mech",
-            "text": "Flarg strikes the helpless Kobold with dagger. No roll is needed.",
+            "text": "Flarg strikes the helpless kobold with dagger. No roll is needed.",
         }
 
     def test_natural_twenty_tags_the_hit(self):
         entry = combat_narrator()._on_attack_rolled(
             attack("combat.attack.hit", roll=20, modifier=-1, total=19, natural=20)
         )
-        assert entry["text"] == "Flarg hits Kobold with sword: rolled 20-1 = 19 (natural 20)."
+        assert entry["text"] == "Flarg hits the kobold with sword: rolled 20-1 = 19 (natural 20)."
 
     def test_natural_one_tags_the_miss_before_needed(self):
         entry = combat_narrator()._on_attack_rolled(
             attack("combat.attack.missed", roll=1, modifier=0, total=1, natural=1)
         )
-        assert entry["text"] == "Flarg misses Kobold with sword: rolled 1+0 = 1 (natural 1) (needed 13)."
+        assert entry["text"] == "Flarg misses the kobold with sword: rolled 1+0 = 1 (natural 1) (needed 13)."
 
     def test_dispatched_by_event_type(self):
         # The generic `_render_event` fallback routes attacks to `_on_attack_rolled`.
         entry = combat_narrator()._render_event(attack("combat.attack.hit"))
-        assert entry["text"] == "Flarg hits Kobold with sword: rolled 15+2 = 17."
+        assert entry["text"] == "Flarg hits the kobold with sword: rolled 15+2 = 17."
 
 
 def search(kind, *found, code="exploration.search.found"):
@@ -494,7 +494,7 @@ class TestSprungTrapOutcome:
 class TestDeathWording:
     def test_non_member_is_killed(self):
         entry = combat_narrator()._render_event(event("death", "combat.death.died", target_id="monster-0001"))
-        assert entry == {"kind": "mech", "text": "Kobold is killed."}
+        assert entry == {"kind": "mech", "text": "The kobold is killed."}
 
     def test_member_is_slain(self):
         entry = combat_narrator()._render_event(event("death", "combat.death.died", target_id="character-0001"))
@@ -1010,22 +1010,22 @@ class TestMonstersLeftBehind:
 
     def test_names_the_runners_and_counts_the_abandoned(self):
         narrator = make_narrator()
-        narrator._labels["group-0001"] = "Kobold"
+        narrator._labels["group-0001"] = "the kobold group"
         entry = narrator._on_monsters_left_behind(
             MonstersLeftBehindEvent(group_id="group-0002", source_group_id="group-0001", count=2)
         )
         assert entry == {
             "kind": "mech",
-            "text": "The Kobold group abandons 2 helpless fellows where they lie.",
+            "text": "The kobold group abandons 2 helpless fellows where they lie.",
         }
 
     def test_one_abandoned_reads_singular(self):
         narrator = make_narrator()
-        narrator._labels["group-0001"] = "Kobold"
+        narrator._labels["group-0001"] = "the kobold group"
         entry = narrator._on_monsters_left_behind(
             MonstersLeftBehindEvent(group_id="group-0002", source_group_id="group-0001", count=1)
         )
-        assert entry["text"] == "The Kobold group abandons 1 helpless fellow where they lie."
+        assert entry["text"] == "The kobold group abandons 1 helpless fellow where they lie."
 
 
 REFUSAL = "The wicket is banded in lead. Nothing the party carries answers it."

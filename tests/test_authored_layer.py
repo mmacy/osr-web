@@ -199,16 +199,16 @@ class TestTheTriggerFires:
         assert _games[game_id].session.fired_triggers == ["adit-draught"]
 
     def test_the_session_carries_exactly_one_interpreter(self, game_id):
-        # `register_listener` never dedupes, and `Game.__init__` is the only
-        # place that calls it. Counting the listeners is the direct statement;
-        # the repeatable-trigger test below is the one that can *feel* a second.
+        # `Game.__init__` is the only place that calls `register_listener`, and
+        # the engine raises ValueError for a second listener with the same key.
+        # Counting the listeners is the direct statement.
         interpreters = [listener for listener in _games[game_id].session.listeners if isinstance(listener, Interpreter)]
         assert len(interpreters) == 1
 
     def test_a_repeatable_trigger_fires_once_per_entry_not_twice(self, repeatable_game):
-        # A second registration would append two journal entries per crossing.
-        # The shipped trigger cannot show this: its fired-mark silences the
-        # duplicate, so the whole suite stays green with the call doubled.
+        # A repeatable trigger writes one journal entry each time the party
+        # crosses its area. The shipped trigger is once-only, so its fired-mark
+        # would hide a trigger that fired twice.
         payload = enter(repeatable_game)
         assert texts(payload).count(JOURNAL) == 1
         # Two on the way in: the quest's offer, then the draught.
