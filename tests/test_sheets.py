@@ -5,7 +5,6 @@ player reads off their own character record — derived from the session's
 Character objects, never referee state.
 """
 
-import pytest
 from osrlib.core.classes import level_title
 from osrlib.core.events import Visibility
 from osrlib.core.items import MagicItemInstance
@@ -185,7 +184,6 @@ class TestArmourClassAsThePlayersKnowIt:
         assert self.session.execute(EquipItem(character_id=fighter.id, item_id=cursed.instance_id)).accepted
         return fighter
 
-    @pytest.mark.xfail(reason="chunk: sheet-armour-class")
     def test_an_unrevealed_cursed_shield_reads_as_the_players_know_it(self):
         fighter = self._wear_a_cursed_shield()
         view = next(m for m in self.session.view(Visibility.PLAYER).party if m.id == fighter.id)
