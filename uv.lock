@@ -233,7 +233,7 @@ dev = [
 
 [[package]]
 name = "osrlib"
-version = "2.4.0"
+version = "2.6.0"
 source = { editable = "../osrlib-python" }
 dependencies = [
     { name = "pydantic" },
@@ -245,7 +245,7 @@ requires-dist = [{ name = "pydantic", specifier = ">=2" }]
 [package.metadata.requires-dev]
 dev = [
     { name = "fastapi", specifier = ">=0.115" },
-    { name = "httpx", specifier = ">=0.28" },
+    { name = "httpx2", specifier = ">=2.16.2" },
     { name = "hypothesis", specifier = ">=6" },
     { name = "mkdocs", specifier = ">=1.6.1" },
     { name = "mkdocs-gen-files", specifier = "==0.5.0" },
@@ -267,7 +267,7 @@ docs = [
 ]
 examples = [
     { name = "fastapi", specifier = ">=0.115" },
-    { name = "httpx", specifier = ">=0.28" },
+    { name = "httpx2", specifier = ">=2.16.2" },
     { name = "uvicorn", specifier = ">=0.32" },
 ]
 
