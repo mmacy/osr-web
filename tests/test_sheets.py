@@ -5,8 +5,11 @@ player reads off their own character record — derived from the session's
 Character objects, never referee state.
 """
 
+import pytest
 from osrlib.core.classes import level_title
-from osrlib.crawl.commands import AwardXP, PrepareSpells, Rest
+from osrlib.core.events import Visibility
+from osrlib.core.items import MagicItemInstance
+from osrlib.crawl.commands import AwardXP, EquipItem, GrantItem, PrepareSpells, Rest, UnequipItem
 
 from server.app import _sheets
 from server.content import new_session
@@ -155,3 +158,49 @@ class TestLevelTitleAndSpellPicks:
         for class_id in ("cleric", "fighter", "thief"):
             member = self._by_class(class_id)
             assert sheets[member.id]["spell_picks"] == []
+
+
+class TestArmourClassAsThePlayersKnowIt:
+    """The sheet's armour class is the player view's, so it never tells more than the engine lets the players know.
+
+    osrlib counts a worn cursed shield or suit of armour that is unidentified, and whose curse isn't revealed, as
+    the +1 item it tests as. `MemberView.armour_class` has that number, and the live `Character` has the real one.
+    """
+
+    def setup_method(self):
+        self.session = new_session(seed=42)
+
+    def _wear_a_cursed_shield(self):
+        fighter = next(m for m in self.session.party.members if m.class_id == "fighter")
+        if fighter.inventory.shield is not None:
+            worn = fighter.inventory.shield
+            item_id = worn.instance_id if isinstance(worn, MagicItemInstance) else worn.template.id
+            assert self.session.execute(UnequipItem(character_id=fighter.id, item_id=item_id)).accepted
+        assert self.session.execute(GrantItem(character_id=fighter.id, item_id="cursed_shield_minus_2")).accepted
+        cursed = next(
+            entry
+            for entry in fighter.inventory.items
+            if isinstance(entry, MagicItemInstance) and entry.template_id == "cursed_shield_minus_2"
+        )
+        assert self.session.execute(EquipItem(character_id=fighter.id, item_id=cursed.instance_id)).accepted
+        return fighter
+
+    @pytest.mark.xfail(reason="chunk: sheet-armour-class")
+    def test_an_unrevealed_cursed_shield_reads_as_the_players_know_it(self):
+        fighter = self._wear_a_cursed_shield()
+        view = next(m for m in self.session.view(Visibility.PLAYER).party if m.id == fighter.id)
+        # The precondition: the engine's two numbers differ, so the test can tell which one the sheet sends.
+        assert view.armour_class != fighter.armour_class
+
+        sheet = _sheets(self.session)[fighter.id]
+
+        assert (sheet["armour_class"], sheet["armour_class_ascending"]) == (
+            view.armour_class,
+            view.armour_class_ascending,
+        )
+
+    def test_every_sheet_agrees_with_the_player_view(self):
+        view = {m.id: m for m in self.session.view(Visibility.PLAYER).party}
+        for member_id, sheet in _sheets(self.session).items():
+            assert sheet["armour_class"] == view[member_id].armour_class
+            assert sheet["armour_class_ascending"] == view[member_id].armour_class_ascending
