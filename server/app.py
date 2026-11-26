@@ -36,6 +36,7 @@ from osrlib.crawl.dungeon import PartyLocation, Position, cell_ref
 from osrlib.crawl.exploration import HEALING_SERVICES
 from osrlib.crawl.interpreter import Interpreter
 from osrlib.crawl.session import GameSession
+from osrlib.crawl.views import PlayerView
 from osrlib.data import load_ability_tables, load_spells
 from osrlib.errors import ContentValidationError, SaveVersionError
 from osrlib.persistence import save_game
@@ -372,9 +373,14 @@ def _spellbook(session: GameSession) -> dict:
 def _sheets(session: GameSession) -> dict:
     """Per-member character-sheet data the projection doesn't carry.
 
-    Everything here is printed on the player's own B/X character sheet —
-    scores, saves, AC, THAC0, movement, XP, languages — derived from the
-    session's Character objects. Nothing referee-only is touched.
+    Everything here is printed on the player's own B/X character sheet:
+    scores, saves, AC, THAC0, movement, XP, and languages. Most of it is read
+    from the session's Character objects. Nothing referee-only is touched.
+
+    The armour class pair comes from the player view's `MemberView`, because
+    that is the number the players know. osrlib counts a worn cursed shield or
+    suit of armour whose curse isn't revealed as the +1 item it tests as, so
+    the live Character's real number would tell the player about the curse.
 
     `spell_slots` is the member's own progression row (rulebook data); `rested`
     says whether a night's sleep is banked for spell preparation — a fact the
@@ -387,9 +393,13 @@ def _sheets(session: GameSession) -> dict:
     """
     tables = load_ability_tables()
     catalog = load_spells()
+    player_view = session.view(Visibility.PLAYER)
+    assert isinstance(player_view, PlayerView)
+    known = {view.id: view for view in player_view.party}
     sheets: dict[str, dict] = {}
     for member_id, member in _members_by_id(session).items():
         definition = member.definition
+        as_known = known[member_id]
         next_row = definition.row(member.level + 1) if member.level < definition.max_level else None
         sheets[member_id] = {
             "race": member.race,
@@ -411,8 +421,8 @@ def _sheets(session: GameSession) -> dict:
             "saves": member.saves.model_dump(),
             "thac0": member.thac0,
             "attack_bonus": member.attack_bonus,
-            "armour_class": member.armour_class,
-            "armour_class_ascending": member.armour_class_ascending,
+            "armour_class": as_known.armour_class,
+            "armour_class_ascending": as_known.armour_class_ascending,
             "movement_per_turn": member.movement_rate(session.ruleset),
             "encumbrance": {
                 "mode": session.ruleset.encumbrance.value,
