@@ -40,11 +40,11 @@ On pull requests CI also runs `uv run python scripts/check_app_version.py --base
 
 Refactor freely and update every call site. The tests and the end-to-end drives are the safety net. No re-exports or aliases kept to preserve an old import path, no deprecation scaffolding, no code kept "just in case". Git history is the archive. Release changes nothing about this: delete, don't deprecate, and add no workarounds, compatibility shims, or other accommodations. Do the right thing even when it's the hard thing, and question existing code and the decisions behind it as the project matures. What was right then may not be right now. The two real constraints are the wire contract below (player-visible state only, never weakened) and osrlib's ownership of every game rule. This app never re-implements or forks one.
 
-## Working method
+## Specs and branches
 
-Work is divided into chunks. For each chunk, the public signatures are written as stubs first, and the acceptance tests are written before the implementation, by a different agent or person than the one who implements it, and committed marked expected-to-fail. Whoever implements the chunk makes the tests pass without editing them, and the markers come off when the chunk merges. A system's design lives one directory per effort, `specs/<effort>/spec.md`, which names its phases, and each phase is a batch of chunks.
+A system's design lives one directory per effort, `specs/<effort>/spec.md`, which names its phases. The phase plans beside each spec are the record of what was built.
 
-Clean up after your own branches. When a pull request you opened merges, or you abandon its branch, remove the worktree you made for it with `git worktree remove`, delete the local branch with `git branch -D`, and delete the remote branch if GitHub has not already. Use `-D` rather than `-d`, because git reports a squash-merged branch as unmerged. Do this before you report the work finished. Leave alone any worktree or branch that you did not make, that has uncommitted changes, or whose pull request is still open. A subagent never makes a worktree, so the agent that spawned it removes the worktree it made once the subagent's pull request merges.
+Clean up after your own branches. When a pull request you opened merges, or you abandon its branch, remove the worktree you made for it with `git worktree remove`, delete the local branch with `git branch -D`, and delete the remote branch if GitHub has not already. Use `-D` rather than `-d`, because git reports a squash-merged branch as unmerged. Do this before you report the work finished. Leave alone any worktree or branch that you did not make, that has uncommitted changes, or whose pull request is still open.
 
 ## The wire contract (do not weaken it)
 
@@ -82,4 +82,4 @@ Skills, loaded on demand: `api-surface` (every `/api/` route and its shape), `ve
 
 - Repository at <https://github.com/mmacy/osr-web> (`origin`). `main` takes pull requests only.
 - `saves/*.json` and `.playwright-cli/` are gitignored scratch output.
-- `uv sync` fails in a git worktree under `.claude/worktrees/`: uv resolves the editable path dependency `../osrlib-python` relative to the checkout, so a worktree must sit beside the engine, a sibling directory in the same parent as `osrlib-python`. Make a worktree by hand as a sibling (`git worktree add ../osr-web-<branch>`). Subagents work in the checkout they are given and never create one.
+- `uv sync` fails in a git worktree under `.claude/worktrees/`: uv resolves the editable path dependency `../osrlib-python` relative to the checkout, so a worktree must sit beside the engine, a sibling directory in the same parent as `osrlib-python`. Make a worktree by hand as a sibling (`git worktree add ../osr-web-<branch>`).

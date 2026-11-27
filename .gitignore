@@ -7,4 +7,3 @@ adventures/
 .playwright-cli/
 .DS_Store
 .screenshot-manifest
-.claude/agent-memory-local/
