@@ -41,7 +41,7 @@ Measured against the tree at the time of writing (414 tests, green, 2.27s):
 
 ## The phases
 
-**Phase 1: the loop, written down.** The per-effort directory layout under `specs/`, with a spec per effort and a plan per phase as the record of what was built, and the working method that `AGENTS.md` states. Phases 2 to 5 shipped on 2026-09-14, each with its record beside this file.
+**Phase 1: the loop, written down.** The per-effort directory layout under `specs/`, with a spec per effort and a plan per phase as the record of what was built. Phases 2 to 5 shipped on 2026-09-14, each with its record beside this file.
 
 **Phase 2 — formatting and lint.** `ruff` as a pinned dev dependency with a rule selection matching osrlib's, the one-time reflow that adopting osrlib's line length costs, the findings that survive it, and the format and lint steps in CI alongside a locked sync. Milestone: `ruff format --check` and `ruff check` are clean and enforced on every PR, the suite is still green, and the guide no longer describes a toolchain that isn't there.
 
