@@ -150,3 +150,33 @@ class TestClientGate:
 
     def test_client_rule_names_the_gate(self):
         assert "check_app_version" in CLIENT_RULE.read_text(encoding="utf-8")
+
+
+def _ignored_paths() -> list[str]:
+    """The workflow's `paths-ignore` list: the files whose changes alone run no CI."""
+    lines = CI.read_text(encoding="utf-8").splitlines()
+    start = next(index for index, line in enumerate(lines) if "paths-ignore: &unpublished-docs" in line)
+    paths: list[str] = []
+    for line in lines[start + 1 :]:
+        stripped = line.strip()
+        if not stripped.startswith("- "):
+            break
+        paths.append(stripped[2:].strip('"'))
+    return paths
+
+
+class TestPathFilters:
+    """A change to unpublished docs alone runs no CI; every other change runs both jobs."""
+
+    def test_push_and_pull_request_share_one_list(self):
+        text = CI.read_text(encoding="utf-8")
+        assert text.count("paths-ignore:") == 2
+        assert "paths-ignore: *unpublished-docs" in text
+
+    def test_only_unpublished_prose_is_ignored(self):
+        assert _ignored_paths() == ["AGENTS.md", "CLAUDE.md", "README.md", "SECURITY.md", ".claude/**", "specs/**"]
+
+    def test_the_screenshots_are_not_ignored(self):
+        assert not any(path.startswith("docs") for path in _ignored_paths()), (
+            "docs/images/ changes run the screenshots job"
+        )

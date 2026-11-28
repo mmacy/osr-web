@@ -16,9 +16,23 @@ on:
   # Pull requests against any branch, plus direct pushes to main. Push is restricted to
   # main so a PR branch does not run the whole workflow twice for one commit (once for the
   # push, once for the pull_request event).
+  #
+  # A change that touches only unpublished docs runs no job at all, because GitHub skips
+  # the workflow when every changed file matches paths-ignore. Every other change runs both
+  # jobs. docs/images/ is not on the list: the screenshots job captures those images and
+  # checks them against README.md, so a change to them runs it. A file not on the list
+  # counts as code.
   push:
     branches: [main]
+    paths-ignore: &unpublished-docs
+      - AGENTS.md
+      - CLAUDE.md
+      - README.md
+      - SECURITY.md
+      - ".claude/**"
+      - "specs/**"
   pull_request:
+    paths-ignore: *unpublished-docs
 
 # Nothing here writes to the repository: the capture step rewrites docs/images/*.png in the
 # runner's throwaway checkout and the result is never committed back. The engine checkout
@@ -72,8 +86,7 @@ jobs:
         # moving major-version tag (refs/tags/v8 is a 404, and there is no v8 branch), and
         # `uses:` resolves a literal git ref rather than a semver range — so `@v8` would
         # fail the job outright with an unresolvable action. Bumping it is therefore a
-        # manual edit. Staying on 8.3.2 rather than 9.0.0, which is days old at the time of
-        # writing and changes the cache-pruning default.
+        # manual edit.
         uses: astral-sh/setup-uv@v10.1.0
         with:
           enable-cache: true
