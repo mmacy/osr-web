@@ -233,7 +233,7 @@ dev = [
 
 [[package]]
 name = "osrlib"
-version = "2.12.0"
+version = "2.13.0"
 source = { editable = "../osrlib-python" }
 dependencies = [
     { name = "pydantic" },
