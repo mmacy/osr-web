@@ -87,7 +87,7 @@ jobs:
         # `uses:` resolves a literal git ref rather than a semver range — so `@v8` would
         # fail the job outright with an unresolvable action. Bumping it is therefore a
         # manual edit.
-        uses: astral-sh/setup-uv@v10.1.0
+        uses: astral-sh/setup-uv@v10.4.0
         with:
           enable-cache: true
 
@@ -154,7 +154,7 @@ jobs:
 
       - name: Install uv
         # Exact tag, and kept in step with the Tests job — see the note there.
-        uses: astral-sh/setup-uv@v10.1.0
+        uses: astral-sh/setup-uv@v10.4.0
         with:
           enable-cache: true
 
