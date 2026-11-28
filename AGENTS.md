@@ -36,6 +36,15 @@ uv run pytest
 
 On pull requests CI also runs `uv run python scripts/check_app_version.py --base origin/<base branch>`, which fails when `static/app.js` differs from the base branch while the `app.js?v=N` query in `static/index.html` does not. The gate has no standing exceptions: no ignore lists, no `noqa`, no `type: ignore`, no suppression keys, no linter config for the client. A finding is fixed in the code. Two tests hold rules as code rather than prose: `tests/test_wire_contract.py` pins the key set of every game payload, so a new response field means editing that set on purpose and answering the wire-contract question in review, and `tests/test_opening_route.py` drives the seed-42 route above and asserts structure, never dice. `tests/test_gates.py` pins the gate's own configuration against osrlib's. The screenshot harness is opt-in. The workflow is `.github/workflows/ci.yml`, and `specs/dev-loop/` describes the gate's phases.
 
+## Crashes come first
+
+A crash is a 500 response or a traceback from the server, or an uncaught error that breaks the page. A hang or a process that dies is also a crash. A refusal that the wire contract documents is not a crash: an in-fiction rejection (HTTP 200 with `accepted: false`), malformed content (422), or an unknown id (404). The inputs include commands, request bodies, and the adventure documents and saves a player loads or imports.
+
+- A crash is the highest priority. Fix it in the current work session, ahead of other planned work. A crash that a player's input can cause comes before every other crash.
+- A crash found while working on something else is fixed in the same session. Do not leave it, and do not defer it to an issue. If the fix needs a decision only the maintainer can make, stop and ask at once.
+- A crash fix includes a test that reproduces the crash.
+- osr-web has no release process, so a crash fix merges to `main` at once, through a pull request that passes the standing gate.
+
 ## Greenfield discipline
 
 Refactor freely and update every call site. The tests and the end-to-end drives are the safety net. No re-exports or aliases kept to preserve an old import path, no deprecation scaffolding, no code kept "just in case". Git history is the archive. Release changes nothing about this: delete, don't deprecate, and add no workarounds, compatibility shims, or other accommodations. Do the right thing even when it's the hard thing, and question existing code and the decisions behind it as the project matures. What was right then may not be right now. The two real constraints are the wire contract below (player-visible state only, never weakened) and osrlib's ownership of every game rule. This app never re-implements or forks one.
