@@ -36,7 +36,6 @@ from osrlib.crawl.dungeon import PartyLocation, Position, cell_ref
 from osrlib.crawl.exploration import HEALING_SERVICES
 from osrlib.crawl.interpreter import Interpreter
 from osrlib.crawl.session import GameSession
-from osrlib.crawl.views import PlayerView
 from osrlib.data import load_ability_tables, load_spells
 from osrlib.errors import ContentValidationError, SaveVersionError
 from osrlib.persistence import save_game
@@ -394,7 +393,6 @@ def _sheets(session: GameSession) -> dict:
     tables = load_ability_tables()
     catalog = load_spells()
     player_view = session.view(Visibility.PLAYER)
-    assert isinstance(player_view, PlayerView)
     known = {view.id: view for view in player_view.party}
     sheets: dict[str, dict] = {}
     for member_id, member in _members_by_id(session).items():
