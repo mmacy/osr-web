@@ -1066,6 +1066,26 @@ class TestGateRefusals:
             text = rejection_text(Rejection(code=code, params={"refusal": ""}))
             assert text != code and text != "", code
 
+    def test_the_refusals_osrlib_added_after_2_11_read_as_words(self):
+        # osrlib refuses these since the release after 2.11.0. Unmapped, each
+        # would print its raw code at the player.
+        codes = (
+            "encounter.evade.nobody_able_to_act",
+            "encounter.evade.cannot_move",
+            "items.use.invisible_target",
+            "magic.cast.unknown_target",
+            "magic.cast.invisible_target",
+            "magic.cast.target_must_be_creature",
+        )
+        for code in codes:
+            text = rejection_text(SimpleNamespace(code=code))
+            assert text != code, code
+            assert text[0].isupper() and text.endswith("."), code
+        # The evade refusal carries either a member or a reason; both render.
+        for params in ({"character": "character-0001"}, {"reason": "overloaded"}):
+            text = rejection_text(Rejection(code="encounter.evade.cannot_move", params=params))
+            assert text == _REJECTION_TEXT["encounter.evade.cannot_move"]
+
     def test_a_rejection_with_no_params_still_renders(self):
         # Every other caller passes a plain rejection; `params` defaults to {}.
         assert rejection_text(SimpleNamespace(code="exploration.door.locked")) == ("The door is locked.")
